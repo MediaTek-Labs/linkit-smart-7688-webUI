@@ -1,0 +1,52 @@
+{
+  "name": "linkit-smart-webui",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "prestart": "npm run build",
+    "start": "NODE_ENV=production webpack --config ./app/webpack.client.config.js",
+    "watch": "webpack-dev-server --colors --inline --hot --config ./app/webpack.client.config.js"
+  },
+  "devDependencies": {
+    "babel": "^5.1.13",
+    "babel-core": "^5.8.22",
+    "babel-eslint": "^3.0.1",
+    "babel-jest": "^5.0.1",
+    "babel-loader": "^5.3.2",
+    "barrels": "^1.4.0",
+    "connect-livereload": "~0.3.2",
+    "del": "^1.1.1",
+    "eslint": "^0.19.0",
+    "esprima-fb": "^15001.1.0-dev-harmony-fb",
+    "extract-text-webpack-plugin": "^0.5.0",
+    "i18n": "^0.5.0",
+    "i18n-webpack-plugin": "^0.2.7",
+    "i18next": "^1.7.10",
+    "jest-cli": "^0.4.0",
+    "jscs": "^1.12.0",
+    "jshint-stylish": "^1.0.1",
+    "mocha": "^2.2.4",
+    "nightwatch": "^0.6.6",
+    "node-debug": "^0.1.0",
+    "nodemon": "^1.3.7",
+    "parallelshell": "^1.1.1",
+    "pre-commit": "Mediatek-Cloud/pre-commit",
+    "react-hot-loader": "^2.0.0-alpha-2",
+    "selenium-webdriver": "^2.45.1",
+    "tiny-lr": "0.0.5",
+    "webpack": "1.10.1",
+    "webpack-dev-server": "^1.10.1"
+  },
+  "author": "iamblue",
+  "license": "ISC",
+  "dependencies": {
+    "bluebird": "^2.9.34",
+    "flux": "^2.1.1",
+    "keymirror": "^0.1.1",
+    "object-assign": "^4.0.1",
+    "react": "^0.13.3",
+    "react-bootstrap": "^0.24.5",
+    "superagent": "^1.3.0"
+  }
+}

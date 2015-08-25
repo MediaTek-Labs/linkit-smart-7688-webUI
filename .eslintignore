@@ -1,0 +1,3 @@
+node_modules/**
+app/build/**
+app/js/jstz.js

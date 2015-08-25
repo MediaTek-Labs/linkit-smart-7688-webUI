@@ -1,0 +1,7 @@
+{
+  "preset": "airbnb",
+  "esprima" : "./node_modules/esprima-fb",
+  "excludeFiles": ["node_modules/**", "client/build/**", "client/js/jstz.js"],
+  "requireCamelCaseOrUpperCaseIdentifiers": "ignoreProperties",
+  "safeContextKeyword": ["this$"]
+}
