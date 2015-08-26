@@ -9,19 +9,36 @@ import rpc from '../util/rpcAPI';
 let APP_PAGE       = {};
 window.session = localStorage.getItem('session') || null;
 
-rpc.grantCode(window.session)
-.then(function() {
-  return AppActions.initialFetchData(window.session)
-})
-.catch(function(err) {
-  window.localStorage.removeItem('session');
-  window.localStorage.removeItem('info');
-  return AppDispatcher.dispatch({
-    APP_PAGE: 'LOGIN',
-    successMsg: null,
-    errorMsg: 'Timeout'
+if(window.session) {
+  rpc.grantCode(window.session)
+  .then(function() {
+    return AppActions.initialFetchData(window.session)
+  })
+  .catch(function(err) {
+    window.localStorage.removeItem('session');
+    window.localStorage.removeItem('info');
+    return AppDispatcher.dispatch({
+      APP_PAGE: 'LOGIN',
+      successMsg: null,
+      errorMsg: 'Timeout'
+    });
   });
-});
+} else {
+  rpc.login('root', '')
+  .then(function(data) {
+    var session = data.body.result[1].ubus_rpc_session;
+    window.session = session;
+    return AppDispatcher.dispatch({
+      APP_PAGE: 'FIRSTLOGIN',
+      successMsg: null,
+      errorMsg: null
+    });
+  })
+  .catch(function(err) {
+    return ;
+  })
+}
+
 
 APP_PAGE.APP_PAGE = 'LOGIN';
 APP_PAGE.errorMsg = AppActions.getQuery('errorMsg') || null;

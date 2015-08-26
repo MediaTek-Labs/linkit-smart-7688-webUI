@@ -13,8 +13,18 @@ var appActions = {
     return rpc.scanWifi(session);
   },
 
-  resetPassword: function(password, session) {
-    return rpc.resetPassword(password, window.session);
+  resetPassword: function(user, password, session) {
+    return rpc.resetPassword(user, password, window.session)
+    .then(function (data) {
+      return AppDispatcher.dispatch({
+        APP_PAGE: 'LOGIN',
+        successMsg: null,
+        errorMsg: null
+      });
+    })
+    .catch(function(err) {
+      console.log(err);
+    })
   },
 
   loadNetwork: function(session) {
@@ -76,11 +86,13 @@ var appActions = {
       return _this.initialFetchData(window.session);
     })
     .catch(function(err) {
+      console.log(err);
       window.session = ''
       window.localStorage.removeItem('session');
       window.localStorage.removeItem('info');
+      alert('Account / password is incorrect.')
       return AppDispatcher.dispatch({
-        APP_PAGE: 'CONTENT',
+        APP_PAGE: 'LOGIN',
         successMsg: null,
         errorMsg: '[' + err + '] failed to grant object permissions'
       });

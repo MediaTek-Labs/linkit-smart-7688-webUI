@@ -7,7 +7,7 @@ injectTapEventPlugin();
 import Login from './components/login.jsx';
 import Content from './components/content.jsx';
 import Header from './components/header.jsx';
-
+import Resetpassword from './components/resetpassword.jsx';
 //store
 import AppStore from './stores/appStore.js';
 
@@ -36,6 +36,9 @@ const App = React.createClass({
   render: function() {
     var elem = '';
     switch (this.state.APP_PAGE) {
+      case AppConstants.FIRSTLOGIN:
+        elem = <Resetpassword { ... this.state }/>
+        break;
       case AppConstants.LOGIN:
         elem = <Login { ... this.state }/>
         break;

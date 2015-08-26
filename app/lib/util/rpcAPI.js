@@ -78,6 +78,7 @@ var rpcAPI = {
 
   },
   // ====== login end ========
+
   scanWifi: function(session) {
     var config = {
       jsonrpc: '2.0',
@@ -116,6 +117,25 @@ var rpcAPI = {
 
     return this.request(config);
 
+  },
+  resetPassword: function(user, password, session) {
+
+    var config = {
+      jsonrpc: '2.0',
+      id: id++,
+      method: 'call',
+      params: [
+        session,
+        'rpc-sys',
+        'password_set',
+        {
+          user: user,
+          password: password
+        }
+      ]
+    };
+
+    return this.request(config)
   },
 
   loadNetstate: function(iface, session) {

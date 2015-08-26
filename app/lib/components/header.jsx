@@ -2,17 +2,26 @@ import React from 'react';
 import Radium from 'radium';
 import mui from 'material-ui';
 let {AppBar} = mui;
-import Logo from '../../img/mediatek.png';
+import Logo from '../../img/mediatek1.png';
 
 var ThemeManager = new mui.Styles.ThemeManager();
-
 @Radium
 export default class loginComponent extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {}
+    this.state = {};
+    this._logOut = this._logOut.bind(this);
   }
-
+  _logOut () {
+    window.localStorage.removeItem('info');
+    window.localStorage.removeItem('session');
+    window.session = '';
+    return AppDispatcher.dispatch({
+      APP_PAGE: 'LOGIN',
+      successMsg: null,
+      errorMsg: null
+    });
+  }
   componentDidMount() {
   }
 
@@ -28,6 +37,7 @@ export default class loginComponent extends React.Component {
         <AppBar
           style={styles.bg}
           iconElementLeft={<img style={styles.img} src={Logo} />}
+          iconElementRight={<a href="" onClick={this._logOut} style={{ color: '#000', lineHeight: '45px', textDecoration: 'none'}}>Log out</a>}
         />
       </div>
     )
@@ -41,7 +51,7 @@ loginComponent.childContextTypes = {
 
 var styles = {
   bg: {
-    background: '#00a1de'
+    background: '#fff'
   },
   img: {
     width: '130px',
