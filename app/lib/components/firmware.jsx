@@ -1,16 +1,17 @@
 import React from 'react';
 import Radium from 'radium';
-import mui from 'material-ui';
-let {AppBar} = mui;
-import Logo from '../../img/mediatek.png';
 
+import mui from 'material-ui';
+let {IconButton, FontIcon, List, ListItem} = mui;
 var ThemeManager = new mui.Styles.ThemeManager();
+
 
 @Radium
 export default class loginComponent extends React.Component {
   constructor(props) {
     super(props)
     this.state = {}
+    // this.state.wifi = []
   }
 
   componentDidMount() {
@@ -24,12 +25,7 @@ export default class loginComponent extends React.Component {
 
   render() {
     return (
-      <div>
-        <AppBar
-          style={styles.bg}
-          iconElementLeft={<img style={styles.img} src={Logo} />}
-        />
-      </div>
+      <div>12312321</div>
     )
   }
 
@@ -39,14 +35,5 @@ loginComponent.childContextTypes = {
   muiTheme: React.PropTypes.object
 };
 
-var styles = {
-  bg: {
-    background: '#00a1de'
-  },
-  img: {
-    width: '130px',
-    marginTop: '15px'
-  }
-}
 
 export default loginComponent;

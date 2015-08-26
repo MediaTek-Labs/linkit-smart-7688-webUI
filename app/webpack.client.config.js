@@ -42,12 +42,18 @@ module.exports =  Object.keys(languages).map(function(language) {
         {
           test: /\.jsx?$/,
           exclude: /node_modules/,
-          loaders: ['react-hot', 'babel-loader']
+          loaders: ['react-hot', 'babel-loader?stage=0']
         },
         {
           test: /\.css$/,
           loader: ExtractTextPlugin.extract('style-loader', 'css-loader')
-        }
+        },
+        { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'url?limit=10000&minetype=application/font-woff&name=[name].[ext]' },
+        { test: /\.(ttf|eot|otf)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'url?limit=10000&minetype=application/font-woff&name=[name].[ext]' },
+        { test: /\.svg\?v=[0-9]\.[0-9]\.[0-9]$/, loader: 'url?limit=10000&minetype=application/font-woff&name=[name].[ext]' },
+        { test: /\.(svg|png|jpg|jpeg)$/, loaders: ['url?limit=10000&name=[name].[ext]'] },
+        { test: /\.json$/, loaders: ['json'] }
+
       ]
     },
     plugins: plugins,

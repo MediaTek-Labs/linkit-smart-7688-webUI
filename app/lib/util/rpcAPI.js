@@ -1,5 +1,5 @@
 var Promise = require('bluebird');
-
+var id = 1;
 var rpcAPI = {
   request: function(config) {
 
