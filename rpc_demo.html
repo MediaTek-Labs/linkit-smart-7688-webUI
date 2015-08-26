@@ -1,0 +1,411 @@
+<html>
+
+<head>
+<title>LinkIt Smart7688 RPC Example</title>
+<script src="jquery-2.1.4.js"></script>
+</head>
+
+<body>
+
+<script type="text/javascript">
+var UBUS_STATUS_OK = 0;
+var UBUS_STATUS_INVALID_COMMAND = 1;
+var UBUS_STATUS_INVALID_ARGUMENT = 2;
+var UBUS_STATUS_METHOD_NOT_FOUND = 3;
+var UBUS_STATUS_NOT_FOUND = 4;
+var UBUS_STATUS_NO_DATA = 5;
+var UBUS_STATUS_PERMISSION_DENIED = 6;
+var UBUS_STATUS_TIMEOUT = 7;
+var UBUS_STATUS_NOT_SUPPORTED = 8;
+var UBUS_STATUS_UNKNOWN_ERROR = 9;
+var UBUS_STATUS_CONNECTION_FAILED = 10;
+
+function do_ajax(data, success) {
+	$.ajax({
+		url: "/ubus",
+		type: "post",
+		data: JSON.stringify(data),
+		success: function(reply) {
+			success(reply);
+		},
+	});
+}
+
+var id = 1;
+var session;
+
+function uci_commit() {
+	var commit = { "jsonrpc": "2.0", "id": id++, "method": "call",
+		"params": [session, "uci", "apply", { "commit": true }]};
+	do_ajax(commit, function(reply) {
+		if (!reply.result && reply.result[0] == UBUS_STATUS_NO_DATA) {
+			alert("config has not changed");
+			return;
+		}
+		if (!reply.result || reply.result[0] != 0) {
+			alert("failed to commit config");
+			return;
+		}
+		alert("changes were comitted");
+		var reload = { "jsonrpc": "2.0", "id": id++, "method": "call",
+			"params": [session, "uci", "reload_config", { "commit": true }]};
+		do_ajax(reload, function(reply) {
+			if (!reply.result || reply.result[0] != 0) {
+				alert("failed to reload config");
+				return;
+			}
+			alert("changes were applied");
+		});
+	});
+}
+
+function rpc_wifi_mode(mode) {
+	var disabled = 1;
+
+	if (mode == "sta")
+		disabled = 0;
+
+	config = { "jsonrpc": "2.0", "id": id++, "method": "call",
+			"params": [ session, "uci", "set", {
+				"config": "wireless",
+				"section": "sta",
+				values: {
+					"disabled": disabled
+				}}
+			]
+		};
+	do_ajax(config, function(reply) {
+		if (!reply.result || reply.result[0] != 0) {
+			alert("failed to apply config");
+			return;
+		}
+		alert("wifi mode set to " + mode);
+	});
+}
+
+function rpc_passwd(pass) {
+	config = { "jsonrpc": "2.0", "id": id++, "method": "call",
+			"params": [ session, "rpc-sys", "password_set", { "user": "root", "password": pass, } ] };
+	do_ajax(config, function(reply) {
+		if (!reply.result || reply.result[0] != 0)
+			alert("failed to set password");
+		else
+			alert("password changed");
+	});
+}
+
+function rpc_wifi_ap_scan() {
+	config = { "jsonrpc": "2.0", "id": id++, "method": "call",
+			"params": [ session, "iwinfo", "scan", { "device": "ra0", } ] };
+	$("#Scan").empty();
+	do_ajax(config, function(reply) {
+		if (!reply.result || reply.result[0] != 0)
+			alert("failed to scan");
+		else
+			alert("scan complete");
+		
+		$.each(reply.result[1].results, function (i, item) {
+			$('#Scan').append($('<option>', { 
+				value: item.ssid,
+				text : item.ssid + " - " + item.quality + "%", 
+			}));
+		});
+	});
+}
+
+function rpc_wifi(section, ssid, key) {
+	var enc = "none";
+
+	if (key.length > 1)
+		enc = "psk2";
+
+	config = { "jsonrpc": "2.0", "id": id++, "method": "call",
+			"params": [ session, "uci", "set", {
+				"config": "wireless",
+				"section": section,
+				values: {
+					"ssid": ssid,
+					"key": key,
+					"encryption": enc,
+				}}
+			]
+		};
+	do_ajax(config, function(reply) {
+		if (!reply.result || reply.result[0] != 0) {
+			alert("failed to apply config");
+			return;
+		}
+		alert(section + " settings were changed");
+	});
+}
+
+function rpc_wifi_ap(ssid, key) {
+	rpc_wifi("ap", ssid, key);
+}
+
+function rpc_wifi_sta(ssid, key) {
+	rpc_wifi("sta", ssid, key);
+}
+
+function rpc_wifi_load() {
+	config = { "jsonrpc": "2.0", "id": id++, "method": "call",
+			"params": [ session, "uci", "get", { "config": "wireless" }]
+		};
+	do_ajax(config, function(reply) {
+		if (!reply.result || reply.result[0] != 0)
+			return;
+		var res = reply.result[1].values;
+
+		$("#Ssid").val(res.ap.ssid);
+		$("#Key").val(res.ap.key);
+
+		$("#sSsid").val(res.sta.ssid);
+		$("#sKey").val(res.sta.key);
+
+		if (res.sta.disabled)
+			$("#Mode").val("ap");
+		else
+			$("#Mode").val("sta");
+
+	});
+}
+
+function rpc_network_load() {
+	config = { "jsonrpc": "2.0", "id": id++, "method": "call",
+			"params": [ session, "uci", "get", { "config": "network" }]
+		};
+	do_ajax(config, function(reply) {
+		if (!reply.result || reply.result[0] != 0)
+			return;
+		var res = reply.result[1].values;
+
+		$("#lan_mac").val(res.lan.macaddr);
+		$("#wan_mac").val(res.wan.macaddr);
+	});
+}
+
+function rpc_netstate_load(iface) {
+	config = { "jsonrpc": "2.0", "id": id++, "method": "call",
+			"params": [ session, "network.interface", "status", { "interface": iface }]
+		};
+	do_ajax(config, function(reply) {
+		if (!reply.result || reply.result[0] != 0)
+			return;
+		var res = reply.result[1];
+
+		if (res["ipv4-address"])
+			$("#" + iface + "_ip").val(res["ipv4-address"][0].address + "/" + res["ipv4-address"][0].mask);
+		else
+			$("#" + iface + "_ip").val("");
+	});
+}
+
+function rpc_system_load() {
+	config = { "jsonrpc": "2.0", "id": id++, "method": "call",
+			"params": [ session, "uci", "get", { "config": "system", "type": "system"  }]
+		};
+	do_ajax(config, function(reply) {
+		if (!reply.result || reply.result[0] != 0)
+			return;
+		var res = reply.result[1].values;
+		for (k in res) if (res[k].hostname) {
+			$("#Hostname").val(res[k].hostname);
+			return
+		}
+	});
+}
+
+function rpc_logout(user, pass)
+{
+	var login = { "jsonrpc": "2.0", "id": id++, "method": "call",
+		"params": [ session, "session", "destroy", { "dummy": 0} ]};
+
+	$("#Session").val("");
+	$("#fwSession").val("");
+	session = "";
+	do_ajax(login, function(reply) {
+		if (!reply.result || reply.result[0] != 0) {
+			alert("failed to logout");
+			return;
+		}
+		alert("logged out");
+	});
+}
+
+function rpc_login(user, pass)
+{
+	var login = { "jsonrpc": "2.0", "id": id++, "method": "call",
+		"params": [ "00000000000000000000000000000000","session","login",{
+			"username":user,"password":pass,
+			}
+		]};
+
+	$("#Session").val("");
+	$("#fwSession").val("");
+	session = "";
+	do_ajax(login, function(reply) {
+		if (!reply.result || reply.result[0] != 0) {
+			alert("failed to login");
+			return;
+		}
+		session = reply.result[1].ubus_rpc_session;
+		var grant = { "jsonrpc": "2.0", "id": id++, "method": "call",
+				"params": [ session, "session", "grant",
+					{ "scope": "uci", "objects": [ [ "*", "read" ], [ "*", "write" ] ] }
+				]};
+		do_ajax(grant, function(reply) {
+			if (!reply.result || reply.result[0] != 0) {
+				alert("failed to grant object permissions");
+				return;
+			}
+			$("#Session").val(session);
+			$("#fwSession").val(session);
+			rpc_system_load();
+			rpc_wifi_load();
+			rpc_network_load();
+			rpc_netstate_load("lan");
+			rpc_netstate_load("wan");
+		});
+	});
+}
+
+function rpc_file_upgrade() {
+	config = { "jsonrpc": "2.0", "id": id++, "method": "call",
+			"params": [ session, "rpc-sys", "upgrade_start", { "keep": 1  }]
+		};
+	do_ajax(config, function(reply) {
+		if (!reply.result || reply.result[0] != 0) {
+			alert("Failed to upgrade image");
+			return;
+		}
+	});
+}
+
+function rpc_factory() {
+	config = { "jsonrpc": "2.0", "id": id++, "method": "call",
+			"params": [ session, "rpc-sys", "factory", { "dummy": 0  }]
+		};
+	do_ajax(config, function(reply) {
+		if (!reply.result || reply.result[0] != 0) {
+			alert("Failed to factory reset");
+			return;
+		}
+		alert("Resetting to factory defaults");
+	});
+}
+
+function rpc_file_check() {
+	config = { "jsonrpc": "2.0", "id": id++, "method": "call",
+			"params": [ session, "rpc-sys", "upgrade_test", { "dummy": 0  }]
+		};
+	do_ajax(config, function(reply) {
+		if (!reply.result || reply.result[0] != 0) {
+			alert("Image check failed");
+			return;
+		}
+		var ret = reply.result[1];
+		if (ret.code && ret.stdout) {
+			alert("Image check failed - " + ret.stdout);
+			return;
+		}
+		rpc_file_upgrade();
+	});
+}
+
+function rpc_file_upload() {
+	var content = $("#uploadFrame").contents().text();
+	if (!content)
+		return;
+	var data = JSON.parse(content);
+	if (!data || !data.size || !data.checksum) {
+		alert("firmware upload failed");
+		return;
+	}
+	rpc_file_check();
+}
+
+$( document ).ready(function() {
+	$("#BtnLogin").click(function() { rpc_login("root", $("#Password").val()); });
+	$("#BtnLogout").click(function() { rpc_logout(); });
+	$("#BtnMode").click(function() { rpc_wifi_mode($("#Mode").val()); });
+	$("#BtnAPscan").click(function() { rpc_wifi_ap_scan(); });
+	$("#BtnAP").click(function() { rpc_wifi_ap($("#Ssid").val(), $("#Key").val()); });
+	$("#BtnSta").click(function() { rpc_wifi_sta($("#sSsid").val(), $("#sKey").val()); });
+	$("#BtnCommit").click(function() { uci_commit(); });
+	$("#BtnPasswd").click(function() { rpc_passwd($("#NewPasswd").val()); });
+	$("#BtnFactory").click(function() { rpc_factory(); });
+	$("#uploadFrame").load(function() { rpc_file_upload(); });
+	$("#Scan").change(function() { $("#sSsid").val($("#Scan").val()); });
+});
+</script>
+
+<h3> Login </h3>
+Password <input type=input id=Password>
+<input type=button value=Login id=BtnLogin><br>
+<input type=button value=Logout id=BtnLogout><br>
+Session ID <input type=input readonly id=Session><br>
+<br><br>
+
+
+<h3> Status </h3>
+Hostname <input type=input readonly id=Hostname><br>
+AP IP <input type=input readonly id=lan_ip><br>
+AP MAC <input type=input readonly id=lan_mac><br>
+Sta IP <input type=input readonly id=wan_ip><br>
+STA MAC <input type=input readonly id=wan_mac><br>
+FW Ver <input type=input readonly id=fwver><br>
+LDR Ver <input type=input readonly id=ldrver><br>
+<br><br>
+
+<h3> WiFi Mode </h3>
+Mode <select id="Mode">
+	<option value=ap>AP</option>
+	<option value=sta>Station</option>
+</select>
+<input type=button value=Mode id=BtnMode>
+<br><br>
+
+<h3> AP Scan </h3>
+Networks <select id="Scan">
+	<option>---</option>
+</select>
+<input type=button value=Scan id=BtnAPscan>
+<br><br>
+
+<h3> AP Setup </h3>
+Ssid <input type=input id=Ssid>
+Key <input type=input id=Key>
+<input type=button value=AP id=BtnAP>
+<br><br>
+
+<h3> STA Setup </h3>
+Ssid <input type=input id=sSsid>
+Key <input type=input id=sKey>
+<input type=button value=Station id=BtnSta>
+<br><br>
+
+<h3> Commit </h3>
+<input type=button value="Commit & Apply Changes" id=BtnCommit>
+<br><br>
+
+<h3> Change Password </h3>
+New Password <input type=input id=NewPasswd>
+<input type=button value=Change id=BtnPasswd>
+<br><br>
+
+<h3> Reset </h3>
+<input type=button value=Factory id=BtnFactory>
+<br><br>
+
+
+<form target=uploadFrame method=post enctype="multipart/form-data" action="/cgi-bin/cgi-upload">
+<input id=fwSession type=hidden name=sessionid>
+<input type=hidden name=filename value="/tmp/firmware.bin">
+<input type=hidden name=filemode value="0600">
+<input type=file name=filedata>
+<input type=submit>
+<form>
+<br>
+<iframe name="uploadFrame" id="uploadFrame"/>
+</body>
+</html>

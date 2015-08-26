@@ -4,8 +4,23 @@ var assign         = require('object-assign');
 var AppConstants  = require('../constants/appConstants');
 var AppActions     = require('../actions/appActions');
 var CHANGE_EVENT   = 'change';
+import rpc from '../util/rpcAPI';
 
 let APP_PAGE       = {};
+window.session = localStorage.getItem('session') || null;
+
+rpc.grantCode(window.session)
+.then(function() {
+  return AppActions.initialFetchData(window.session)
+})
+.catch(function(err) {
+  window.localStorage.removeItem('session');
+  return AppDispatcher.dispatch({
+    APP_PAGE: 'LOGIN',
+    successMsg: null,
+    errorMsg: 'Timeout'
+  });
+});
 
 APP_PAGE.APP_PAGE = 'LOGIN';
 APP_PAGE.errorMsg = AppActions.getQuery('errorMsg') || null;

@@ -4,7 +4,6 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "prestart": "npm run build",
     "start": "NODE_ENV=production webpack --config ./app/webpack.client.config.js",
     "watch": "webpack-dev-server --colors --inline --hot --config ./app/webpack.client.config.js"
   },

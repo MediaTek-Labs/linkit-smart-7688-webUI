@@ -1,5 +1,7 @@
 var Promise = require('bluebird');
+var request = require('superagent');
 var id = 1;
+var ubusStatus = require('./ubusStatus');
 var rpcAPI = {
   request: function(config) {
 
@@ -9,12 +11,26 @@ var rpcAPI = {
       .send(config)
       .set('Accept', 'application/json')
       .end(function(err, res) {
-        return res.ok ? resolve(res) : reject(err);
+        console.log(res);
+        // return res.ok ? resolve(res) : reject(err);
+        if (!res.ok) {
+          return reject('Connection failed');
+        }
+
+        if (res.body.error) {
+          return reject(res.body.error.message);
+        }
+
+        if (!res.body.result || res.body.result[0] != 0) {
+          return reject(ubusStatus[res.body.result[0]]);
+        } else {
+          return resolve(res);
+        }
       });
     });
-
   },
 
+  // ====== login start ========
   login: function(userId, password) {
 
     var config = {
@@ -36,6 +52,26 @@ var rpcAPI = {
 
   },
 
+  grantCode: function(session) {
+
+    var config = {
+      jsonrpc: '2.0',
+      id: id++,
+      method: 'call',
+      params: [
+        session,
+        'session',
+        'grant',
+        {
+          scope: 'uci',
+          objects: [['*', 'read'], ['*', 'write']]
+        }
+    ]};
+
+    return this.request(config);
+
+  },
+  // ====== login end ========
   selectWifi: function(section, ssid, key, enc, session) {
 
     var config = {
@@ -83,24 +119,12 @@ var rpcAPI = {
   },
 
   loadNetwork: function(session) {
-
-  },
-
-  grantCode: function(session) {
-
     var config = {
       jsonrpc: '2.0',
       id: id++,
       method: 'call',
-      params: [
-        session,
-        'session',
-        'grant',
-        {
-          scope: 'uci',
-          objects: [['*', 'read'], ['*', 'write']]
-        }
-    ]};
+      params: [session, 'uci', 'get', { config: 'network' }]
+    };
 
     return this.request(config);
 
@@ -125,6 +149,18 @@ var rpcAPI = {
 
     return this.request(config);
 
+  },
+
+  loadWifi: function(session) {
+
+    var config = {
+      jsonrpc: '2.0',
+      id: id++,
+      method: 'call',
+      params: [ session, 'uci', 'get', { config: 'wireless' }]
+    };
+
+    return this.request(config);
   },
 
   applyConfig: function(session) {

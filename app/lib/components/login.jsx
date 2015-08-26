@@ -10,7 +10,9 @@ var ThemeManager = new mui.Styles.ThemeManager();
 export default class loginComponent extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {}
+    this.state = {
+      password: ''
+    }
     this._handleLogin = this._handleLogin.bind(this)
   }
 
@@ -25,7 +27,8 @@ export default class loginComponent extends React.Component {
   }
 
   _handleLogin() {
-    return appAction.login();
+    var password = this.state.password
+    return appAction.login('root', password);
   }
 
   render() {
@@ -37,7 +40,13 @@ export default class loginComponent extends React.Component {
           <TextField
             hintText="Input your password"
             type="password"
+            ref="password"
             style={ styles.basicWidth }
+            onChange={
+              (e) => {
+                this.setState({password:e.target.value});
+              }
+            }
             floatingLabelText="Password" />
           <br />
           <RaisedButton
