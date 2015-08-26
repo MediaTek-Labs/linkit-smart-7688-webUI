@@ -12,9 +12,10 @@ import Network from './network.jsx';
 export default class contentComponent extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {};
-    this._handleTabActive = this._handleTabActive.bind(this);
-    // this.state.wifi = []
+    this._handleTabsChangeNetWork = this._handleTabsChangeNetWork.bind(this);
+    this._handleTabsChangeSYS = this._handleTabsChangeSYS.bind(this);
+
+    this.state = {tabsValue: 'sysinfo'};
   }
 
   componentDidMount() {
@@ -25,22 +26,30 @@ export default class contentComponent extends React.Component {
       muiTheme: ThemeManager.getCurrentTheme()
     };
   }
-  _handleTabActive() {
 
+  _handleTabsChangeNetWork(){
+    this.setState({tabsValue: 'network'});
   }
+
+  _handleTabsChangeSYS(){
+    this.setState({tabsValue: 'sysinfo'});
+  }
+
   render() {
     return (
       <div style={styles.block}>
-        <header style={styles.header}>
-          <p> Welcome to <b>LinkIt Smart 7688</b></p>
-          <p>For advanced network configuration, go to <a href="">OpenWrt</a>.</p>
+        <header style={ styles.header }>
+          <p style={{ lineHeight: '35px' }}> Welcome to <b>LinkIt Smart 7688</b></p>
+          <p style={{ lineHeight: '35px' }}>For advanced network configuration, go to <a href="">OpenWrt</a>.</p>
         </header>
-        <Tabs style={styles.content}>
-          <Tab label="System information" >
-            <Network />
+        <Tabs
+          valueLink={{ value: this.state.tabsValue }}
+          style={styles.content}>
+          <Tab label="System information" value="sysinfo" onClick={this._handleTabsChangeSYS.bind(this)}>
+            <Sysinfo />
           </Tab>
-          <Tab label="Network" >
-            (Tab content...123123)
+          <Tab label="Network" value="network" onClick={this._handleTabsChangeNetWork.bind(this)}>
+            <Network />
           </Tab>
         </Tabs>
       </div>
@@ -66,6 +75,7 @@ var styles= {
   },
   header: {
     width: '768px',
+    height: '64px',
     display: 'flex',
     justifyContent: 'space-between'
   }
