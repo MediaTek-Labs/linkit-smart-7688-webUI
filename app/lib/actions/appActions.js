@@ -3,27 +3,32 @@ import promise from 'bluebird';
 import rpc from '../util/rpcAPI';
 var AppDispatcher = require('../dispatcher/appDispatcher');
 
-var session = window.session;
 var appActions = {
-  wifiMode: function(mode, ssid, key) {
 
+  setWifi: function(section, ssid, key) {
+    return rpc.setWifi(session, ssid, key)
   },
 
-  resetPassword: function(password) {
-    return rpc.resetPassword(password, session);
+  scanWifi: function(session) {
+    return rpc.scanWifi(session);
   },
 
-  loadNetwork: function() {
+  resetPassword: function(password, session) {
+    return rpc.resetPassword(password, window.session);
+  },
+
+  loadNetwork: function(session) {
     return rpc.loadNetwork(session);
   },
 
-  loadNetstate: function() {
+  loadNetstate: function(session) {
     return rpc.loadNetstate(session);
   },
 
-  loadSystem: function() {
+  loadSystem: function(session) {
     return rpc.loadSystem(session);
   },
+
   initialFetchData: function(session) {
     return promise.delay(10).then(function() {
       return [
@@ -35,7 +40,7 @@ var appActions = {
       ]
     })
     .spread(function(system, wifi, network, lan, wan) {
-      var boardInfo = {}
+      var boardInfo = {};
       boardInfo.system = system.body.result[1].values;
       boardInfo.wifi = wifi.body.result[1].values;
       boardInfo.network = network.body.result[1].values;
@@ -53,24 +58,23 @@ var appActions = {
       });
     })
   },
+
   login: function(user, password) {
     var _this = this;
     return rpc.login(user, password)
     .then(function(data) {
-      console.log(data)
       var session = data.body.result[1].ubus_rpc_session;
       return session;
     })
     .then(function(session) {
-      window.session = session
+      window.session = session;
       window.localStorage.setItem('session', session);
       return rpc.grantCode(session);
     })
     .then(function(data) {
-      return _this.initialFetchData(window.session)
+      return _this.initialFetchData(window.session);
     })
     .catch(function(err) {
-      console.log(err);
       window.session = ''
       window.localStorage.removeItem('session');
       return AppDispatcher.dispatch({

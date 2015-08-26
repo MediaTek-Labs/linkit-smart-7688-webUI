@@ -1,7 +1,8 @@
 require('../css/main.css');
 import React from 'react';
 import AppConstants from './constants/appConstants.js';
-
+var injectTapEventPlugin = require("react-tap-event-plugin");
+injectTapEventPlugin();
 //component
 import Login from './components/login.jsx';
 import Content from './components/content.jsx';
@@ -34,7 +35,6 @@ const App = React.createClass({
 
   render: function() {
     var elem = '';
-    console.log(this.state.APP_PAGE)
     switch (this.state.APP_PAGE) {
       case AppConstants.LOGIN:
         elem = <Login { ... this.state }/>

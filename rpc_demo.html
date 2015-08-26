@@ -103,11 +103,11 @@ function rpc_wifi_ap_scan() {
 			alert("failed to scan");
 		else
 			alert("scan complete");
-		
+
 		$.each(reply.result[1].results, function (i, item) {
-			$('#Scan').append($('<option>', { 
+			$('#Scan').append($('<option>', {
 				value: item.ssid,
-				text : item.ssid + " - " + item.quality + "%", 
+				text : item.ssid + " - " + item.quality + "%",
 			}));
 		});
 	});

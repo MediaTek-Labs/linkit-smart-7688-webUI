@@ -14,7 +14,9 @@ export default class contentComponent extends React.Component {
     super(props)
     this._handleTabsChangeNetWork = this._handleTabsChangeNetWork.bind(this);
     this._handleTabsChangeSYS = this._handleTabsChangeSYS.bind(this);
-
+    console.log('======================');
+    console.log(this.props);
+    console.log('======================');
     this.state = {tabsValue: 'sysinfo'};
   }
 
@@ -46,10 +48,10 @@ export default class contentComponent extends React.Component {
           valueLink={{ value: this.state.tabsValue }}
           style={styles.content}>
           <Tab label="System information" value="sysinfo" onClick={this._handleTabsChangeSYS.bind(this)}>
-            <Sysinfo />
+            <Sysinfo boardInfo={ this.props.boardInfo } />
           </Tab>
           <Tab label="Network" value="network" onClick={this._handleTabsChangeNetWork.bind(this)}>
-            <Network />
+            <Network boardInfo={ this.props.boardInfo } />
           </Tab>
         </Tabs>
       </div>

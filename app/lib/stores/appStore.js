@@ -56,6 +56,7 @@ AppDispatcher.register(function(action) {
 
   APP_PAGE.errorMsg = action.errorMsg || null;
   APP_PAGE.successMsg = action.successMsg || null;
+  APP_PAGE.boardInfo = action.boardInfo || null;
 
   switch (action.APP_PAGE) {
     case AppConstants.LOGIN:

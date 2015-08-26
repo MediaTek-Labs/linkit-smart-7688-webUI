@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "NODE_ENV=production webpack --config ./app/webpack.client.config.js",
-    "watch": "webpack-dev-server --colors --inline --hot --config ./app/webpack.client.config.js"
+    "watch": "NODE_ENV=dev webpack-dev-server --colors --inline --hot --config ./app/webpack.client.config.js"
   },
   "devDependencies": {
     "babel": "^5.1.13",
