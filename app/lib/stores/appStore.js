@@ -15,6 +15,7 @@ rpc.grantCode(window.session)
 })
 .catch(function(err) {
   window.localStorage.removeItem('session');
+  window.localStorage.removeItem('info');
   return AppDispatcher.dispatch({
     APP_PAGE: 'LOGIN',
     successMsg: null,

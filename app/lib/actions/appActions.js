@@ -68,6 +68,7 @@ var appActions = {
     })
     .then(function(session) {
       window.session = session;
+      window.localStorage.setItem('info', JSON.stringify({user: user, password: password}));
       window.localStorage.setItem('session', session);
       return rpc.grantCode(session);
     })
@@ -77,6 +78,7 @@ var appActions = {
     .catch(function(err) {
       window.session = ''
       window.localStorage.removeItem('session');
+      window.localStorage.removeItem('info');
       return AppDispatcher.dispatch({
         APP_PAGE: 'CONTENT',
         successMsg: null,
