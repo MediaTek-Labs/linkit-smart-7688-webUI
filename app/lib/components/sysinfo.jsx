@@ -10,11 +10,12 @@ let {
   Card,
   FlatButton,
   RaisedButton,
-  Dialog
+  Dialog,
+  c
 } = mui;
 
 var ThemeManager = new mui.Styles.ThemeManager();
-
+var Colors = mui.Styles.Colors;
 @Radium
 export default class loginComponent extends React.Component {
   constructor(props) {
@@ -63,9 +64,14 @@ export default class loginComponent extends React.Component {
   }
 
   _onFactorySubmit() {
-    return appActions.resetFactory(window.session)
+    return AppActions.resetFactory(window.session)
     .then(function(data) {
       alert('Success!');
+      return AppDispatcher.dispatch({
+        APP_PAGE: 'LOGIN',
+        successMsg: null,
+        errorMsg: null
+      });
     })
     .catch(function(err) {
       alert(err + ' Please try again!');
@@ -93,8 +99,25 @@ export default class loginComponent extends React.Component {
       return AppActions.resetPassword('root', _this.state.password, window.session);
     })
     .then(function(data) {
-      alert('success!');
-      return _this._editPlatformBlock(false);
+      return AppActions.commitAndReboot(window.session)
+      .then(function(){
+        return;
+      })
+      .catch(function(err) {
+        if (err === 'no data') {
+          return;
+        } else {
+          return err;
+        }
+      })
+    })
+    .then(function(data) {
+      alert('Success! We will reboot now!');
+      return AppDispatcher.dispatch({
+        APP_PAGE: 'LOGIN',
+        successMsg: null,
+        errorMsg: null
+      });
     })
     .catch(function(err) {
       alert(err);
@@ -182,6 +205,7 @@ export default class loginComponent extends React.Component {
           secondary={true}
           label="Configure"
           fullWidth={true}
+          backgroundColor={Colors.amber700}
           onClick={()=>{this._editPlatformBlock(true)}}
           style={{width: '100%', textAlign: 'center', marginTop: '20px', marginBottom: '20px'}}>
         </RaisedButton>
@@ -241,6 +265,7 @@ export default class loginComponent extends React.Component {
               secondary={true}
               label="Configure & Restart"
               onClick={()=>{this._submitPlatformBlock(false)}}
+              backgroundColor={Colors.amber700}
               // onClick={this._handleLogin}
               style={{flexGrow:1, textAlign: 'center', marginTop: '20px', marginBottom: '20px'}}>
             </RaisedButton>
@@ -267,6 +292,7 @@ export default class loginComponent extends React.Component {
           linkButton={true}
           secondary={true}
           label="Upgrade firmware"
+          backgroundColor={Colors.amber700}
           onClick={()=>{this._editSoftwareBlock(true)}}
           style={{
             width: '100%',
@@ -321,6 +347,7 @@ export default class loginComponent extends React.Component {
               linkButton={true}
               secondary={true}
               label="Upgrade & Restart"
+              backgroundColor={Colors.amber700}
               disabled={this.state.upgradeFirmware}
               onClick={()=>{this._onSubmitFirmware(this.state.files[0]) }}
               // onClick={this._handleLogin}
@@ -332,7 +359,7 @@ export default class loginComponent extends React.Component {
     }
 
     let standardActions = [
-      { text: 'Cancel' },
+      { text: 'Cancel'},
       { text: 'Reset now', onTouchTap: this._onFactorySubmit, ref: 'submit' }
     ];
 
@@ -360,6 +387,7 @@ export default class loginComponent extends React.Component {
             secondary={true}
             label="Reset"
             onTouchTap={this._handleStandardDialogTouchTap}
+            backgroundColor={Colors.amber700}
             style={{width: '100%', textAlign: 'center', marginTop: '20px', marginBottom: '20px'}}>
           </RaisedButton>
 

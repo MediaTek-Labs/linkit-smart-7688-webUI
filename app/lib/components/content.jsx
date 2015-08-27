@@ -4,6 +4,7 @@ import Radium from 'radium';
 import mui from 'material-ui';
 let { Tabs, Tab, TextField} = mui;
 var ThemeManager = new mui.Styles.ThemeManager();
+var Colors = mui.Styles.Colors;
 
 import Sysinfo from './sysinfo.jsx';
 import Network from './network.jsx';
@@ -14,9 +15,6 @@ export default class contentComponent extends React.Component {
     super(props)
     this._handleTabsChangeNetWork = this._handleTabsChangeNetWork.bind(this);
     this._handleTabsChangeSYS = this._handleTabsChangeSYS.bind(this);
-    console.log('======================');
-    console.log(this.props);
-    console.log('======================');
     this.state = {tabsValue: 'sysinfo'};
   }
 
@@ -47,7 +45,11 @@ export default class contentComponent extends React.Component {
         <Tabs
           valueLink={{ value: this.state.tabsValue }}
           style={styles.content}>
-          <Tab label="System information" value="sysinfo" onClick={this._handleTabsChangeSYS.bind(this)}>
+          <Tab
+            label="System information"
+            value="sysinfo"
+            backgroundColor={Colors.amber700}
+            onClick={this._handleTabsChangeSYS.bind(this)}>
             <Sysinfo boardInfo={ this.props.boardInfo } />
           </Tab>
           <Tab label="Network" value="network" onClick={this._handleTabsChangeNetWork.bind(this)}>
@@ -73,7 +75,7 @@ var styles= {
   },
   content: {
     width: '768px',
-    paddingBottom: '30px'
+    paddingBottom: '30px',
   },
   header: {
     width: '768px',

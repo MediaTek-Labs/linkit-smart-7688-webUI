@@ -5,6 +5,8 @@ import mui from 'material-ui';
 import appAction from '../actions/appActions';
 let {RaisedButton, FontIcon, TextField} = mui;
 var ThemeManager = new mui.Styles.ThemeManager();
+var Colors = mui.Styles.Colors;
+var AppDispatcher = require('../dispatcher/appDispatcher');
 
 @Radium
 export default class loginComponent extends React.Component {
@@ -30,13 +32,26 @@ export default class loginComponent extends React.Component {
   _handleResetPassword() {
     var password = this.state.password;
     var againPassword = this.state.againPassword;
+
     if (password.length < 6) {
       return alert('Password length must more than 6.');
     }
+
     if (password !== againPassword) {
       return alert('Password does not match confirmation.');
     }
-    return appAction.resetPassword('root', password, window.session);
+
+    return appAction.resetPassword('root', password, window.session)
+    .then(function(){
+      return AppDispatcher.dispatch({
+        APP_PAGE: 'LOGIN',
+        successMsg: null,
+        errorMsg: null
+      });
+    })
+    .catch(function(err) {
+      alert(err);
+    });
   }
 
   render() {
@@ -81,6 +96,7 @@ export default class loginComponent extends React.Component {
             linkButton={true}
             secondary={true}
             label="Submit"
+            backgroundColor={Colors.amber700}
             onClick={this._handleResetPassword}
             style={styles.basicWidth}>
           </RaisedButton>

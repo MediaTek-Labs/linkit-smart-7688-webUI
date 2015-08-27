@@ -2,6 +2,7 @@ import React from 'react';
 import Radium from 'radium';
 import mui from 'material-ui';
 var AppActions     = require('../actions/appActions');
+var AppDispatcher  = require('../dispatcher/appDispatcher');
 
 let {
   TextField,
@@ -16,6 +17,7 @@ let {
 } = mui;
 
 var ThemeManager = new mui.Styles.ThemeManager();
+var Colors = mui.Styles.Colors;
 
 @Radium
 export default class loginComponent extends React.Component {
@@ -44,6 +46,7 @@ export default class loginComponent extends React.Component {
     this._scanWifi = this._scanWifi.bind(this);
     this._onRadioButtonClick = this._onRadioButtonClick.bind(this);
     this._handleSelectValueChange = this._handleSelectValueChange.bind(this);
+    this._handleSettingMode = this._handleSettingMode.bind(this);
   }
 
   componentDidMount() {
@@ -85,12 +88,43 @@ export default class loginComponent extends React.Component {
   _handleSelectValueChange(name, e) {
     let change = {};
     change[name] = e.target.value;
+    console.log('===================')
     console.log(e.target.value);
-    this.state.wifiList[e.target.value+1].ssid
+    console.log('===================')
+
+    // console.log(this.state.wifiList[e.target.value-1);
     change['stationContent'] = {};
     change['stationContent'].key = '';
-    change['stationContent'].ssid = this.state.wifiList[e.target.value+1].ssid;
+    change['stationContent'].ssid = this.state.wifiList[e.target.value-1].ssid;
     this.setState(change);
+  }
+
+  _handleSettingMode() {
+    return AppActions.setWifi(this.state.mode, this.state[ this.state.mode+'Content'].ssid, this.state[ this.state.mode+'Content'].key, window.session)
+    .then(function() {
+      return AppActions.commitAndReboot(window.session)
+      .then(function(){
+        return;
+      })
+      .catch(function(err) {
+        if (err === 'no data') {
+          return;
+        } else {
+          return err;
+        }
+      })
+    })
+    .then(function() {
+      alert('Success!We will reboot now!')
+      return AppDispatcher.dispatch({
+        APP_PAGE: 'LOGIN',
+        successMsg: null,
+        errorMsg: null
+      });
+    })
+    .catch(function(err) {
+      alert('[' + err + '] Please try again!');
+    })
   }
 
   render() {
@@ -108,6 +142,17 @@ export default class loginComponent extends React.Component {
             <TextField
               hintText="Input your password"
               type="password"
+              value={ this.state.apContent.key }
+              onChange={
+                (e)=>{
+                  this.setState({
+                    apContent: {
+                      ssid: this.state.apContent.ssid,
+                      key: e.target.value
+                    }
+                  })
+                }
+              }
               style={{ width: '100%' }}
               floatingLabelText="Password" />
           </div>
@@ -127,11 +172,21 @@ export default class loginComponent extends React.Component {
             <RaisedButton label="Refresh" onClick={ this._scanWifi }/>
             <br />
             <TextField
-            style={{ width: '100%' }}
-            value={ this.state.stationContent.key }
-            hintText="Input your Password"
-            type="password"
-            floatingLabelText="Password" />
+              style={{ width: '100%' }}
+              value={ this.state.stationContent.key }
+              hintText="Input your Password"
+              type="password"
+              onChange={
+                (e)=>{
+                  this.setState({
+                    stationContent: {
+                      ssid: this.state.stationContent.ssid,
+                      key: e.target.value
+                    }
+                  })
+                }
+              }
+              floatingLabelText="Password" />
           </div>
         break;
     }
@@ -156,14 +211,14 @@ export default class loginComponent extends React.Component {
           <RaisedButton
             linkButton={true}
             label="Cancel"
-            onClick={this._handleLogin}
             style={{width: '50%', textAlign: 'center', marginTop: '20px', marginBottom: '20px'}}>
           </RaisedButton>
           <RaisedButton
             linkButton={true}
             secondary={true}
             label="Configure & Restart"
-            onClick={this._handleLogin}
+            backgroundColor={Colors.amber700}
+            onClick={this._handleSettingMode}
             style={{width: '50%', textAlign: 'center', marginTop: '20px', marginBottom: '20px'}}>
           </RaisedButton>
         </Card>

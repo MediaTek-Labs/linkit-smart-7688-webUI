@@ -82,13 +82,30 @@ var rpcAPI = {
 
   },
   // ====== login end ========
+  changeWifiMode: function(disabled, session) {
+    var config = {
+      jsonrpc: '2.0',
+      id: id++,
+      method: 'call',
+      params: [ session, 'uci', 'set', {
+        config: 'wireless',
+        section: 'sta',
+        values: {
+          disabled: disabled
+        }}
+      ]
+    };
+
+    return this.request(config);
+
+  },
 
   scanWifi: function(session) {
     var config = {
       jsonrpc: '2.0',
       id: id++,
       method: 'call',
-      params: [ session, 'iwinfo', 'scan', { device: 'ra0' } ]
+      params: [session, 'iwinfo', 'scan', { device: 'ra0' }]
     };
 
     return this.request(config);
@@ -97,7 +114,9 @@ var rpcAPI = {
 
   setWifi: function(section, ssid, key, session) {
     var enc = 'none';
-    if (key.length > 1) { enc = 'psk2' };
+    if (key.length > 1) {
+      enc = 'psk2'
+    };
 
     var config = {
       jsonrpc: '2.0',
@@ -122,6 +141,30 @@ var rpcAPI = {
     return this.request(config);
 
   },
+
+  commitWifi: function(session) {
+    var config = {
+      jsonrpc: '2.0',
+      id: id++,
+      method: 'call',
+      params: [session, 'uci', 'apply', { commit: true }]};
+
+    return this.request(config);
+
+  },
+
+  reboot: function(session) {
+    var config = {
+      jsonrpc: '2.0',
+      id: id++,
+      method: 'call',
+      params: [session, 'rpc-sys', 'reboot', { dummy: 0}]
+    };
+
+    return this.request(config);
+
+  },
+
   resetPassword: function(user, password, session) {
 
     var config = {
@@ -224,6 +267,7 @@ var rpcAPI = {
     return this.request(config);
 
   },
+
   activeFirmware: function(session) {
 
     var config = {
@@ -249,6 +293,7 @@ var rpcAPI = {
     return this.request(config);
 
   },
+
   uploadFirmware: function(file, session) {
     var uploadUrl = RPCurl.replace('/ubus', '/cgi-bin/cgi-upload')
     return new Promise((resolve, reject) => {
@@ -309,8 +354,8 @@ var rpcAPI = {
         session,
         'uci',
         'set', {
-          config: "system",
-          section: "@system[0]",
+          config: 'system',
+          section: '@system[0]',
           values: { hostname: hostname}
         }
       ]
@@ -319,7 +364,6 @@ var rpcAPI = {
     return this.request(config);
 
   }
-
 
 };
 

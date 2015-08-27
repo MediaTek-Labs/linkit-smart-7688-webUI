@@ -5,6 +5,7 @@ import mui from 'material-ui';
 import appAction from '../actions/appActions';
 let {RaisedButton, FontIcon, TextField, Dialog} = mui;
 var ThemeManager = new mui.Styles.ThemeManager();
+var Colors = mui.Styles.Colors;
 
 @Radium
 export default class loginComponent extends React.Component {
@@ -46,7 +47,7 @@ export default class loginComponent extends React.Component {
           title="Connection failed..."
           ref="waitingDialog"
           modal={ this.state.waiting }>
-          <p>Please refresh. If problem persists, please ensure your board is not in the process of updating new firmware, or check Wi-Fi connectivity settings.</p>
+          <p style={{ lineHeight: '23px'}}>Please refresh. If problem persists, please ensure your board is not in the process of rebooting, or updating new firmware, or check Wi-Fi connectivity settings.</p>
         </Dialog>
         <div style={styles.block}>
           <img src={Logo} style={styles.img}/>
@@ -54,6 +55,7 @@ export default class loginComponent extends React.Component {
           <TextField
             hintText="Input your Account"
             ref="password"
+            color={Colors.amber700}
             value="root (default)"
             style={ styles.basicWidth }
             required
@@ -62,6 +64,7 @@ export default class loginComponent extends React.Component {
           <TextField
             hintText="Input your password"
             type="password"
+            color={Colors.amber700}
             ref="password"
             style={ styles.basicWidth }
             onChange={
@@ -75,6 +78,7 @@ export default class loginComponent extends React.Component {
             linkButton={true}
             secondary={true}
             label="Login"
+            backgroundColor={Colors.amber700}
             onClick={this._handleLogin}
             style={styles.basicWidth}>
             <FontIcon style={styles.exampleButtonIcon} className="muidocs-icon-custom-github"/>

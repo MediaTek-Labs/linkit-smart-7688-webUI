@@ -4,14 +4,29 @@ import rpc from '../util/rpcAPI';
 var AppDispatcher = require('../dispatcher/appDispatcher');
 
 var appActions = {
+  commitAndReboot: function(session) {
+    return rpc.commitWifi(session)
+    .then(function(data) {
+      return rpc.reboot(session);
+    })
+  },
 
-  setWifi: function(section, ssid, key) {
-    return rpc.setWifi(session, ssid, key)
+  setWifi: function(section, ssid, key, session) {
+    var disabled = 1;
+
+    if (section === 'station') {
+      section = 'sta';
+      disabled = 0;
+    }
+
+    return rpc.changeWifiMode(disabled, session)
+    .then(function(data) {
+      return rpc.setWifi(section, ssid, key, session)
+    });
   },
 
   scanWifi: function(session) {
     return rpc.scanWifi(session);
-
   },
 
   resetHostName: function(hostname, session) {
@@ -21,16 +36,6 @@ var appActions = {
 
   resetPassword: function(user, password, session) {
     return rpc.resetPassword(user, password, window.session)
-    .then(function(data) {
-      return AppDispatcher.dispatch({
-        APP_PAGE: 'LOGIN',
-        successMsg: null,
-        errorMsg: null
-      });
-    })
-    .catch(function(err) {
-      console.log(err);
-    })
   },
 
   loadNetwork: function(session) {
