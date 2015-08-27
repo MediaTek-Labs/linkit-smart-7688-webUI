@@ -1,8 +1,8 @@
-<html>
 
-<head>
+<!-- saved from url=(0035)http://mylinkit.local/rpc_demo.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=Big5">
 <title>LinkIt Smart7688 RPC Example</title>
-<script src="jquery-2.1.4.js"></script>
+<script src="./rpc_demo_files/jquery-2.1.4.js"></script>
 </head>
 
 <body>
@@ -59,6 +59,23 @@ function uci_commit() {
 	});
 }
 
+function rpc_hostname(hostname) {
+	config = { "jsonrpc": "2.0", "id": id++, "method": "call",
+			"params": [ session, "uci", "set", {
+				"config": "system",
+				"section": "@system[0]",
+				values: { "hostname": hostname }}
+			]
+		};
+	do_ajax(config, function(reply) {
+		if (!reply.result || reply.result[0] != 0) {
+			alert("failed to change hostname");
+			return;
+		}
+		alert("hostname set to " + hostname);
+	});
+}
+
 function rpc_wifi_mode(mode) {
 	var disabled = 1;
 
@@ -103,11 +120,11 @@ function rpc_wifi_ap_scan() {
 			alert("failed to scan");
 		else
 			alert("scan complete");
-
+		
 		$.each(reply.result[1].results, function (i, item) {
-			$('#Scan').append($('<option>', {
+			$('#Scan').append($('<option>', { 
 				value: item.ssid,
-				text : item.ssid + " - " + item.quality + "%",
+				text : item.ssid + " - " + item.quality + "%", 
 			}));
 		});
 	});
@@ -210,8 +227,22 @@ function rpc_system_load() {
 		var res = reply.result[1].values;
 		for (k in res) if (res[k].hostname) {
 			$("#Hostname").val(res[k].hostname);
+			$("#ldrver").val(res[k].loader_version);
+			$("#fwver").val(res[k].firmware_version);
 			return
 		}
+	});
+}
+
+function rpc_board_load() {
+	config = { "jsonrpc": "2.0", "id": id++, "method": "call",
+			"params": [ session, "system", "board", { "dummy": 0  }]
+		};
+	do_ajax(config, function(reply) {
+		if (!reply.result || reply.result[0] != 0)
+			return;
+		if (reply.result[1].model) 
+			$("#Model").val(reply.result[1].model);
 	});
 }
 
@@ -260,6 +291,7 @@ function rpc_login(user, pass)
 			}
 			$("#Session").val(session);
 			$("#fwSession").val(session);
+			rpc_board_load();
 			rpc_system_load();
 			rpc_wifi_load();
 			rpc_network_load();
@@ -291,6 +323,19 @@ function rpc_factory() {
 			return;
 		}
 		alert("Resetting to factory defaults");
+	});
+}
+
+function rpc_reboot() {
+	config = { "jsonrpc": "2.0", "id": id++, "method": "call",
+			"params": [ session, "rpc-sys", "reboot", { "dummy": 0  }]
+		};
+	do_ajax(config, function(reply) {
+		if (!reply.result || reply.result[0] != 0) {
+			alert("Failed to reboot");
+			return;
+		}
+		alert("Rebooting");
 	});
 }
 
@@ -334,78 +379,90 @@ $( document ).ready(function() {
 	$("#BtnCommit").click(function() { uci_commit(); });
 	$("#BtnPasswd").click(function() { rpc_passwd($("#NewPasswd").val()); });
 	$("#BtnFactory").click(function() { rpc_factory(); });
+	$("#BtnReboot").click(function() { rpc_reboot(); });
+	$("#BtnHostname").click(function() { rpc_hostname($("#Hostname").val()); });
 	$("#uploadFrame").load(function() { rpc_file_upload(); });
 	$("#Scan").change(function() { $("#sSsid").val($("#Scan").val()); });
 });
 </script>
 
 <h3> Login </h3>
-Password <input type=input id=Password>
-<input type=button value=Login id=BtnLogin><br>
-<input type=button value=Logout id=BtnLogout><br>
-Session ID <input type=input readonly id=Session><br>
+Password <input type="input" id="Password">
+<input type="button" value="Login" id="BtnLogin"><br>
+<input type="button" value="Logout" id="BtnLogout"><br>
+Session ID <input type="input" readonly="" id="Session"><br>
 <br><br>
 
 
 <h3> Status </h3>
-Hostname <input type=input readonly id=Hostname><br>
-AP IP <input type=input readonly id=lan_ip><br>
-AP MAC <input type=input readonly id=lan_mac><br>
-Sta IP <input type=input readonly id=wan_ip><br>
-STA MAC <input type=input readonly id=wan_mac><br>
-FW Ver <input type=input readonly id=fwver><br>
-LDR Ver <input type=input readonly id=ldrver><br>
+Model <input type="input" readonly="" id="Model"><br>
+AP IP <input type="input" readonly="" id="lan_ip"><br>
+AP MAC <input type="input" readonly="" id="lan_mac"><br>
+Sta IP <input type="input" readonly="" id="wan_ip"><br>
+STA MAC <input type="input" readonly="" id="wan_mac"><br>
+FW Ver <input type="input" readonly="" id="fwver"><br>
+LDR Ver <input type="input" readonly="" id="ldrver"><br>
+<br><br>
+
+<h3> Hostname </h3>
+Hostname <input type="input" id="Hostname">
+<input type="button" value="Mode" id="BtnHostname">
 <br><br>
 
 <h3> WiFi Mode </h3>
 Mode <select id="Mode">
-	<option value=ap>AP</option>
-	<option value=sta>Station</option>
+	<option value="ap">AP</option>
+	<option value="sta">Station</option>
 </select>
-<input type=button value=Mode id=BtnMode>
+<input type="button" value="Mode" id="BtnMode">
 <br><br>
 
 <h3> AP Scan </h3>
 Networks <select id="Scan">
 	<option>---</option>
 </select>
-<input type=button value=Scan id=BtnAPscan>
+<input type="button" value="Scan" id="BtnAPscan">
 <br><br>
 
 <h3> AP Setup </h3>
-Ssid <input type=input id=Ssid>
-Key <input type=input id=Key>
-<input type=button value=AP id=BtnAP>
+Ssid <input type="input" id="Ssid">
+Key <input type="input" id="Key">
+<input type="button" value="AP" id="BtnAP">
 <br><br>
 
 <h3> STA Setup </h3>
-Ssid <input type=input id=sSsid>
-Key <input type=input id=sKey>
-<input type=button value=Station id=BtnSta>
+Ssid <input type="input" id="sSsid">
+Key <input type="input" id="sKey">
+<input type="button" value="Station" id="BtnSta">
 <br><br>
 
 <h3> Commit </h3>
-<input type=button value="Commit & Apply Changes" id=BtnCommit>
+<input type="button" value="Commit &amp; Apply Changes" id="BtnCommit">
 <br><br>
 
 <h3> Change Password </h3>
-New Password <input type=input id=NewPasswd>
-<input type=button value=Change id=BtnPasswd>
+New Password <input type="input" id="NewPasswd">
+<input type="button" value="Change" id="BtnPasswd">
 <br><br>
 
-<h3> Reset </h3>
-<input type=button value=Factory id=BtnFactory>
+<h3> Reboot </h3>
+<input type="button" value="Reboot" id="BtnReboot">
+<br><br>
+
+<h3> Factory Reset </h3>
+<input type="button" value="Factory" id="BtnFactory">
 <br><br>
 
 
-<form target=uploadFrame method=post enctype="multipart/form-data" action="/cgi-bin/cgi-upload">
-<input id=fwSession type=hidden name=sessionid>
-<input type=hidden name=filename value="/tmp/firmware.bin">
-<input type=hidden name=filemode value="0600">
-<input type=file name=filedata>
-<input type=submit>
-<form>
+<form target="uploadFrame" method="post" enctype="multipart/form-data" action="http://mylinkit.local/cgi-bin/cgi-upload">
+<input id="fwSession" type="hidden" name="sessionid">
+<input type="hidden" name="filename" value="/tmp/firmware.bin">
+<input type="hidden" name="filemode" value="0600">
+<input type="file" name="filedata">
+<input type="submit">
+
 <br>
-<iframe name="uploadFrame" id="uploadFrame"/>
-</body>
-</html>
+<iframe name="uploadFrame" id="uploadFrame">
+&lt;/body&gt;
+&lt;/html&gt;
+</iframe></form></body></html>

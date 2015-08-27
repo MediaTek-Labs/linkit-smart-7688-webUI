@@ -43,6 +43,8 @@ export default class loginComponent extends React.Component {
     this._onFactorySubmit = this._onFactorySubmit.bind(this);
     this._handleStandardDialogTouchTap = this._handleStandardDialogTouchTap.bind(this);
     this._onSubmitFirmware = this._onSubmitFirmware.bind(this)
+    this._onSubmitResetHostName = this._onSubmitResetHostName.bind(this);
+    this._onSubmitResetPassword = this._onSubmitResetPassword.bind(this);
   }
 
   getChildContext() {
@@ -69,6 +71,20 @@ export default class loginComponent extends React.Component {
     .catch(function(err) {
       alert(err + ' Please try again!');
     });
+  }
+
+  _onSubmitResetHostName(hostname) {
+    return appActions.resetHostName(hostname, window.session)
+    .then(function(data) {
+
+    })
+  }
+
+  _onSubmitResetPassword(password) {
+    return appActions.resetPassword(password, window.session)
+    .then(function(data) {
+
+    })
   }
 
   _onDrop(files) {

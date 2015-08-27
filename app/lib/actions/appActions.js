@@ -11,11 +11,17 @@ var appActions = {
 
   scanWifi: function(session) {
     return rpc.scanWifi(session);
+
+  },
+
+  resetHostName: function(hostname, session) {
+    return rpc.resetHostName(hostname, session);
+
   },
 
   resetPassword: function(user, password, session) {
     return rpc.resetPassword(user, password, window.session)
-    .then(function (data) {
+    .then(function(data) {
       return AppDispatcher.dispatch({
         APP_PAGE: 'LOGIN',
         successMsg: null,
