@@ -43,8 +43,7 @@ export default class loginComponent extends React.Component {
     this._onFactorySubmit = this._onFactorySubmit.bind(this);
     this._handleStandardDialogTouchTap = this._handleStandardDialogTouchTap.bind(this);
     this._onSubmitFirmware = this._onSubmitFirmware.bind(this)
-    this._onSubmitResetHostName = this._onSubmitResetHostName.bind(this);
-    this._onSubmitResetPassword = this._onSubmitResetPassword.bind(this);
+    this._submitPlatformBlock = this._submitPlatformBlock.bind(this);
   }
 
   getChildContext() {
@@ -73,20 +72,6 @@ export default class loginComponent extends React.Component {
     });
   }
 
-  _onSubmitResetHostName(hostname) {
-    return appActions.resetHostName(hostname, window.session)
-    .then(function(data) {
-
-    })
-  }
-
-  _onSubmitResetPassword(password) {
-    return appActions.resetPassword(password, window.session)
-    .then(function(data) {
-
-    })
-  }
-
   _onDrop(files) {
     console.log('Received files: ', files);
     this.setState({
@@ -98,6 +83,21 @@ export default class loginComponent extends React.Component {
     console.log(status)
     this.setState({
       modal: status
+    })
+  }
+
+  _submitPlatformBlock() {
+    var _this = this;
+    return AppActions.resetHostName(_this.state.deviceName, window.session)
+    .then(function(data) {
+      return AppActions.resetPassword('root', _this.state.password, window.session);
+    })
+    .then(function(data) {
+      alert('success!');
+      return _this._editPlatformBlock(false);
+    })
+    .catch(function(err) {
+      alert(err);
     })
   }
 
@@ -196,6 +196,7 @@ export default class loginComponent extends React.Component {
             hintText="Device name"
             style={{width: '100%'}}
             defaultValue={this.state.deviceName}
+            onChange={ (e) => {this.setState({deviceName: e.target.value})} }
             underlineStyle={{border: '1px solid #53c34a'}}
             floatingLabelText="Device name" />
           <TextField
@@ -225,6 +226,7 @@ export default class loginComponent extends React.Component {
             underlineStyle={{border: '1px solid #53c34a'}}
             defaultValue={this.state.password}
             type="password"
+            onChange={ (e) => {this.setState({password: e.target.value})} }
             floatingLabelText="Password" />
           <div style={{ display: 'flex',flexDirection: 'row', justifyContent:'space-between', }}>
             <RaisedButton
@@ -238,7 +240,7 @@ export default class loginComponent extends React.Component {
               linkButton={true}
               secondary={true}
               label="Configure & Restart"
-              onClick={()=>{this._editPlatformBlock(false)}}
+              onClick={()=>{this._submitPlatformBlock(false)}}
               // onClick={this._handleLogin}
               style={{flexGrow:1, textAlign: 'center', marginTop: '20px', marginBottom: '20px'}}>
             </RaisedButton>
