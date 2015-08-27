@@ -19,11 +19,15 @@ var rpcAPI = {
       .end(function(err, res) {
         console.log(res);
         // return res.ok ? resolve(res) : reject(err);
+        if (!res) {
+          return reject('Connection failed');
+        }
+
         if (!res.ok) {
           return reject('Connection failed');
         }
 
-        if (res.body.error) {
+        if (res.body && res.body.error) {
           return reject(res.body.error.message);
         }
 
@@ -197,7 +201,7 @@ var rpcAPI = {
       jsonrpc: '2.0',
       id: id++,
       method: 'call',
-      params: [ session, 'uci', 'get', { config: 'wireless' }]
+      params: [session, 'uci', 'get', { config: 'wireless' }]
     };
 
     return this.request(config);
@@ -220,6 +224,51 @@ var rpcAPI = {
     return this.request(config);
 
   },
+  activeFirmware: function(session) {
+
+    var config = {
+      jsonrpc: '2.0',
+      id: id++,
+      method: 'call',
+      params: [session, 'rpc-sys', 'upgrade_start', { keep: 1}]
+    };
+
+    return this.request(config);
+
+  },
+
+  checkFirmware: function(session) {
+
+    var config = {
+      jsonrpc: '2.0',
+      id: id++,
+      method: 'call',
+      params: [session, 'rpc-sys', 'upgrade_test', { dummy: 0}]
+    };
+
+    return this.request(config);
+
+  },
+  uploadFirmware: function(file, session) {
+    var uploadUrl = RPCurl.replace('/ubus', '/cgi-bin/cgi-upload')
+    return new Promise((resolve, reject) => {
+      request
+      .post(uploadUrl)
+      .field('sessionid', session)
+      .field('filemode', '0600')
+      .field('filename', '/tmp/firmware.bin')
+      .attach('filedata', file, file.name)
+      .end(function(err, res) {
+        console.log(res);
+        // return res.ok ? resolve(res) : reject(err);
+        if (!res.ok) {
+          return reject('Connection failed');
+        } else {
+          return resolve(res);
+        }
+      });
+    });
+  },
 
   reloadConfig: function(session) {
 
@@ -237,6 +286,18 @@ var rpcAPI = {
 
     return this.request(config);
 
+  },
+
+  resetFactory: function(session) {
+
+    var config = {
+      jsonrpc: '2.0',
+      id: id++,
+      method: 'call',
+      params: [session, 'rpc-sys', 'factory', { dummy: 0}]
+    };
+
+    return this.request(config);
   }
 
 };

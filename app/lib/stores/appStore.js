@@ -26,6 +26,7 @@ if(window.session) {
 } else {
   rpc.login('root', '')
   .then(function(data) {
+    console.log(data)
     var session = data.body.result[1].ubus_rpc_session;
     window.session = session;
     return AppDispatcher.dispatch({
@@ -35,14 +36,28 @@ if(window.session) {
     });
   })
   .catch(function(err) {
+    console.log(err);
+    if (err === 'Connection failed') {
+      return AppDispatcher.dispatch({
+        APP_PAGE: 'LOGIN',
+        successMsg: null,
+        errorMsg: 'Waiting'
+      });
+    } else if (err === 'Permission denied') {
+      return AppDispatcher.dispatch({
+        APP_PAGE: 'LOGIN',
+        successMsg: null,
+        errorMsg: null
+      });
+    }
+
     return ;
   })
 }
 
-
-APP_PAGE.APP_PAGE = 'LOGIN';
-APP_PAGE.errorMsg = AppActions.getQuery('errorMsg') || null;
-APP_PAGE.successMsg = AppActions.getQuery('successMsg') || null;
+// APP_PAGE.APP_PAGE = 'LOGIN';
+// APP_PAGE.errorMsg = AppActions.getQuery('errorMsg') || null;
+// APP_PAGE.successMsg = AppActions.getQuery('successMsg') || null;
 
 var appStore = assign({}, EventEmitter.prototype, {
 
@@ -77,6 +92,10 @@ AppDispatcher.register(function(action) {
   APP_PAGE.boardInfo = action.boardInfo || null;
 
   switch (action.APP_PAGE) {
+    case AppConstants.FIRSTLOGIN:
+      APP_PAGE.APP_PAGE = AppConstants.FIRSTLOGIN;
+      appStore.emitChange();
+      break;
     case AppConstants.LOGIN:
       APP_PAGE.APP_PAGE = AppConstants.LOGIN;
       appStore.emitChange();

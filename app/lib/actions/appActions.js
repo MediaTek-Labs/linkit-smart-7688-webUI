@@ -90,13 +90,28 @@ var appActions = {
       window.session = ''
       window.localStorage.removeItem('session');
       window.localStorage.removeItem('info');
-      alert('Account / password is incorrect.')
-      return AppDispatcher.dispatch({
-        APP_PAGE: 'LOGIN',
-        successMsg: null,
-        errorMsg: '[' + err + '] failed to grant object permissions'
-      });
+      if (err === 'Connection failed') {
+        return AppDispatcher.dispatch({
+          APP_PAGE: 'LOGIN',
+          successMsg: null,
+          errorMsg: 'Waiting'
+        });
+      };
+      alert('Account / password is incorrect.');
     })
+  },
+
+  resetFactory: function(session) {
+    return rpc.resetFactory(session);
+  },
+  checkFirmware: function(session) {
+    return rpc.checkFirmware(session);
+  },
+  activeFirmware: function(session) {
+    return rpc.activeFirmware(session);
+  },
+  uploadFirmware: function(file, session) {
+    return rpc.uploadFirmware(file, session);
   },
 
   getQuery: function(name) {

@@ -3,7 +3,7 @@ import Radium from 'radium';
 import Logo from '../../img/mediatek.png';
 import mui from 'material-ui';
 import appAction from '../actions/appActions';
-let {RaisedButton, FontIcon, TextField} = mui;
+let {RaisedButton, FontIcon, TextField, Dialog} = mui;
 var ThemeManager = new mui.Styles.ThemeManager();
 
 @Radium
@@ -13,11 +13,19 @@ export default class loginComponent extends React.Component {
     this.state = {
       password: ''
     }
+
     this._handleLogin = this._handleLogin.bind(this)
   }
 
   componentDidMount() {
-
+    console.log(this.props.errorMsg)
+    if (this.props.errorMsg === 'Waiting') {
+      this.state.waiting = true;
+      this.refs.waitingDialog.show();
+    } else {
+      this.state.waiting = false;
+      this.refs.waitingDialog.dismiss();
+    }
   }
 
   getChildContext() {
@@ -34,6 +42,12 @@ export default class loginComponent extends React.Component {
   render() {
     return (
       <div style={styles.frame}>
+        <Dialog
+          title="Connection failed..."
+          ref="waitingDialog"
+          modal={ this.state.waiting }>
+          <p>Please refresh. If problem persists, please ensure your board is not in the process of updating new firmware, or check Wi-Fi connectivity settings.</p>
+        </Dialog>
         <div style={styles.block}>
           <img src={Logo} style={styles.img}/>
           <p style={{lineHeight: '22px'}}>Welcome to MyLinkIt, please input password to access the web console.</p>
