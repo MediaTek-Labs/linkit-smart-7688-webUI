@@ -70,7 +70,6 @@ var appActions = {
       return boardInfo;
     })
     .then(function(boardInfo) {
-      console.log(boardInfo)
       return AppDispatcher.dispatch({
         APP_PAGE: 'CONTENT',
         boardInfo: boardInfo,
@@ -97,7 +96,6 @@ var appActions = {
       return _this.initialFetchData(window.session);
     })
     .catch(function(err) {
-      console.log(err);
       window.session = ''
       window.localStorage.removeItem('session');
       window.localStorage.removeItem('info');

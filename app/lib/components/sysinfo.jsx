@@ -16,6 +16,7 @@ let {
 
 var ThemeManager = new mui.Styles.ThemeManager();
 var Colors = mui.Styles.Colors;
+
 @Radium
 export default class loginComponent extends React.Component {
   constructor(props) {
@@ -27,15 +28,22 @@ export default class loginComponent extends React.Component {
     this.state.modal = false;
     this.state.upgradeFirmware = false;
     var info = JSON.parse(localStorage.getItem('info'))
-    console.log(info)
     if (this.props.boardInfo) {
       this.state.deviceName = this.props.boardInfo.system[Object.keys(this.props.boardInfo.system)[0]].hostname
-      this.state.macaddr = this.props.boardInfo.network.lan.macaddr;
-      this.state.currentIp = this.props.boardInfo.lan['ipv4-address'][0].address
       this.state.user = info.user;
       this.state.password = info.password;
-      this.state.bootLoaderVersion = '';
-      this.state.firmwareVersion = '';
+      this.state.bootLoaderVersion = this.props.boardInfo.system[Object.keys(this.props.boardInfo.system)[0]].loader_version;
+      this.state.firmwareVersion = this.props.boardInfo.system[Object.keys(this.props.boardInfo.system)[0]].firmware_version;
+      console.log(this.props.boardInfo.wifi)
+      if (this.props.boardInfo.wifi.sta.disabled === "1") {
+        this.state.mode = 'ap';
+        this.state.macaddr = this.props.boardInfo.network.lan.macaddr;
+        this.state.currentIp = this.props.boardInfo.lan['ipv4-address'][0].address
+      } else {
+        this.state.mode = 'station';
+        this.state.macaddr = this.props.boardInfo.network.wan.macaddr;
+        this.state.currentIp = this.props.boardInfo.wan['ipv4-address'][0].address
+      }
     }
     this._editPlatformBlock = this._editPlatformBlock.bind(this);
     this._editSoftwareBlock = this._editSoftwareBlock.bind(this);
@@ -79,14 +87,12 @@ export default class loginComponent extends React.Component {
   }
 
   _onDrop(files) {
-    console.log('Received files: ', files);
     this.setState({
       files: files
     })
   }
 
   _onReset(status) {
-    console.log(status)
     this.setState({
       modal: status
     })
@@ -152,7 +158,6 @@ export default class loginComponent extends React.Component {
       });
     })
     .catch(function(err) {
-      console.log(err)
       alert('Failed to upgrade image');
     })
   }
@@ -221,7 +226,9 @@ export default class loginComponent extends React.Component {
             style={{width: '100%'}}
             defaultValue={this.state.deviceName}
             onChange={ (e) => {this.setState({deviceName: e.target.value})} }
-            underlineStyle={{border: '1px solid #53c34a'}}
+            underlineStyle={{borderColor: Colors.amber700}}
+            underlineFocusStyle={{borderColor: Colors.amber700}}
+            floatingLabelStyle={{color: Colors.amber700}}
             floatingLabelText="Device name" />
           <TextField
             hintText="Mac address"
@@ -247,8 +254,10 @@ export default class loginComponent extends React.Component {
           <TextField
             hintText="Password"
             style={{width: '100%'}}
-            underlineStyle={{border: '1px solid #53c34a'}}
+            underlineStyle={{borderColor: Colors.amber700}}
             defaultValue={this.state.password}
+            underlineFocusStyle={{borderColor: Colors.amber700}}
+            floatingLabelStyle={{color: Colors.amber700}}
             type="password"
             onChange={ (e) => {this.setState({password: e.target.value})} }
             floatingLabelText="Password" />
@@ -280,13 +289,13 @@ export default class loginComponent extends React.Component {
           hintText="Boot loader version"
           disabled={true}
           style={{width: '100%'}}
-          defaultValue="Boot loader version"
+          defaultValue={this.state.bootLoaderVersion}
           floatingLabelText="Boot loader version" />
         <TextField
           hintText="Firmware version"
           style={{width: '100%'}}
           disabled={true}
-          defaultValue="Firmware version"
+          defaultValue={this.state.firmwareVersion}
           floatingLabelText="Firmware version" />
         <RaisedButton
           linkButton={true}
@@ -309,15 +318,15 @@ export default class loginComponent extends React.Component {
             hintText="Boot loader version"
             disabled={true}
             style={{ width: '100%' }}
-            defaultValue="Boot loader version"
+            defaultValue={this.state.bootLoaderVersion}
             floatingLabelText="Boot loader version" />
           <TextField
             hintText="Firmware version"
             style={{ width: '100%' }}
             disabled={true}
-            defaultValue="Firmware version"
+            defaultValue={this.state.firmwareVersion}
             floatingLabelText="Firmware version" />
-          <Dropzone onDrop={this._onDrop} style={{width: '100%', border: '3px dotted #53c34a'}}>
+          <Dropzone onDrop={this._onDrop} style={{width: '100%', border: '3px dotted #ffa000'}}>
             <div>
               <h3 style={{textAlign: 'center'}}>Firmware upgrade</h3>
               <p style={{textAlign: 'center'}}>Try dropping some files here, or click to select files to upload.</p>

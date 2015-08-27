@@ -23,7 +23,6 @@ var Colors = mui.Styles.Colors;
 export default class loginComponent extends React.Component {
   constructor(props) {
     super(props)
-    console.log(this.props)
 
     this.state = {}
     this.state.wifiList = [];
@@ -37,7 +36,7 @@ export default class loginComponent extends React.Component {
       key: this.props.boardInfo.wifi.sta.key || ''
     };
 
-    if (this.props.boardInfo.wifi.sta.disabled) {
+    if (this.props.boardInfo.wifi.sta.disabled === "1") {
       this.state.mode = 'ap';
 
     } else {
@@ -88,11 +87,7 @@ export default class loginComponent extends React.Component {
   _handleSelectValueChange(name, e) {
     let change = {};
     change[name] = e.target.value;
-    console.log('===================')
-    console.log(e.target.value);
-    console.log('===================')
 
-    // console.log(this.state.wifiList[e.target.value-1);
     change['stationContent'] = {};
     change['stationContent'].key = '';
     change['stationContent'].ssid = this.state.wifiList[e.target.value-1].ssid;
@@ -138,10 +133,14 @@ export default class loginComponent extends React.Component {
             type="text"
             value={ this.state.apContent.ssid }
             style={{ width: '100%' }}
+            underlineFocusStyle={{borderColor: Colors.amber700}}
+            floatingLabelStyle={{color: Colors.amber700}}
             floatingLabelText="Network name" />
             <TextField
               hintText="Input your password"
               type="password"
+              underlineFocusStyle={{borderColor: Colors.amber700}}
+              floatingLabelStyle={{color: Colors.amber700}}
               value={ this.state.apContent.key }
               onChange={
                 (e)=>{
@@ -175,6 +174,8 @@ export default class loginComponent extends React.Component {
               style={{ width: '100%' }}
               value={ this.state.stationContent.key }
               hintText="Input your Password"
+              underlineFocusStyle={{borderColor: Colors.amber700}}
+              floatingLabelStyle={{color: Colors.amber700}}
               type="password"
               onChange={
                 (e)=>{
@@ -198,14 +199,14 @@ export default class loginComponent extends React.Component {
           <RadioButtonGroup name="shipSpeed" defaultSelected={this.state.mode}>
             <RadioButton
               value="ap"
+              style={{color: Colors.amber700, marginBottom:16}}
               label="AP mode"
-              onClick={() => this._onRadioButtonClick('ap')}
-              style={{marginBottom:16}} />
+              onClick={() => this._onRadioButtonClick('ap')}/>
             <RadioButton
               value="station"
               label="Station mode"
               onClick={() => this._onRadioButtonClick('station')}
-              style={{marginBottom:16}}/>
+              style={{color: Colors.amber700, marginBottom:16}}/>
           </RadioButtonGroup>
           { elem }
           <RaisedButton

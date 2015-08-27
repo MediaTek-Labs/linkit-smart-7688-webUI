@@ -40,15 +40,15 @@ export default class contentComponent extends React.Component {
       <div style={styles.block}>
         <header style={ styles.header }>
           <p style={{ lineHeight: '35px' }}> Welcome to <b>LinkIt Smart 7688</b></p>
-          <p style={{ lineHeight: '35px' }}>For advanced network configuration, go to <a href="">OpenWrt</a>.</p>
+          <p style={{ lineHeight: '35px' }}>For advanced network configuration, go to <a style={{color:'#666'}} href="/cgi-bin/luci">OpenWrt</a>.</p>
         </header>
         <Tabs
           valueLink={{ value: this.state.tabsValue }}
+          tabItemContainerStyle={{ backgroundColor: Colors.amber700 }}
           style={styles.content}>
           <Tab
             label="System information"
             value="sysinfo"
-            backgroundColor={Colors.amber700}
             onClick={this._handleTabsChangeSYS.bind(this)}>
             <Sysinfo boardInfo={ this.props.boardInfo } />
           </Tab>
@@ -74,12 +74,13 @@ var styles= {
     alignItems: 'center',
   },
   content: {
-    width: '768px',
+    maxWidth: '768px',
+    width: '100%',
     paddingBottom: '30px',
   },
   header: {
-    width: '768px',
-    height: '64px',
+    maxWidth: '768px',
+    width: '100%',
     display: 'flex',
     justifyContent: 'space-between'
   }

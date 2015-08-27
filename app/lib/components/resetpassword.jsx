@@ -64,6 +64,8 @@ export default class loginComponent extends React.Component {
             hintText="Input your Account"
             ref="password"
             value="root (default)"
+            underlineFocusStyle={{borderColor: Colors.amber700}}
+            floatingLabelStyle={{color: Colors.amber700}}
             style={ styles.basicWidth }
             required
             minLength="6"
@@ -71,6 +73,8 @@ export default class loginComponent extends React.Component {
           <TextField
             hintText="Input your password"
             type="password"
+            underlineFocusStyle={{borderColor: Colors.amber700}}
+            floatingLabelStyle={{color: Colors.amber700}}
             style={ styles.basicWidth }
             required
             minLength="6"
@@ -84,6 +88,8 @@ export default class loginComponent extends React.Component {
             hintText="Please input your password again"
             type="password"
             required
+            underlineFocusStyle={{borderColor: Colors.amber700}}
+            floatingLabelStyle={{color: Colors.amber700}}
             style={ styles.basicWidth }
             onChange={
               (e) => {

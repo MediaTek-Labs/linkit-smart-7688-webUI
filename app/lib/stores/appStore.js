@@ -26,7 +26,6 @@ if(window.session) {
 } else {
   rpc.login('root', '')
   .then(function(data) {
-    console.log(data)
     var session = data.body.result[1].ubus_rpc_session;
     window.session = session;
     return AppDispatcher.dispatch({
@@ -36,7 +35,6 @@ if(window.session) {
     });
   })
   .catch(function(err) {
-    console.log(err);
     if (err === 'Connection failed') {
       return AppDispatcher.dispatch({
         APP_PAGE: 'LOGIN',

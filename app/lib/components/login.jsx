@@ -19,7 +19,6 @@ export default class loginComponent extends React.Component {
   }
 
   componentDidMount() {
-    console.log(this.props.errorMsg)
     if (this.props.errorMsg === 'Waiting') {
       this.state.waiting = true;
       this.refs.waitingDialog.show();
@@ -58,13 +57,16 @@ export default class loginComponent extends React.Component {
             color={Colors.amber700}
             value="root (default)"
             style={ styles.basicWidth }
+            underlineFocusStyle={{borderColor: Colors.amber700}}
+            floatingLabelStyle={{color: Colors.amber700}}
             required
             minLength="6"
             floatingLabelText="Account" />
           <TextField
             hintText="Input your password"
             type="password"
-            color={Colors.amber700}
+            underlineFocusStyle={{borderColor: Colors.amber700}}
+            floatingLabelStyle={{color: Colors.amber700}}
             ref="password"
             style={ styles.basicWidth }
             onChange={
@@ -83,7 +85,7 @@ export default class loginComponent extends React.Component {
             style={styles.basicWidth}>
             <FontIcon style={styles.exampleButtonIcon} className="muidocs-icon-custom-github"/>
           </RaisedButton>
-          <p style={{marginTop: '50px'}}>For advanced network configuration, go to <a href="">OpenWrt</a>.</p>
+          <p style={{marginTop: '50px'}}>For advanced network configuration, go to <a style={{color:'#666'}} href="/cgi-bin/luci">OpenWrt</a>.</p>
         </div>
       </div>
     )

@@ -17,7 +17,6 @@ var rpcAPI = {
       .send(config)
       .set('Accept', 'application/json')
       .end(function(err, res) {
-        console.log(res);
         // return res.ok ? resolve(res) : reject(err);
         if (!res) {
           return reject('Connection failed');
@@ -304,7 +303,6 @@ var rpcAPI = {
       .field('filename', '/tmp/firmware.bin')
       .attach('filedata', file, file.name)
       .end(function(err, res) {
-        console.log(res);
         // return res.ok ? resolve(res) : reject(err);
         if (!res.ok) {
           return reject('Connection failed');

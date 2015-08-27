@@ -1,4 +1,16 @@
+@font-face {
+  font-family: 'RionaSans';
+  font-weight: normal;
+  font-style: normal;
+  src: url(../font/riona-sans-regular.otf);
+}
+
 body {
   margin: 0px;
   padding: 0px;
+  font-family:RionaSans,Arial,Helvetica,sans-serif;
+}
+
+* {
+  font-family:RionaSans,Arial,Helvetica,sans-serif;
 }
