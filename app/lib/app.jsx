@@ -8,6 +8,8 @@ import Login from './components/login.jsx';
 import Content from './components/content.jsx';
 import Header from './components/header.jsx';
 import Resetpassword from './components/resetpassword.jsx';
+import Loading from './components/loading.jsx';
+
 //store
 import AppStore from './stores/appStore.js';
 

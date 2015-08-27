@@ -155,7 +155,7 @@ export default class loginComponent extends React.Component {
           { elem }
           <RaisedButton
             linkButton={true}
-            label="Discard"
+            label="Cancel"
             onClick={this._handleLogin}
             style={{width: '50%', textAlign: 'center', marginTop: '20px', marginBottom: '20px'}}>
           </RaisedButton>
