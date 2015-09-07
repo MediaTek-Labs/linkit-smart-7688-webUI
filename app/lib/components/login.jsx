@@ -81,7 +81,7 @@ export default class loginComponent extends React.Component {
             secondary={true}
             label="Login"
             backgroundColor={Colors.amber700}
-            onClick={this._handleLogin}
+            onTouchTap={this._handleLogin}
             style={styles.basicWidth}>
             <FontIcon style={styles.exampleButtonIcon} className="muidocs-icon-custom-github"/>
           </RaisedButton>

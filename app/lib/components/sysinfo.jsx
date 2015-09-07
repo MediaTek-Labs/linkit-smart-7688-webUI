@@ -34,7 +34,6 @@ export default class loginComponent extends React.Component {
       this.state.password = info.password;
       this.state.bootLoaderVersion = this.props.boardInfo.system[Object.keys(this.props.boardInfo.system)[0]].loader_version;
       this.state.firmwareVersion = this.props.boardInfo.system[Object.keys(this.props.boardInfo.system)[0]].firmware_version;
-      console.log(this.props.boardInfo.wifi)
       if (this.props.boardInfo.wifi.sta.disabled === "1") {
         this.state.mode = 'ap';
         this.state.macaddr = this.props.boardInfo.network.lan.macaddr;
@@ -82,6 +81,16 @@ export default class loginComponent extends React.Component {
       });
     })
     .catch(function(err) {
+      if (err === 'Access denied') {
+        alert(err);
+        window.localStorage.removeItem('session');
+        window.localStorage.removeItem('info');
+        return AppDispatcher.dispatch({
+          APP_PAGE: 'LOGIN',
+          successMsg: null,
+          errorMsg: null
+        });
+      }
       alert(err + ' Please try again!');
     });
   }
@@ -126,6 +135,16 @@ export default class loginComponent extends React.Component {
       });
     })
     .catch(function(err) {
+      if (err === 'Access denied') {
+        alert(err);
+        window.localStorage.removeItem('session');
+        window.localStorage.removeItem('info');
+        return AppDispatcher.dispatch({
+          APP_PAGE: 'LOGIN',
+          successMsg: null,
+          errorMsg: null
+        });
+      }
       alert(err);
     })
   }
@@ -158,6 +177,16 @@ export default class loginComponent extends React.Component {
       });
     })
     .catch(function(err) {
+      if (err === 'Access denied') {
+        alert(err);
+        window.localStorage.removeItem('session');
+        window.localStorage.removeItem('info');
+        return AppDispatcher.dispatch({
+          APP_PAGE: 'LOGIN',
+          successMsg: null,
+          errorMsg: null
+        });
+      }
       alert('Failed to upgrade image');
     })
   }
@@ -211,7 +240,7 @@ export default class loginComponent extends React.Component {
           label="Configure"
           fullWidth={true}
           backgroundColor={Colors.amber700}
-          onClick={()=>{this._editPlatformBlock(true)}}
+          onTouchTap={()=>{this._editPlatformBlock(true)}}
           style={{width: '100%', textAlign: 'center', marginTop: '20px', marginBottom: '20px'}}>
         </RaisedButton>
       </div>
@@ -265,7 +294,7 @@ export default class loginComponent extends React.Component {
             <RaisedButton
               linkButton={true}
               label="Cancel"
-              onClick={()=>{this._editPlatformBlock(false)}}
+              onTouchTap={()=>{this._editPlatformBlock(false)}}
               // onClick={this._handleLogin}
               style={{flexGrow:1, textAlign: 'center', marginTop: '20px', marginBottom: '20px'}}>
             </RaisedButton>
@@ -273,7 +302,7 @@ export default class loginComponent extends React.Component {
               linkButton={true}
               secondary={true}
               label="Configure & Restart"
-              onClick={()=>{this._submitPlatformBlock(false)}}
+              onTouchTap={()=>{this._submitPlatformBlock(false)}}
               backgroundColor={Colors.amber700}
               // onClick={this._handleLogin}
               style={{flexGrow:1, textAlign: 'center', marginTop: '20px', marginBottom: '20px'}}>
@@ -302,7 +331,7 @@ export default class loginComponent extends React.Component {
           secondary={true}
           label="Upgrade firmware"
           backgroundColor={Colors.amber700}
-          onClick={()=>{this._editSoftwareBlock(true)}}
+          onTouchTap={()=>{this._editSoftwareBlock(true)}}
           style={{
             width: '100%',
             textAlign: 'center',
@@ -348,7 +377,7 @@ export default class loginComponent extends React.Component {
               linkButton={true}
               label="Cancel"
               disabled={this.state.upgradeFirmware}
-              onClick={()=>{this._editSoftwareBlock(false)}}
+              onTouchTap={()=>{this._editSoftwareBlock(false)}}
               // onClick={this._handleLogin}
               style={{flexGrow:1, textAlign: 'center', marginTop: '20px', marginBottom: '20px'}}>
             </RaisedButton>
@@ -358,7 +387,7 @@ export default class loginComponent extends React.Component {
               label="Upgrade & Restart"
               backgroundColor={Colors.amber700}
               disabled={this.state.upgradeFirmware}
-              onClick={()=>{this._onSubmitFirmware(this.state.files[0]) }}
+              onTouchTap={()=>{this._onSubmitFirmware(this.state.files[0]) }}
               // onClick={this._handleLogin}
               style={{flexGrow:1, textAlign: 'center', marginTop: '20px', marginBottom: '20px'}}>
             </RaisedButton>

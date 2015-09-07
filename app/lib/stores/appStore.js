@@ -9,7 +9,7 @@ import rpc from '../util/rpcAPI';
 let APP_PAGE       = {};
 window.session = localStorage.getItem('session') || null;
 
-if(window.session) {
+if (window.session) {
   rpc.grantCode(window.session)
   .then(function() {
     return AppActions.initialFetchData(window.session)

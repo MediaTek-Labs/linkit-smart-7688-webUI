@@ -13,7 +13,9 @@ let {
   DropDownMenu,
   RaisedButton,
   FontIcon,
-  SelectField
+  SelectField,
+  Dialog,
+  ListItem
 } = mui;
 
 var ThemeManager = new mui.Styles.ThemeManager();
@@ -46,6 +48,7 @@ export default class loginComponent extends React.Component {
     this._onRadioButtonClick = this._onRadioButtonClick.bind(this);
     this._handleSelectValueChange = this._handleSelectValueChange.bind(this);
     this._handleSettingMode = this._handleSettingMode.bind(this);
+    this.selectWifiList = false;
   }
 
   componentDidMount() {
@@ -118,6 +121,16 @@ export default class loginComponent extends React.Component {
       });
     })
     .catch(function(err) {
+      if (err === 'Access denied') {
+        alert(err);
+        window.localStorage.removeItem('session');
+        window.localStorage.removeItem('info');
+        return AppDispatcher.dispatch({
+          APP_PAGE: 'LOGIN',
+          successMsg: null,
+          errorMsg: null
+        });
+      }
       alert('[' + err + '] Please try again!');
     })
   }
@@ -133,6 +146,16 @@ export default class loginComponent extends React.Component {
             type="text"
             value={ this.state.apContent.ssid }
             style={{ width: '100%' }}
+            onChange={
+              (e)=>{
+                this.setState({
+                  apContent: {
+                    ssid: e.target.value,
+                    key: this.state.apContent.key
+                  }
+                })
+              }
+            }
             underlineFocusStyle={{borderColor: Colors.amber700}}
             floatingLabelStyle={{color: Colors.amber700}}
             floatingLabelText="Network name" />
@@ -160,22 +183,21 @@ export default class loginComponent extends React.Component {
         elem =
           <div>
             <SelectField
-              value={ this.state.selectValue }
               style={{ width: '100%' }}
-              multiLine={true}
-              underlineStyle={{maxHeight:'100px', overflow: 'hidden'}}
-              menuItemStyle={{maxHeight:'100px'}}
+              multiLine={ true }
+              underlineStyle={{ maxHeight:'100px', overflow: 'hidden' }}
+              menuItemStyle={{  maxHeight:'100px' }}
               onChange={ this._handleSelectValueChange.bind(null, 'selectValue') }
               hintText="Detected wifi network"
               menuItems={ this.state.wifiList } />
-            <RaisedButton label="Refresh" onClick={ this._scanWifi }/>
+            <RaisedButton label="Refresh" onTouchTap={ this._scanWifi }/>
             <br />
             <TextField
               style={{ width: '100%' }}
               value={ this.state.stationContent.key }
               hintText="Input your Password"
-              underlineFocusStyle={{borderColor: Colors.amber700}}
-              floatingLabelStyle={{color: Colors.amber700}}
+              underlineFocusStyle={{ borderColor: Colors.amber700 }}
+              floatingLabelStyle={{ color: Colors.amber700 }}
               type="password"
               onChange={
                 (e)=>{
@@ -201,11 +223,11 @@ export default class loginComponent extends React.Component {
               value="ap"
               style={{color: Colors.amber700, marginBottom:16}}
               label="AP mode"
-              onClick={() => this._onRadioButtonClick('ap')}/>
+              onTouchTap={() => this._onRadioButtonClick('ap')}/>
             <RadioButton
               value="station"
               label="Station mode"
-              onClick={() => this._onRadioButtonClick('station')}
+              onTouchTap={() => this._onRadioButtonClick('station')}
               style={{color: Colors.amber700, marginBottom:16}}/>
           </RadioButtonGroup>
           { elem }
@@ -219,7 +241,7 @@ export default class loginComponent extends React.Component {
             secondary={true}
             label="Configure & Restart"
             backgroundColor={Colors.amber700}
-            onClick={this._handleSettingMode}
+            onTouchTap={this._handleSettingMode}
             style={{width: '50%', textAlign: 'center', marginTop: '20px', marginBottom: '20px'}}>
           </RaisedButton>
         </Card>

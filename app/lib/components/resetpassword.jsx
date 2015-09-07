@@ -103,7 +103,7 @@ export default class loginComponent extends React.Component {
             secondary={true}
             label="Submit"
             backgroundColor={Colors.amber700}
-            onClick={this._handleResetPassword}
+            onTouchTap={this._handleResetPassword}
             style={styles.basicWidth}>
           </RaisedButton>
         </div>
