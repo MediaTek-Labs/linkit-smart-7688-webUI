@@ -10,8 +10,7 @@ let {
   Card,
   FlatButton,
   RaisedButton,
-  Dialog,
-  c
+  Dialog
 } = mui;
 
 var ThemeManager = new mui.Styles.ThemeManager();
@@ -21,19 +20,21 @@ var Colors = mui.Styles.Colors;
 export default class loginComponent extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {}
+    this.state = {};
     this.state.PlatformBlockIsEdit = false;
     this.state.SoftwareBlockIsEdit = false;
-    this.state.files = [{name:''}];
+    this.state.files = [{ name:'' }];
     this.state.modal = false;
     this.state.upgradeFirmware = false;
-    var info = JSON.parse(localStorage.getItem('info'))
+    var info = JSON.parse(localStorage.getItem('info'));
+
     if (this.props.boardInfo) {
-      this.state.deviceName = this.props.boardInfo.system[Object.keys(this.props.boardInfo.system)[0]].hostname
+      this.state.deviceName = this.props.boardInfo.system[Object.keys(this.props.boardInfo.system)[0]].hostname;
       this.state.user = info.user;
       this.state.password = info.password;
       this.state.bootLoaderVersion = this.props.boardInfo.system[Object.keys(this.props.boardInfo.system)[0]].loader_version;
       this.state.firmwareVersion = this.props.boardInfo.system[Object.keys(this.props.boardInfo.system)[0]].firmware_version;
+
       if (this.props.boardInfo.wifi.sta.disabled === "1") {
         this.state.mode = 'ap';
         this.state.macaddr = this.props.boardInfo.network.lan.macaddr;
@@ -43,6 +44,7 @@ export default class loginComponent extends React.Component {
         this.state.macaddr = this.props.boardInfo.network.wan.macaddr;
         this.state.currentIp = this.props.boardInfo.wan['ipv4-address'][0].address
       }
+
     }
     this._editPlatformBlock = this._editPlatformBlock.bind(this);
     this._editSoftwareBlock = this._editSoftwareBlock.bind(this);
@@ -198,28 +200,29 @@ export default class loginComponent extends React.Component {
   render() {
     var PlatformBlock =
       <div>
-        <h3 style={styles.h3}>Platform information</h3>
+        <h3 style={ styles.h3 }>Platform information</h3>
 
         <TextField
           hintText="Device name"
-          style={{width: '100%'}}
-          disabled={true}
-          defaultValue={this.state.deviceName}
+          style={{ width: '100%' }}
+          disabled={ true }
+          defaultValue={ this.state.deviceName }
+          underlineStyle={{ borderColor: '#D1D2D3' }}
           floatingLabelText="Device name" />
         <TextField
           hintText="Mac address"
-          disabled={true}
-          style={{width: '100%'}}
-          defaultValue={this.state.macaddr}
+          disabled={ true }
+          style={{ width: '100%' }}
+          defaultValue={ this.state.macaddr }
           floatingLabelText="Mac address" />
         <TextField
           hintText="Current IP address"
-          style={{width: '100%'}}
-          disabled={true}
-          defaultValue={this.state.currentIp}
+          style={{ width: '100%' }}
+          disabled={ true }
+          defaultValue={ this.state.currentIp }
           floatingLabelText="Current IP address" />
 
-        <h3 style={styles.h3Top}>Account information</h3>
+        <h3 style={ styles.h3Top }>Account information</h3>
 
         <TextField
           hintText="Account"
@@ -233,7 +236,11 @@ export default class loginComponent extends React.Component {
           style={{width: '100%'}}
           defaultValue={this.state.password}
           type="password"
-          floatingLabelText="Password" />
+          floatingLabelText={
+            <div>
+              Password <b style={{ color: 'red' }}>*</b>
+            </div>
+          } />
         <RaisedButton
           linkButton={true}
           secondary={true}
@@ -283,20 +290,24 @@ export default class loginComponent extends React.Component {
           <TextField
             hintText="Password"
             style={{width: '100%'}}
-            underlineStyle={{borderColor: Colors.amber700}}
-            defaultValue={this.state.password}
-            underlineFocusStyle={{borderColor: Colors.amber700}}
-            floatingLabelStyle={{color: Colors.amber700}}
+            underlineStyle={{ borderColor: Colors.amber700 }}
+            defaultValue={ this.state.password }
+            underlineFocusStyle={{ borderColor: Colors.amber700}}
+            floatingLabelStyle={{ color: 'rgba(0,0,0,0.3)' }}
             type="password"
-            onChange={ (e) => {this.setState({password: e.target.value})} }
-            floatingLabelText="Password" />
+            onChange={ (e) => {this.setState({ password: e.target.value })} }
+            floatingLabelText={
+              <div>
+                Password <b style={{ color: 'red' }}>*</b>
+              </div>
+            } />
           <div style={{ display: 'flex',flexDirection: 'row', justifyContent:'space-between', }}>
             <RaisedButton
-              linkButton={true}
+              linkButton={ true }
               label="Cancel"
-              onTouchTap={()=>{this._editPlatformBlock(false)}}
+              onTouchTap={ ()=>{ this._editPlatformBlock(false) } }
               // onClick={this._handleLogin}
-              style={{flexGrow:1, textAlign: 'center', marginTop: '20px', marginBottom: '20px'}}>
+              style={{ background: '#EDEDED', width: '236px', flexGrow:1, textAlign: 'center', marginTop: '20px', marginBottom: '20px', marginRight: '10px' }}>
             </RaisedButton>
             <RaisedButton
               linkButton={true}
@@ -305,7 +316,7 @@ export default class loginComponent extends React.Component {
               onTouchTap={()=>{this._submitPlatformBlock(false)}}
               backgroundColor={Colors.amber700}
               // onClick={this._handleLogin}
-              style={{flexGrow:1, textAlign: 'center', marginTop: '20px', marginBottom: '20px'}}>
+              style={{ width: '236px', flexGrow:1, textAlign: 'center', marginTop: '20px', marginBottom: '20px', marginLeft: '10px'}}>
             </RaisedButton>
           </div>
         </div>
@@ -345,28 +356,32 @@ export default class loginComponent extends React.Component {
         <div>
           <TextField
             hintText="Boot loader version"
-            disabled={true}
+            disabled={ true }
             style={{ width: '100%' }}
-            defaultValue={this.state.bootLoaderVersion}
+            defaultValue={ this.state.bootLoaderVersion }
             floatingLabelText="Boot loader version" />
           <TextField
             hintText="Firmware version"
             style={{ width: '100%' }}
-            disabled={true}
-            defaultValue={this.state.firmwareVersion}
+            disabled={ true }
+            defaultValue={ this.state.firmwareVersion }
             floatingLabelText="Firmware version" />
-          <Dropzone onDrop={this._onDrop} style={{width: '100%', border: '3px dotted #ffa000'}}>
+          <Dropzone onDrop={ this._onDrop } style={{ width: '100%', border: '3px dotted #ffa000' }}>
             <div>
-              <h3 style={{textAlign: 'center'}}>Firmware upgrade</h3>
-              <p style={{textAlign: 'center'}}>Try dropping some files here, or click to select files to upload.</p>
+              <h3 style={{ textAlign: 'center' }}>Firmware upgrade</h3>
+              <p style={{ textAlign: 'center' }}>Try dropping some files here, or click to select files to upload.</p>
             </div>
             { this.state.files.length !== 0 ?
               <div>
-                <p style={{textAlign: 'center'}}>Firmware: {this.state.files[0].name}</p>
+                <p style={{ textAlign: 'center' }}>Firmware: { this.state.files[0].name }</p>
               </div> : null
             }
           </Dropzone>
-          <div style={{ display: 'flex',flexDirection: 'row', justifyContent:'space-between', }}>
+          <div style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent:'space-between'
+          }}>
             <Dialog
               title="Upload Firmware"
               ref="uploadDialog"
@@ -377,23 +392,32 @@ export default class loginComponent extends React.Component {
               linkButton={true}
               label="Cancel"
               disabled={this.state.upgradeFirmware}
-              onTouchTap={()=>{this._editSoftwareBlock(false)}}
+              onTouchTap={ ()=>{ this._editSoftwareBlock(false) } }
               // onClick={this._handleLogin}
-              style={{flexGrow:1, textAlign: 'center', marginTop: '20px', marginBottom: '20px'}}>
+              style={{
+                flexGrow:1,
+                textAlign: 'center',
+                marginTop: '20px',
+                marginBottom: '20px'
+              }}>
             </RaisedButton>
             <RaisedButton
               linkButton={true}
               secondary={true}
               label="Upgrade & Restart"
-              backgroundColor={Colors.amber700}
-              disabled={this.state.upgradeFirmware}
-              onTouchTap={()=>{this._onSubmitFirmware(this.state.files[0]) }}
+              backgroundColor={ Colors.amber700 }
+              disabled={ this.state.upgradeFirmware }
+              onTouchTap={ ()=>{ this._onSubmitFirmware(this.state.files[0]) } }
               // onClick={this._handleLogin}
-              style={{flexGrow:1, textAlign: 'center', marginTop: '20px', marginBottom: '20px'}}>
+              style={{
+                flexGrow:1,
+                textAlign: 'center',
+                marginTop: '20px',
+                marginBottom: '20px'
+              }}>
             </RaisedButton>
           </div>
         </div>
-
     }
 
     let standardActions = [
@@ -403,32 +427,36 @@ export default class loginComponent extends React.Component {
 
     return (
       <div>
-        <Card style={{ paddingRight: '20px', paddingLeft: '20px', paddingTop: '20px' }}>
+        <Card style={{ paddingRight: '128px', paddingLeft: '128px', paddingTop: '20px' }}>
           { PlatformBlock }
           { softwareBlock }
 
-          <h3 style={styles.h3}>Factory reset</h3>
-          <p>Reset the device to its factory default settings.</p>
-          <b>Important: This action will remove all your data and settings in the device.</b>
-          <p>{this.state.modal}</p>
+          <h3 style={ styles.h3 }>Factory reset</h3>
+          <p>Reset the device to its default settings.</p>
+          <b style={{ color: '#DB4437' }}>Important: This action will remove all your data and settings from the device.</b>
+          <p>{ this.state.modal }</p>
           <Dialog
             title="Factory reset"
-            actions={standardActions}
+            actions={ standardActions }
             actionFocus="submit"
             ref="standardDialog"
-            modal={this.state.modal}>
+            modal={ this.state.modal }>
             <p>Are you sure you want to reset?</p>
             <p>You cannot revert this action.</p>
           </Dialog>
           <RaisedButton
-            linkButton={true}
-            secondary={true}
+            linkButton={ true }
+            secondary={ true }
             label="Reset"
-            onTouchTap={this._handleStandardDialogTouchTap}
-            backgroundColor={Colors.amber700}
-            style={{width: '100%', textAlign: 'center', marginTop: '20px', marginBottom: '20px'}}>
+            onTouchTap={ this._handleStandardDialogTouchTap }
+            backgroundColor={ Colors.amber700 }
+            style={{
+              width: '100%',
+              textAlign: 'center',
+              marginTop: '20px',
+              marginBottom: '20px'
+            }}>
           </RaisedButton>
-
         </Card>
       </div>
     )

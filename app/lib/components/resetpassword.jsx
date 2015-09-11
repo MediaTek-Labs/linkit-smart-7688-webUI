@@ -71,8 +71,12 @@ export default class loginComponent extends React.Component {
             minLength="6"
             floatingLabelText="Account" />
           <TextField
-            hintText="Input your password"
-            type="password"
+            hintText="Please set a password"
+            type={
+              <div>
+                password <p>*</p>
+              </div>
+            }
             underlineFocusStyle={{borderColor: Colors.amber700}}
             floatingLabelStyle={{color: Colors.amber700}}
             style={ styles.basicWidth }
@@ -84,6 +88,7 @@ export default class loginComponent extends React.Component {
               }
             }
             floatingLabelText="Password" />
+          <a> SHOW PASSWORD </a>
           <TextField
             hintText="Please input your password again"
             type="password"

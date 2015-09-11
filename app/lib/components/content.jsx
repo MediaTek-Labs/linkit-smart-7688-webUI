@@ -71,6 +71,7 @@ var styles= {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
+    backgroundColor: '#FAFAFA',
     alignItems: 'center',
   },
   content: {
@@ -81,6 +82,7 @@ var styles= {
   header: {
     maxWidth: '768px',
     width: '100%',
+    marginTop: '60px',
     display: 'flex',
     justifyContent: 'space-between'
   }

@@ -14,7 +14,6 @@ export default class loginComponent extends React.Component {
     this.state = {
       password: ''
     }
-
     this._handleLogin = this._handleLogin.bind(this)
   }
 
@@ -48,13 +47,12 @@ export default class loginComponent extends React.Component {
           modal={ this.state.waiting }>
           <p style={{ lineHeight: '23px'}}>Please refresh. If problem persists, please ensure your board is not in the process of rebooting, or updating new firmware, or check Wi-Fi connectivity settings.</p>
         </Dialog>
-        <div style={styles.block}>
-          <img src={Logo} style={styles.img}/>
-          <p style={{lineHeight: '22px'}}>Welcome to MyLinkIt, please input password to access the web console.</p>
+        <div style={ styles.block }>
+          <img src={ Logo } style={ styles.img }/>
+          <p style={{ lineHeight: '22px' }}>Welcome to <b>LinkIt Smart 7688</b>.</p>
           <TextField
             hintText="Input your Account"
-            ref="password"
-            color={Colors.amber700}
+            color={ Colors.amber700 }
             value="root (default)"
             style={ styles.basicWidth }
             underlineFocusStyle={{borderColor: Colors.amber700}}
@@ -66,15 +64,18 @@ export default class loginComponent extends React.Component {
             hintText="Input your password"
             type="password"
             underlineFocusStyle={{borderColor: Colors.amber700}}
-            floatingLabelStyle={{color: Colors.amber700}}
-            ref="password"
             style={ styles.basicWidth }
             onChange={
               (e) => {
                 this.setState({password:e.target.value});
               }
             }
-            floatingLabelText="Password" />
+            floatingLabelText=
+              {
+                <div>
+                  Password <b style={{ color: 'red' }}>*</b>
+                </div>
+              } />
           <br />
           <RaisedButton
             linkButton={true}
