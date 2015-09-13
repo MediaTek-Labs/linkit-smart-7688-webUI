@@ -40,7 +40,7 @@ export default class contentComponent extends React.Component {
       <div style={styles.block}>
         <header style={ styles.header }>
           <p style={{ lineHeight: '35px' }}> Welcome to <b>LinkIt Smart 7688</b></p>
-          <p style={{ lineHeight: '35px' }}>For advanced network configuration, go to <a style={{color:'#666'}} href="/cgi-bin/luci">OpenWrt</a>.</p>
+          <p style={{ lineHeight: '35px' }}>For advanced network configuration, go to <a style={{ color:'#00a1de', textDecoration: 'none' }} href="/cgi-bin/luci">OpenWrt</a>.</p>
         </header>
         <Tabs
           valueLink={{ value: this.state.tabsValue }}

@@ -234,7 +234,10 @@ export default class loginComponent extends React.Component {
           <RaisedButton
             linkButton={true}
             label="Cancel"
-            style={{width: '50%', textAlign: 'center', marginTop: '20px', marginBottom: '20px'}}>
+            style={{ width: '236px', flexGrow:1, textAlign: 'center', marginTop: '20px', marginBottom: '20px', marginLeft: '10px'}}
+            backgroundColor="#EDEDED"
+            labelColor="#999A94"
+          >              
           </RaisedButton>
           <RaisedButton
             linkButton={true}
@@ -242,7 +245,8 @@ export default class loginComponent extends React.Component {
             label="Configure & Restart"
             backgroundColor={Colors.amber700}
             onTouchTap={this._handleSettingMode}
-            style={{width: '50%', textAlign: 'center', marginTop: '20px', marginBottom: '20px'}}>
+            style={{ width: '236px', flexGrow:1, textAlign: 'center', marginTop: '20px', marginBottom: '20px', marginLeft: '10px'}}
+          > 
           </RaisedButton>
         </Card>
       </div>
