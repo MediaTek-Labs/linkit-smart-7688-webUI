@@ -265,7 +265,7 @@ export default class loginComponent extends React.Component {
         hoverColor="none" />
     ]
     var PlatformBlock =
-      <div style={{ paddingRight: '128px', paddingLeft: '128px', paddingTop: '20px' }}>
+      <div style={ styles.content } key="PlatformBlock">
         
         <h3 style={ styles.h3 }>{__('Platform information')}</h3>
         <TextField
@@ -327,7 +327,7 @@ export default class loginComponent extends React.Component {
 
     if (this.state.PlatformBlockIsEdit) {
       PlatformBlock =
-        <div style={{ paddingRight: '128px', paddingLeft: '128px', paddingTop: '20px' }}>
+        <div style={ styles.content } key="PlatformBlockIsEdit">
           <h3 style={styles.h3}>Platform information</h3>
           <TextField
             hintText={__("Device name")}
@@ -406,7 +406,7 @@ export default class loginComponent extends React.Component {
     }
 
     var softwareBlock =
-      <div style={{ paddingRight: '128px', paddingLeft: '128px', paddingTop: '20px' }}>
+      <div style={ styles.content } key="softwareBlock">
         <h3 style={styles.h3}>{__('Software information')}</h3>
         <TextField
           hintText={__("Boot loader version")}
@@ -436,7 +436,7 @@ export default class loginComponent extends React.Component {
       </div>
     if (this.state.SoftwareBlockIsEdit) {
       softwareBlock =
-        <div style={{ paddingRight: '128px', paddingLeft: '128px', paddingTop: '20px' }}>
+        <div style={styles.content} key="softwareBlock">
           <TextField
             hintText={__("Boot loader version")}
             disabled={ true }
@@ -529,7 +529,7 @@ export default class loginComponent extends React.Component {
           <hr style={{ border: '1px solid rgba(0,0,0,0.12)', marginTop: '20px', marginBottom: '0px' }} />
           { softwareBlock }
           <hr style={{ border: '1px solid rgba(0,0,0,0.12)', marginTop: '20px', marginBottom: '0px' }} />
-          <div style={{ paddingRight: '128px', paddingLeft: '128px', paddingTop: '20px' }}>
+          <div style={ styles.content } key="reset">
             <h3 style={ styles.h3 }>{__('Factory reset')}</h3>
             <p>{__('Reset the device to its default settings.')}</p>
             <b style={{ color: '#DB4437' }}>{__('Important: This action will remove all your data and settings from the device.')}</b>
@@ -568,6 +568,15 @@ var styles = {
   h3: {
     marginBottom: '0px',
     marginTop:'0px',
+  },
+  content: {
+    paddingRight: '128px', 
+    paddingLeft: '128px', 
+    paddingTop: '20px',
+    '@media (max-width: 760px)': {
+      paddingRight: '20px', 
+      paddingLeft: '20px',
+    }
   },
   editTextField: {
     pointerEvent: 'none',

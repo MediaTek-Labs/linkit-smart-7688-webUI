@@ -35,7 +35,11 @@ export default class loginComponent extends React.Component {
       this.state.waiting = false;
       this.refs.waitingDialog.dismiss();
     }
-    this.refs.snackbar.show();
+    
+    if (this.state.successMsg) {
+      this.refs.snackbar.show();  
+    }
+    
   }
 
   getChildContext() {

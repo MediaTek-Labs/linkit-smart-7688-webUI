@@ -61,5 +61,6 @@
   "Access denied": "Access denied",
   "Firmware upgrade": "Firmware upgrade",
   "Try dropping some files here, or click to select files to upload.": "Try dropping some files here, or click to select files to upload.",
-  "Your token was expired, please sign in again.": "Your token was expired, please sign in again."
+  "Your token was expired, please sign in again.": "Your token was expired, please sign in again.",
+  "Account / password is incorrect.": "Account / password is incorrect."
 }

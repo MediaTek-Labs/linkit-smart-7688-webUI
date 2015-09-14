@@ -60,6 +60,8 @@
   "Check troubleshooting guide for more information": "檢查故障排除指南以獲取更多信息",
   "Access denied": "訪問被拒絕",
   "Firmware upgrade": "上傳韌體",
-  "Try dropping some files here, or click to select files to upload.": "在這裡放入文件，或者是點選選擇檔案上傳",
-  "Your token was expired, please sign in again.": "你的令牌過期，請重新登錄。"
+  "Try dropping some files here, or click to select files to upload.": "在這裡放入文件，或者是點擊選擇檔案上傳",
+  "Your token was expired, please sign in again.": "你的令牌過期，請重新登錄。",
+  "Account / password is incorrect.": "帳號 / 密碼不正確。"
+
 }

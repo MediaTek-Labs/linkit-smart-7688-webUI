@@ -106,7 +106,8 @@ var appActions = {
           errorMsg: 'Waiting'
         });
       };
-      alert('Account / password is incorrect.');
+      console.log(err);
+      alert(__('Account / password is incorrect.'));
     })
   },
 
