@@ -84,7 +84,7 @@ export default class loginComponent extends React.Component {
                 }
                 labelStyle={{ 
                   color: Colors.amber700, 
-                  lineHeight: '63px', 
+                  lineHeight: '60px', 
                   fontSize: '16px' }} 
                 underlineStyle={{ border: '0px' }}/>
               <a 
@@ -130,8 +130,11 @@ var styles = {
     height: '45px',
     lineHeight: '60px',
     justifyContent: 'space-between',
-    width: '768px',
-    margin: '0 auto'
+    maxWidth: '768px',
+    margin: '0 auto',
+    '@media (max-width: 760px)': {
+
+    }
   }
 }
 

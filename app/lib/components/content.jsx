@@ -18,9 +18,6 @@ export default class contentComponent extends React.Component {
     this.state = {tabsValue: 'sysinfo'};
   }
 
-  componentDidMount() {
-  }
-
   getChildContext() {
     return {
       muiTheme: ThemeManager.getCurrentTheme()
@@ -39,8 +36,8 @@ export default class contentComponent extends React.Component {
     return (
       <div style={styles.block}>
         <header style={ styles.header }>
-          <p style={{ lineHeight: '35px' }}>{__('Welcome to')} <b>LinkIt Smart 7688</b></p>
-          <p style={{ lineHeight: '35px' }}>{__('For advanced network configuration, go to ')}<a style={{ color:'#00a1de', textDecoration: 'none' }} href="/cgi-bin/luci">OpenWrt</a>.</p>
+          <p style={ styles.welcomeTitle } key="welcome">{__('Welcome to')} <b>LinkIt Smart 7688</b></p>
+          <p style={ styles.welcomeTitle } key="advanced">{__('For advanced network configuration, go to ')}<a style={{ color:'#00a1de', textDecoration: 'none' }} href="/cgi-bin/luci">OpenWrt</a>.</p>
         </header>
         <Tabs
           valueLink={{ value: this.state.tabsValue }}
@@ -77,6 +74,12 @@ var styles= {
     backgroundColor: '#FAFAFA',
     alignItems: 'center',
   },
+  welcomeTitle: {
+    lineHeight: '35px',
+    '@media (max-width: 760px)': {
+      width: '100%'
+    }
+  },
   content: {
     maxWidth: '768px',
     width: '100%',
@@ -87,7 +90,11 @@ var styles= {
     width: '100%',
     marginTop: '60px',
     display: 'flex',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    '@media (max-width: 760px)': {
+      justifyContent: 'none',
+      display: 'block'
+    }
   }
 }
 

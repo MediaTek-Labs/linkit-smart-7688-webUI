@@ -35,10 +35,17 @@ export default class loginComponent extends React.Component {
       this.state.waiting = false;
       this.refs.waitingDialog.dismiss();
     }
-    
+
     if (this.state.successMsg) {
       this.refs.snackbar.show();  
     }
+    var _this = this;
+    document.addEventListener('keypress', function (e) {
+      var key = e.which || e.keyCode;
+      if (key === 13) { // 13 is enter
+        return _this._handleLogin()
+      }
+    })
     
   }
 
@@ -152,6 +159,7 @@ export default class loginComponent extends React.Component {
               label={__("Sign in")}
               backgroundColor={ Colors.amber700 }
               onTouchTap={ this._handleLogin }
+              type="submit"
               style={ styles.basicWidth }>
               <FontIcon 
                 style={ styles.exampleButtonIcon } 
