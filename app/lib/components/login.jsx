@@ -3,7 +3,13 @@ import Radium from 'radium';
 import Logo from '../../img/mediatek.png';
 import mui from 'material-ui';
 import appAction from '../actions/appActions';
-let {RaisedButton, FontIcon, TextField, Dialog} = mui;
+let {
+  RaisedButton, 
+  FontIcon, 
+  TextField, 
+  Dialog,
+  Snackbar
+} = mui;
 var ThemeManager = new mui.Styles.ThemeManager();
 var Colors = mui.Styles.Colors;
 
@@ -12,8 +18,10 @@ export default class loginComponent extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      password: ''
+      password: '',
+      showPassword: false
     }
+
     this._handleLogin = this._handleLogin.bind(this)
   }
 
@@ -34,60 +42,97 @@ export default class loginComponent extends React.Component {
   }
 
   _handleLogin() {
-    var password = this.state.password
+    var password = this.state.password;
     return appAction.login('root', password);
   }
 
   render() {
+    if (this.state.showPassword) {
+      var textType = 'text';
+    } else {
+      var textType = 'password';
+    }
     return (
       <div style={styles.frame}>
         <Dialog
-          title="Connection failed..."
+          title={__("Connection failed...")}
           ref="waitingDialog"
           modal={ this.state.waiting }>
-          <p style={{ lineHeight: '23px'}}>Please refresh. If problem persists, please ensure your board is not in the process of rebooting, or updating new firmware, or check Wi-Fi connectivity settings.</p>
+          <p style={{ lineHeight: '23px'}}>{__('Please refresh. If problem persists, please ensure your board is not in the process of rebooting, or updating new firmware, or check Wi-Fi connectivity settings.')}</p>
         </Dialog>
         <div style={ styles.block }>
-          <img src={ Logo } style={ styles.img }/>
-          <p style={{ lineHeight: '22px' }}>Welcome to <b>LinkIt Smart 7688</b>.</p>
-          <TextField
-            hintText="Input your Account"
-            color={ Colors.amber700 }
-            value="root (default)"
-            style={ styles.basicWidth }
-            underlineFocusStyle={{borderColor: Colors.amber700}}
-            floatingLabelStyle={{color: Colors.amber700}}
-            required
-            minLength="6"
-            floatingLabelText="Account" />
-          <TextField
-            hintText="Input your password"
-            type="password"
-            underlineFocusStyle={{borderColor: Colors.amber700}}
-            style={ styles.basicWidth }
-            onChange={
-              (e) => {
-                this.setState({password:e.target.value});
+          <div style={{ 
+            width: '300px', 
+            paddingLeft: '60px', 
+            paddingRight: '60px',
+            display: 'flex',
+            justifyContent: 'center',
+            flexDirection: 'column',
+            alignItems: 'center' 
+          }}>
+            <img src={ Logo } style={ styles.img }/>
+            <p style={{ lineHeight: '22px', marginTop: '40px' }}>{__('Welcome to')} <b>LinkIt Smart 7688</b>.</p>
+            <TextField
+              hintText={__("Input your Account")}
+              color={ Colors.amber700 }
+              value="root (default)"
+              style={ styles.basicWidth }
+              underlineFocusStyle={{ borderColor: Colors.amber700 }}
+              required
+              minLength="6"
+              floatingLabelText="Account" />
+            <TextField
+              hintText={__("Please enter your password")}
+              type={ textType }
+              floatingLabelStyle={{ color: 'rgba(0, 0, 0, 0.498039)' }}
+              underlineFocusStyle={{ borderColor: Colors.amber700 }}
+              style={ styles.basicWidth }
+              onChange={
+                (e) => {
+                  this.setState({password:e.target.value});
+                }
               }
-            }
-            floatingLabelText=
-              {
-                <div>
-                  Password <b style={{ color: 'red' }}>*</b>
-                </div>
-              } />
-          <br />
-          <RaisedButton
-            linkButton={true}
-            secondary={true}
-            label="Login"
-            backgroundColor={Colors.amber700}
-            onTouchTap={this._handleLogin}
-            style={styles.basicWidth}>
-            <FontIcon style={styles.exampleButtonIcon} className="muidocs-icon-custom-github"/>
-          </RaisedButton>
-          <p style={{marginTop: '50px'}}>For advanced network configuration, go to <a style={{color:'#666'}} href="/cgi-bin/luci">OpenWrt</a>.</p>
+              floatingLabelText=
+                {
+                  <div>
+                    Password <b style={{ color: 'red' }}>*</b>
+                  </div>
+                } />
+            <div style={{ width: '100%', marginBottom: '24px' }}>
+              <a 
+                onTouchTap={
+                  (e) => {
+                    this.setState({ 
+                      showPassword: !this.state.showPassword 
+                    });
+                  }
+                }
+                style={{ 
+                  textAlign: 'left', 
+                  color: Colors.amber700, 
+                  textDecoration: 'none', 
+                  cursor: 'pointer' 
+                }}>{__('SHOW PASSWORD')}</a>
+            </div>
+            <br />
+            <RaisedButton
+              linkButton={true}
+              secondary={true}
+              label="Sign in"
+              backgroundColor={ Colors.amber700 }
+              onTouchTap={ this._handleLogin }
+              style={ styles.basicWidth }>
+              <FontIcon 
+                style={ styles.exampleButtonIcon } 
+                className="muidocs-icon-custom-github"/>
+            </RaisedButton>
+          </div>
+          <p style={{ marginTop: '80px', borderTop: '1px solid rgba(0,0,0,0.12)', paddingTop: '10px'}} >{__('For advanced network configuration, go to ')}<a style={{ color:'#00a1de', textDecoration: 'none' }} href="/cgi-bin/luci">OpenWrt</a>.</p>
         </div>
+        <Snackbar 
+          message="Event added to your calendar"
+          action="undo"
+          autoHideDuration={this.state.autoHideDuration} />
       </div>
     )
   }
@@ -106,14 +151,13 @@ var styles = {
     justifyContent: 'center'
   },
   img: {
-    marginBottom: '10px',
     width:'200px'
   },
   block: {
     display: 'flex',
+    width: '420px',
     justifyContent: 'center',
     flexDirection: 'column',
-    width: '350px',
     alignItems: 'center'
   },
   basicWidth: {

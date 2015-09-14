@@ -54,6 +54,7 @@ export default class loginComponent extends React.Component {
     this._handleStandardDialogTouchTap = this._handleStandardDialogTouchTap.bind(this);
     this._onSubmitFirmware = this._onSubmitFirmware.bind(this)
     this._submitPlatformBlock = this._submitPlatformBlock.bind(this);
+    this._cancelDialog = this._cancelDialog.bind(this);
   }
 
   getChildContext() {
@@ -149,6 +150,9 @@ export default class loginComponent extends React.Component {
       }
       alert(err);
     })
+  }
+  _cancelDialog() {
+    this.refs.standardDialog.dismiss();
   }
 
   _onSubmitFirmware(file) {
@@ -263,9 +267,9 @@ export default class loginComponent extends React.Component {
       PlatformBlock =
         <div style={{ paddingRight: '128px', paddingLeft: '128px', paddingTop: '20px' }}>
           <h3 style={styles.h3}>Platform information</h3>
-
           <TextField
             hintText="Device name"
+            floatingLabelStyle={{ color: 'rgba(0, 0, 0, 0.498039)' }}
             style={{ width: '100%' }}
             defaultValue={this.state.deviceName}
             underlineStyle={{ borderColor: Colors.amber700 }}
@@ -298,7 +302,8 @@ export default class loginComponent extends React.Component {
             style={{width: '100%'}}
             underlineStyle={{ borderColor: Colors.amber700 }}
             defaultValue={ this.state.password }
-            underlineFocusStyle={{ borderColor: Colors.amber700}}
+            floatingLabelStyle={{ color: 'rgba(0, 0, 0, 0.498039)' }}
+            underlineFocusStyle={{ borderColor: Colors.amber700 }}
             type="password"
             onChange={ (e) => {this.setState({ password: e.target.value })} }
             floatingLabelText={
@@ -306,12 +311,12 @@ export default class loginComponent extends React.Component {
                 Password <b style={{ color: 'red' }}>*</b>
               </div>
             } />
+
           <div style={{ display: 'flex',flexDirection: 'row', justifyContent:'space-between', }}>
             <RaisedButton
               linkButton={ true }
               label="Cancel"
               onTouchTap={ ()=>{ this._editPlatformBlock(false) } }
-              // onClick={this._handleLogin}
               backgroundColor="#EDEDED"
               labelColor="#999A94"
               style={{ width: '236px', flexGrow:1, textAlign: 'center', marginTop: '20px', marginBottom: '20px', marginRight: '10px' }}>
@@ -320,9 +325,12 @@ export default class loginComponent extends React.Component {
               linkButton={true}
               secondary={true}
               label="Configure & Restart"
-              onTouchTap={()=>{this._submitPlatformBlock(false)}}
-              backgroundColor={Colors.amber700}
-              // onClick={this._handleLogin}
+              onTouchTap={ 
+                () => { 
+                  this._submitPlatformBlock(false)
+                } 
+              }
+              backgroundColor={ Colors.amber700 }
               style={{ width: '236px', flexGrow:1, textAlign: 'center', marginTop: '20px', marginBottom: '20px', marginLeft: '10px'}}>
             </RaisedButton>
           </div>
@@ -423,12 +431,12 @@ export default class loginComponent extends React.Component {
       <FlatButton
         label="Cancel"
         labelStyle={{ color: Colors.amber700 }}
+        onTouchTap={ this._cancelDialog }
         hoverColor="none" />,
       <FlatButton
         label="Reset"
         labelStyle={{ color: Colors.amber700 }}
         hoverColor="none"
-        ref="submit"
         onTouchTap={this._onFactorySubmit} />
     ];
 

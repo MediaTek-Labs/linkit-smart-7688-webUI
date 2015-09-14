@@ -1,7 +1,11 @@
 import React from 'react';
 import Radium from 'radium';
 import mui from 'material-ui';
-let {AppBar, Card} = mui;
+let {
+  AppBar, 
+  Card,
+  DropDownMenu
+} = mui;
 import Logo from '../../img/mediatek.png';
 var AppDispatcher  = require('../dispatcher/appDispatcher');
 var ThemeManager = new mui.Styles.ThemeManager();
@@ -13,6 +17,13 @@ export default class loginComponent extends React.Component {
     super(props)
     this.state = {};
     this._logOut = this._logOut.bind(this);
+    if (/zh\-tw/.test(window.location.pathname)) {
+      this.state.language = '2';
+    } else if (/zh\-cn/.test(window.location.pathname)) {
+      this.state.language = '3';
+    } else {
+      this.state.language = '1';
+    }
   }
   _logOut () {
     window.localStorage.removeItem('info');
@@ -32,21 +43,52 @@ export default class loginComponent extends React.Component {
       muiTheme: ThemeManager.getCurrentTheme()
     };
   }
-  // <AppBar
-  //         style={ styles.bg }
-  //         iconElementLeft={
-  //           <img style={ styles.img } src={ Logo } />
-  //         }
-  //         iconElementRight={
-  //           <a href="" onTouchTap={this._logOut} style={{ color: '#000', lineHeight: '45px', textDecoration: 'none'}}>Log out</a>
-  //         }/>
+
   render() {
+    let menuItems = [
+      { payload: '1', text: 'English' },
+      { payload: '2', text: '繁體中文' },
+      { payload: '3', text: '简体中文' },
+    ];
+
+    var defaultRouter = '';
+    if (/127.0.0.1/.test(window.location.host)) {
+      defaultRouter = '/app';
+    }
+
     return (
       <div>
         <header style={ styles.header }>
           <div style={ styles.container }>
             <img style={ styles.img } src={ Logo } />
-            <a href="" style={{ color: Colors.amber700, textDecoration: 'none' }}>Sign out</a>
+            <div style={{ display: 'flex' }}>
+              <DropDownMenu 
+                menuItems={menuItems} 
+                value={this.state.language}
+                style={{ width: '130px', borderBottom: '0px' }} 
+                onChange={
+                  (e, sel, item)=>{
+                    switch(sel) {
+                      case 0:
+                        console.log('en')
+                        window.location.href = defaultRouter + '/';
+                        break;
+                      case 1: 
+                        window.location.href = defaultRouter + '/zh-tw.html';
+                        break;
+                      case 2:
+                        window.location.href = defaultRouter + '/zh-cn.html';
+                        break;
+                    }
+                  }
+                }
+                labelStyle={{ 
+                  color: Colors.amber700, 
+                  lineHeight: '63px', 
+                  fontSize: '16px' }} 
+                underlineStyle={{ border: '0px' }}/>
+              <a onTouchTap={this._logOut} style={{ color: Colors.amber700, textDecoration: 'none', cursor: 'pointer' }}>Sign out</a>
+            </div>
           </div>
         </header>
       </div>

@@ -3,7 +3,13 @@ import Radium from 'radium';
 import Logo from '../../img/mediatek.png';
 import mui from 'material-ui';
 import appAction from '../actions/appActions';
-let {RaisedButton, FontIcon, TextField} = mui;
+let {
+  RaisedButton, 
+  FontIcon, 
+  TextField,
+  Dialog,
+  FlatButton
+} = mui;
 var ThemeManager = new mui.Styles.ThemeManager();
 var Colors = mui.Styles.Colors;
 var AppDispatcher = require('../dispatcher/appDispatcher');
@@ -14,13 +20,14 @@ export default class loginComponent extends React.Component {
     super(props)
     this.state = {
       password: '',
-      againPassword: ''
+      againPassword: '',
+      showPassword: false,
+      notPassPassword: false,
+      modal: false,
+      errorTitle: '',
+      errorMsg: ''
     }
-    this._handleResetPassword = this._handleResetPassword.bind(this)
-  }
-
-  componentDidMount() {
-
+    this._handleResetPassword = this._handleResetPassword.bind(this);
   }
 
   getChildContext() {
@@ -30,15 +37,11 @@ export default class loginComponent extends React.Component {
   }
 
   _handleResetPassword() {
+    var _self = this;
     var password = this.state.password;
-    var againPassword = this.state.againPassword;
-
+    
     if (password.length < 6) {
-      return alert('Password length must more than 6.');
-    }
-
-    if (password !== againPassword) {
-      return alert('Password does not match confirmation.');
+      return ;
     }
 
     return appAction.resetPassword('root', password, window.session)
@@ -50,59 +53,84 @@ export default class loginComponent extends React.Component {
       });
     })
     .catch(function(err) {
-      alert(err);
+      return ; 
     });
   }
 
   render() {
+    if (this.state.showPassword) {
+      var textType = 'text';
+    } else {
+      var textType = 'password';
+    }
+
+    if (this.state.notPassPassword) {
+      var errorText = 
+        <div>
+          <p style={{ color:'#69BE28', textAlign: 'left', marginTop: '2px' }}>Please use at least 6 alphanumeric characters.</p>
+        </div>
+      var showPasswordStyle = {
+        marginTop: '20px',
+        width: '100%', 
+        marginBottom: '44px'
+      };
+    } else {
+      var showPasswordStyle = {
+        width: '100%', 
+        marginBottom: '44px'
+      };
+      var errorText;
+    }
+    
     return (
-      <div style={styles.frame}>
-        <div style={styles.block}>
-          <img src={Logo} style={styles.img}/>
-          <p style={{lineHeight: '22px'}}>Welcome to <b>LinkIt Smart 7688</b>, please setup your password at first.</p>
+      <div style={ styles.frame }>
+        <div style={ styles.block }>
+          <img src={ Logo } style={ styles.img }/>
+          <p style={{ lineHeight: '22px', marginTop: '40px' }}>Welcome to <b>LinkIt Smart 7688</b></p>
           <TextField
             hintText="Input your Account"
             ref="password"
             value="root (default)"
-            underlineFocusStyle={{borderColor: Colors.amber700}}
-            floatingLabelStyle={{color: Colors.amber700}}
+            underlineFocusStyle={{ borderColor: Colors.amber700 }}
             style={ styles.basicWidth }
+            floatingLabelStyle={{ color: 'rgba(0, 0, 0, 0.498039)' }}
             required
             minLength="6"
             floatingLabelText="Account" />
           <TextField
             hintText="Please set a password"
-            type={
-              <div>
-                password <p>*</p>
-              </div>
-            }
-            underlineFocusStyle={{borderColor: Colors.amber700}}
-            floatingLabelStyle={{color: Colors.amber700}}
+            type={ textType }
+            floatingLabelStyle={{ color: 'rgba(0, 0, 0, 0.498039)' }}
+            underlineFocusStyle={{ borderColor: Colors.amber700 }}
+            errorStyle={{ borderColor: Colors.amber700 }}
             style={ styles.basicWidth }
             required
             minLength="6"
             onChange={
               (e) => {
-                this.setState({password: e.target.value});
+                if (e.target.value.length < 6) {
+                  this.setState({ notPassPassword: true });
+                } else {
+                  this.setState({ password: e.target.value, notPassPassword: false });
+                }
               }
             }
-            floatingLabelText="Password" />
-          <a> SHOW PASSWORD </a>
-          <TextField
-            hintText="Please input your password again"
-            type="password"
-            required
-            underlineFocusStyle={{borderColor: Colors.amber700}}
-            floatingLabelStyle={{color: Colors.amber700}}
-            style={ styles.basicWidth }
-            onChange={
-              (e) => {
-                this.setState({againPassword: e.target.value});
+            errorText={ errorText }
+            floatingLabelText=
+            {
+              <div>
+                Password <b style={{ color: 'red' }}>*</b>
+              </div>
+            } />
+          <div style={ showPasswordStyle }>
+            <a 
+              onTouchTap={
+                (e) => {
+                  this.setState({ showPassword: !this.state.showPassword });
+                }
               }
-            }
-            floatingLabelText="Confirm the password" />
-          <br />
+              style={{ textAlign: 'left', color: Colors.amber700, textDecoration: 'none', cursor: 'pointer' }}>SHOW PASSWORD</a>
+          </div>
           <RaisedButton
             linkButton={true}
             secondary={true}
@@ -130,14 +158,13 @@ var styles = {
     justifyContent: 'center'
   },
   img: {
-    marginBottom: '10px',
     width:'200px'
   },
   block: {
     display: 'flex',
     justifyContent: 'center',
     flexDirection: 'column',
-    width: '350px',
+    width: '300px',
     alignItems: 'center'
   },
   basicWidth: {
