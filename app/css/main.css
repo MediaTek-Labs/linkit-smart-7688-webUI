@@ -5,12 +5,26 @@
   src: url(../font/riona-sans-regular.otf);
 }
 
+@font-face {
+  font-family: 'RionaSansLight';
+  font-weight: normal;
+  font-style: normal;
+  src: url(../font/riona-sans-light.otf);
+}
+
+@font-face {
+  font-family: 'RionaSansMedium';
+  font-weight: normal;
+  font-style: normal;
+  src: url(../font/riona-sans-medium.otf);
+}
+
 body {
   margin: 0px;
   padding: 0px;
-  font-family:RionaSans,Arial,Helvetica,sans-serif;
+  font-family:RionaSansLight,Arial,Helvetica,sans-serif;
 }
 
 * {
-  font-family:RionaSans,Arial,Helvetica,sans-serif;
+  font-family:RionaSansLight,Arial,Helvetica,sans-serif;
 }

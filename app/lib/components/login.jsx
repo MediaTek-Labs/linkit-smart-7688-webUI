@@ -19,10 +19,12 @@ export default class loginComponent extends React.Component {
     super(props)
     this.state = {
       password: '',
-      showPassword: false
+      showPassword: false,
+      autoHideDuration: 3000,
+      successMsg: this.props.successMsg
     }
 
-    this._handleLogin = this._handleLogin.bind(this)
+    this._handleLogin = this._handleLogin.bind(this);
   }
 
   componentDidMount() {
@@ -33,6 +35,7 @@ export default class loginComponent extends React.Component {
       this.state.waiting = false;
       this.refs.waitingDialog.dismiss();
     }
+    this.refs.snackbar.show();
   }
 
   getChildContext() {
@@ -52,13 +55,32 @@ export default class loginComponent extends React.Component {
     } else {
       var textType = 'password';
     }
+    if (this.state.successMsg) {
+      var dialogMsg = 
+        <div style={{ 
+          width: '100%',
+          position: 'fixed', 
+          display: 'flex',
+          left:'0px',
+          bottom: '0px',
+          justifyContent: 'center' 
+        }}>
+          <Snackbar 
+            style={{ fontSize: '14px', height: 'none', minHeight: '48px', bottom: '0px', margin:'0 auto', position: 'relative' }}
+            message={ this.state.successMsg }
+            ref="snackbar"
+            autoHideDuration={this.state.autoHideDuration} />
+        </div>
+    } else {
+      var dialogMsg;
+    }
     return (
       <div style={styles.frame}>
         <Dialog
           title={__("Connection failed...")}
           ref="waitingDialog"
           modal={ this.state.waiting }>
-          <p style={{ lineHeight: '23px'}}>{__('Please refresh. If problem persists, please ensure your board is not in the process of rebooting, or updating new firmware, or check Wi-Fi connectivity settings.')}</p>
+          <p style={{ lineHeight: '23px', marginTop: '-10px' }}>{__('Please refresh. If problem persists, please ensure your board is not in the process of rebooting, or updating new firmware, or check Wi-Fi connectivity settings.')}</p>
         </Dialog>
         <div style={ styles.block }>
           <div style={{ 
@@ -73,8 +95,9 @@ export default class loginComponent extends React.Component {
             <img src={ Logo } style={ styles.img }/>
             <p style={{ 
               lineHeight: '22px', 
-              marginTop: '40px' 
-            }}>{__('Welcome to')} <b>LinkIt Smart 7688</b>.</p>
+              marginTop: '40px',
+              fontFamily: 'RionaSansLight,Arial,Helvetica,sans-serif'
+            }}><span style={{fontFamily: 'RionaSansLight,Arial,Helvetica,sans-serif'}}>{__('Welcome to')}</span> <b style={{ fontFamily: 'RionaSansMedium,Arial,Helvetica,sans-serif' }}>LinkIt Smart 7688</b>.</p>
             <TextField
               hintText={__("Input your Account")}
               color={ Colors.amber700 }
@@ -114,32 +137,33 @@ export default class loginComponent extends React.Component {
                   textAlign: 'left', 
                   color: Colors.amber700, 
                   textDecoration: 'none', 
-                  cursor: 'pointer' 
+                  cursor: 'pointer',
+                  fontSize: '14px'
                 }}>{__('SHOW PASSWORD')}</a>
             </div>
             <br />
             <RaisedButton
               linkButton={true}
               secondary={true}
-              label="Sign in"
+              label={__("Sign in")}
               backgroundColor={ Colors.amber700 }
               onTouchTap={ this._handleLogin }
               style={ styles.basicWidth }>
               <FontIcon 
                 style={ styles.exampleButtonIcon } 
-                className="muidocs-icon-custom-github"/>
+                className="muidocs-icon-custom-github" />
             </RaisedButton>
           </div>
-          <p style={{ 
-            marginTop: '80px', 
-            borderTop: '1px solid rgba(0,0,0,0.12)', 
-            paddingTop: '10px'
-          }} >{__('For advanced network configuration, go to ')}<a style={{ color:'#00a1de', textDecoration: 'none' }} href="/cgi-bin/luci">OpenWrt</a>.</p>
+          <div style={{width: '100%'}}>
+            <p style={{ 
+              marginTop: '80px', 
+              borderTop: '1px solid rgba(0,0,0,0.12)', 
+              paddingTop: '10px',
+              textAlign: 'center'
+            }} >{__('For advanced network configuration, go to ')}<a style={{ color:'#00a1de', textDecoration: 'none' }} href="/cgi-bin/luci">OpenWrt</a>.</p>
+          </div>
         </div>
-        <Snackbar 
-          message="Event added to your calendar"
-          action="undo"
-          autoHideDuration={this.state.autoHideDuration} />
+        { dialogMsg }
       </div>
     )
   }

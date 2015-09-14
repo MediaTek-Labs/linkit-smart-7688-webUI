@@ -226,30 +226,37 @@ export default class loginComponent extends React.Component {
       <div>
         <Card style={{ paddingRight: '128px', paddingLeft: '128px' }}>
           <h3>{__('Network setting')}</h3>
-          <h4>{__('Network mode')}</h4>
-          <RadioButtonGroup name="shipSpeed" defaultSelected={ this.state.mode } >
+          <RadioButtonGroup name="shipSpeed" defaultSelected={ this.state.mode } style={{ display: 'flex', paddingTop: '20px' }} >
             <RadioButton
               value="ap"
-              style={{color: Colors.amber700, marginBottom: 16}}
+              style={{
+                color: Colors.amber700, 
+                marginBottom: 16, 
+                width: '150px'
+              }}
               label={__("AP mode")}
               onTouchTap={() => this._onRadioButtonClick('ap')}/>
             <RadioButton
               value="station"
               label={__("Station mode")}
               onTouchTap={() => this._onRadioButtonClick('station')}
-              style={{color: Colors.amber700, marginBottom: 16}}/>
+              style={{
+                color: Colors.amber700, 
+                marginBottom: 16, 
+                width: '170px'
+              }}/>
           </RadioButtonGroup>
           { elem }
           <RaisedButton
             linkButton={true}
             label={__("Cancel")}
             style={{ 
-              width: '236px', 
+              width: '246px', 
               flexGrow:1, 
               textAlign: 'center', 
               marginTop: '20px', 
               marginBottom: '20px', 
-              marginLeft: '10px'
+              marginRight: '10px'
             }}
             backgroundColor="#EDEDED"
             labelColor="#999A94"
@@ -262,7 +269,7 @@ export default class loginComponent extends React.Component {
             backgroundColor={ Colors.amber700 }
             onTouchTap={ this._handleSettingMode }
             style={{ 
-              width: '236px', 
+              width: '246px', 
               flexGrow: 1, 
               textAlign: 'center', 
               marginTop: '20px', 

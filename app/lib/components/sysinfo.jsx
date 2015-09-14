@@ -20,7 +20,10 @@ var Colors = mui.Styles.Colors;
 export default class loginComponent extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {};
+    this.state = {
+      errorMsgTitle: null,
+      errorMsg: null
+    };
     this.state.PlatformBlockIsEdit = false;
     this.state.SoftwareBlockIsEdit = false;
     this.state.files = [{ name:'' }];
@@ -55,6 +58,11 @@ export default class loginComponent extends React.Component {
     this._onSubmitFirmware = this._onSubmitFirmware.bind(this);
     this._submitPlatformBlock = this._submitPlatformBlock.bind(this);
     this._cancelDialog = this._cancelDialog.bind(this);
+    this._returnToIndex = this._returnToIndex.bind(this);
+    this._cancelErrorMsgDialog = this._cancelErrorMsgDialog.bind(this);
+    this._cancelConfigureFailedDialog = this._cancelConfigureFailedDialog.bind(this); 
+    this._cancelUpgradeFirmwareFailedDialog = this._cancelUpgradeFirmwareFailedDialog.bind(this); 
+    this._cancelUpgradeFirmwareSuccessedDialog = this._cancelUpgradeFirmwareSuccessedDialog.bind(this);
   }
 
   getChildContext() {
@@ -76,11 +84,10 @@ export default class loginComponent extends React.Component {
   _onFactorySubmit() {
     return AppActions.resetFactory(window.session)
     .then(function(data) {
-      alert('Success!');
       return AppDispatcher.dispatch({
         APP_PAGE: 'LOGIN',
-        successMsg: null,
-        errorMsg: null
+        successMsg: __('Configuration saved. You can sign in to the console after your device has restarted.'),
+        errorMsg: null 
       });
     })
     .catch(function(err) {
@@ -130,27 +137,21 @@ export default class loginComponent extends React.Component {
       })
     })
     .then(function(data) {
-      alert('Success! We will reboot now!');
       return AppDispatcher.dispatch({
         APP_PAGE: 'LOGIN',
-        successMsg: null,
+        successMsg: __('Configuration saved. You can sign in to the console after your device has restarted.'),
         errorMsg: null
       });
     })
     .catch(function(err) {
       if (err === 'Access denied') {
-        alert(err);
-        window.localStorage.removeItem('session');
-        window.localStorage.removeItem('info');
-        return AppDispatcher.dispatch({
-          APP_PAGE: 'LOGIN',
-          successMsg: null,
-          errorMsg: null
-        });
+        _this.setState({ errorMsgTitle: __('Access denied'), errorMsg: __('Your token was expired, please sign in again.') });
+        return _this.refs.errorMsg.show();
       }
       alert(err);
     })
   }
+
   _cancelDialog() {
     this.refs.standardDialog.dismiss();
   }
@@ -173,37 +174,99 @@ export default class loginComponent extends React.Component {
       return AppActions.activeFirmware(window.session)
     })
     .then(function(data) {
-      alert('Uploading firmware successful, but board is currently in the process of updating firmware. Please refresh again in around 10 minutes, or after board finishes updating.')
-      window.localStorage.removeItem('session');
-      window.localStorage.removeItem('info');
-      return AppDispatcher.dispatch({
-        APP_PAGE: 'LOGIN',
-        successMsg: null,
-        errorMsg: null
-      });
+      _this.refs.uploadDialog.dismiss();
+      return _this.refs.upgradeFirmwareSuccessedDialog.show();      
     })
     .catch(function(err) {
+      _this.refs.uploadDialog.dismiss();
       if (err === 'Access denied') {
-        alert(err);
-        window.localStorage.removeItem('session');
-        window.localStorage.removeItem('info');
-        return AppDispatcher.dispatch({
-          APP_PAGE: 'LOGIN',
-          successMsg: null,
-          errorMsg: null
-        });
+        _this.setState({ errorMsgTitle: __('Access denied'), errorMsg: __('Your token was expired, please sign in again.') });
+        return _this.refs.errorMsg.show();
       }
-      alert('Failed to upgrade image');
+      alert(err);
     })
+  }
+
+  _returnToIndex() {
+    window.localStorage.removeItem('session');
+    window.localStorage.removeItem('info');
+    return AppDispatcher.dispatch({
+      APP_PAGE: 'LOGIN',
+      successMsg: null,
+      errorMsg: null
+    });
   }
 
   _handleStandardDialogTouchTap() {
     this.refs.standardDialog.show();
   }
 
+  _cancelErrorMsgDialog() {
+    this.refs.errorDialog.dismiss();
+    this._returnToIndex();
+  }
+  
+  _cancelConfigureFailedDialog() {
+    this.refs.configureFailedDialog.dismiss();
+  }
+  
+  _cancelUpgradeFirmwareFailedDialog() {
+    this.refs.upgradeFirmwareFailedDialog.dismiss();
+  }
+
+  _cancelUpgradeFirmwareSuccessedDialog() {
+    this.refs.upgradeFirmwareSuccessedDialog.dismiss();
+    return this._returnToIndex();
+  }
+
   render() {
+    let standardActions = [
+      <FlatButton
+        label={__("Cancel")}
+        labelStyle={{ color: Colors.amber700 }}
+        onTouchTap={ this._cancelDialog }
+        hoverColor="none" />,
+      <FlatButton
+        label={__("Reset")}
+        labelStyle={{ color: Colors.amber700 }}
+        hoverColor="none"
+        onTouchTap={this._onFactorySubmit} />
+    ];
+
+    let configureFailedActions = [
+      <FlatButton
+        label={__("OK")}
+        labelStyle={{ color: Colors.amber700 }}
+        onTouchTap={ this._cancelConfigureFailedDialog }
+        hoverColor="none" />
+    ];
+
+    let upgradeFirmwareFailedActions = [
+      <FlatButton
+        label={__("OK")}
+        labelStyle={{ color: Colors.amber700 }}
+        onTouchTap={ this._cancelUpgradeFirmwareFailedDialog }
+        hoverColor="none" />
+    ];
+
+    let upgradeFirmwareSuccessedActions = [
+      <FlatButton
+        label={__("SIGN IN")}
+        labelStyle={{ color: Colors.amber700 }}
+        onTouchTap={ this._cancelUpgradeFirmwareSuccessedDialog }
+        hoverColor="none" />
+    ];
+
+    let errMsgActions = [
+      <FlatButton
+        label={__("SIGN IN")}
+        labelStyle={{ color: Colors.amber700 }}
+        onTouchTap={ this._cancelErrorMsgDialog }
+        hoverColor="none" />
+    ]
     var PlatformBlock =
       <div style={{ paddingRight: '128px', paddingLeft: '128px', paddingTop: '20px' }}>
+        
         <h3 style={ styles.h3 }>{__('Platform information')}</h3>
         <TextField
           hintText={__("Device name")}
@@ -330,7 +393,13 @@ export default class loginComponent extends React.Component {
                 } 
               }
               backgroundColor={ Colors.amber700 }
-              style={{ width: '236px', flexGrow:1, textAlign: 'center', marginTop: '20px', marginBottom: '20px', marginLeft: '10px'}}>
+              style={{ 
+                width: '236px', 
+                flexGrow:1, 
+                textAlign: 'center', 
+                marginTop: '20px', 
+                marginBottom: '20px', 
+                marginLeft: '10px'}}>
             </RaisedButton>
           </div>
         </div>
@@ -382,8 +451,8 @@ export default class loginComponent extends React.Component {
             floatingLabelText={__("Firmware version")} />
           <Dropzone onDrop={ this._onDrop } style={{ width: '100%', border: '3px dotted #ffa000' }}>
             <div>
-              <h3 style={{ textAlign: 'center' }}>Firmware upgrade</h3>
-              <p style={{ textAlign: 'center' }}>Try dropping some files here, or click to select files to upload.</p>
+              <h3 style={{ textAlign: 'center' }}>{__('Firmware upgrade')}</h3>
+              <p style={{ textAlign: 'center' }}>{__('Try dropping some files here, or click to select files to upload.')}</p>
             </div>
             { this.state.files.length !== 0 ?
               <div>
@@ -397,10 +466,29 @@ export default class loginComponent extends React.Component {
             justifyContent:'space-between'
           }}>
             <Dialog
+              title={__("Firmware upgrade failed.")}
+              actions={ upgradeFirmwareFailedActions }
+              actionFocus="submit"
+              ref="upgradeFirmwareFailedDialog"
+              modal={ this.state.modal }>
+              <p style={{ color: '#999A94', marginTop: '-20px' }}>{__('Please consult the troubleshooting guide and then try again.')}</p>
+            </Dialog>
+            <Dialog
+              title={__("The firmware has been pushed to the device.")}
+              actions={ upgradeFirmwareSuccessedActions }
+              actionFocus="submit"
+              ref="upgradeFirmwareSuccessedDialog"
+              modal={ this.state.modal }>
+              <p style={{ color: '#999A94', marginTop: '-10px' }}>{__('Please wait while the device upgrades to the new firmware. You may sign in to the console after the firmware upgrade is completed.')}</p>
+              <p style={{ color: '#999A94', marginTop: '0px' }}>{__('Note: Do not disconnect the device from power source during firmware upgrade, or else the device will fail to boot up.')}</p>
+              <p style={{ color: '#999A94', marginTop: '0px' }}>{__('Check troubleshooting guide for more information.')}</p>
+            </Dialog>
+
+            <Dialog
               title={__("Upload Firmware")}
               ref="uploadDialog"
               modal={this.state.upgradeFirmware}>
-              <p>Uploading ...</p>
+              <p>{__('Uploading ...')}</p>
             </Dialog>
             <RaisedButton
               linkButton={true}
@@ -426,22 +514,17 @@ export default class loginComponent extends React.Component {
         </div>
     }
 
-    let standardActions = [
-      <FlatButton
-        label={__("Cancel")}
-        labelStyle={{ color: Colors.amber700 }}
-        onTouchTap={ this._cancelDialog }
-        hoverColor="none" />,
-      <FlatButton
-        label={__("Reset")}
-        labelStyle={{ color: Colors.amber700 }}
-        hoverColor="none"
-        onTouchTap={this._onFactorySubmit} />
-    ];
-
     return (
       <div>
         <Card>
+          <Dialog
+            title={this.state.errorMsgTitle}
+            actions={ errMsgActions }
+            actionFocus="submit"
+            ref="errorDialog"
+            modal={ this.state.modal }>
+            <p style={{ color: '#999A94', marginTop: '-20px' }}>{ this.state.errorMsg }</p>
+          </Dialog>
           { PlatformBlock }
           <hr style={{ border: '1px solid rgba(0,0,0,0.12)', marginTop: '20px', marginBottom: '0px' }} />
           { softwareBlock }

@@ -44,5 +44,22 @@
   "Network": "Network",
   "Network name": "Network name",
   "Network setting": "Network setting",
-  "Network mode": "Network mode"
+  "Network mode": "Network mode",
+  "You have set your password successfully, please sign in now.": "You have set your password successfully, please sign in now.",
+  "Sign in": "Sign in",
+  "SIGN IN": "SIGN IN",
+  "Uploading ...": "Uploading ...",
+  "Check troubleshooting guide for more information.": "Check troubleshooting guide for more information.",
+  "Configuration saved. You can sign in to the console after your device has restarted.": "Configuration saved. You can sign in to the console after your device has restarted.",
+  "OK": "OK",
+  "Firmware upgrade failed.": "Firmware upgrade failed.",
+  "Please consult the troubleshooting guide and then try again.": "Please consult the troubleshooting guide and then try again.",
+  "The firmware has been pushed to the device.": "The firmware has been pushed to the device.",
+  "Please wait while the device upgrades to the new firmware. You may sign in to the console after the firmware upgrade is completed.": "Please wait while the device upgrades to the new firmware. You may sign in to the console after the firmware upgrade is completed.",
+  "Note: Do not disconnect the device from power source during firmware upgrade, or else the device will fail to boot up.": "Note: Do not disconnect the device from   power source during firmware upgrade, or else the device will fail to boot up.",
+  "Check troubleshooting guide for more information": "Check troubleshooting guide for more information",
+  "Access denied": "Access denied",
+  "Firmware upgrade": "Firmware upgrade",
+  "Try dropping some files here, or click to select files to upload.": "Try dropping some files here, or click to select files to upload.",
+  "Your token was expired, please sign in again.": "Your token was expired, please sign in again."
 }

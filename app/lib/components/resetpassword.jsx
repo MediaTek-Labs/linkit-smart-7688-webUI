@@ -48,7 +48,7 @@ export default class loginComponent extends React.Component {
     .then(function(){
       return AppDispatcher.dispatch({
         APP_PAGE: 'LOGIN',
-        successMsg: null,
+        successMsg: __('You have set your password successfully, please sign in now.'),
         errorMsg: null
       });
     })
@@ -90,7 +90,7 @@ export default class loginComponent extends React.Component {
       <div style={ styles.frame }>
         <div style={ styles.block }>
           <img src={ Logo } style={ styles.img }/>
-          <p style={{ lineHeight: '22px', marginTop: '40px' }}>{__('Welcome to')} <b>LinkIt Smart 7688</b></p>
+          <p style={{ lineHeight: '22px', marginTop: '40px', fontFamily: 'RionaSansLight,Arial,Helvetica,sans-serif' }}>{__('Welcome to')} <b>LinkIt Smart 7688</b></p>
           <TextField
             hintText={__("Input your Account")}
             ref="password"
@@ -139,7 +139,8 @@ export default class loginComponent extends React.Component {
                 textAlign: 'left', 
                 color: Colors.amber700, 
                 textDecoration: 'none', 
-                cursor: 'pointer' 
+                cursor: 'pointer',
+                fontSize: '14px' 
               }}>{__('SHOW PASSWORD')}</a>
           </div>
           <RaisedButton
