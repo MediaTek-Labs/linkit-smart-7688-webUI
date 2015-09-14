@@ -113,6 +113,7 @@ export default class loginComponent extends React.Component {
               hintText={__("Input your Account")}
               color={ Colors.amber700 }
               value="root (default)"
+              disabled={ true }
               style={ styles.basicWidth }
               underlineFocusStyle={{ borderColor: Colors.amber700 }}
               required

@@ -41,20 +41,21 @@ export default class loginComponent extends React.Component {
     var password = this.state.password;
     
     if (password.length < 6) {
+      // console.log(123123)
       return ;
-    }
-
-    return appAction.resetPassword('root', password, window.session)
-    .then(function(){
-      return AppDispatcher.dispatch({
-        APP_PAGE: 'LOGIN',
-        successMsg: __('You have set your password successfully, please sign in now.'),
-        errorMsg: null
+    } else {
+      return appAction.resetPassword('root', password, window.session)
+      .then(function(){
+        return AppDispatcher.dispatch({
+          APP_PAGE: 'LOGIN',
+          successMsg: __('You have set your password successfully, please sign in now.'),
+          errorMsg: null
+        });
+      })
+      .catch(function(err) {
+        return ; 
       });
-    })
-    .catch(function(err) {
-      return ; 
-    });
+    }
   }
 
   render() {
@@ -95,6 +96,7 @@ export default class loginComponent extends React.Component {
             hintText={__("Input your Account")}
             ref="password"
             value="root (default)"
+            disabled={ true }
             underlineFocusStyle={{ borderColor: Colors.amber700 }}
             style={ styles.basicWidth }
             floatingLabelStyle={{ color: 'rgba(0, 0, 0, 0.498039)' }}

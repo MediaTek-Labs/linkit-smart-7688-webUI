@@ -62,5 +62,6 @@
   "Firmware upgrade": "上传韧体",
   "Try dropping some files here, or click to select files to upload.": "在这里放入文件，或者是点击选择档案上传。",
   "Your token was expired, please sign in again.": "你的令牌过期，请重新登录。",
-  "Account / password is incorrect.": "帐号 / 密码不正确。"
+  "Account / password is incorrect.": "帐号 / 密码不正确。",
+  "Choose the Wi-Fi network.": "选择一个 Wi-Fi 网路"
 }
