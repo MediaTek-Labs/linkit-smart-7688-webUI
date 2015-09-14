@@ -38,11 +38,11 @@ export default class loginComponent extends React.Component {
       if (this.props.boardInfo.wifi.sta.disabled === "1") {
         this.state.mode = 'ap';
         this.state.macaddr = this.props.boardInfo.network.lan.macaddr;
-        this.state.currentIp = this.props.boardInfo.lan['ipv4-address'][0].address
+        this.state.currentIp = this.props.boardInfo.lan['ipv4-address'][0].address;
       } else {
         this.state.mode = 'station';
         this.state.macaddr = this.props.boardInfo.network.wan.macaddr;
-        this.state.currentIp = this.props.boardInfo.wan['ipv4-address'][0].address
+        this.state.currentIp = this.props.boardInfo.wan['ipv4-address'][0].address;
       }
 
     }
@@ -52,7 +52,7 @@ export default class loginComponent extends React.Component {
     this._onReset = this._onReset.bind(this);
     this._onFactorySubmit = this._onFactorySubmit.bind(this);
     this._handleStandardDialogTouchTap = this._handleStandardDialogTouchTap.bind(this);
-    this._onSubmitFirmware = this._onSubmitFirmware.bind(this)
+    this._onSubmitFirmware = this._onSubmitFirmware.bind(this);
     this._submitPlatformBlock = this._submitPlatformBlock.bind(this);
     this._cancelDialog = this._cancelDialog.bind(this);
   }
@@ -204,53 +204,53 @@ export default class loginComponent extends React.Component {
   render() {
     var PlatformBlock =
       <div style={{ paddingRight: '128px', paddingLeft: '128px', paddingTop: '20px' }}>
-        <h3 style={ styles.h3 }>Platform information</h3>
+        <h3 style={ styles.h3 }>{__('Platform information')}</h3>
 
         <TextField
-          hintText="Device name"
+          hintText={__("Device name")}
           style={ styles.editTextField }
           disabled={ true }
           defaultValue={ this.state.deviceName }
           labelColor="#000"
           underlineStyle={{ borderColor: '#D1D2D3', borderWidth: '1px'}}
-          floatingLabelText="Device name" />
+          floatingLabelText={__("Device name")} />
         <TextField
-          hintText="Mac address"
+          hintText={__("Mac address")}
           disabled={ true }
           style={{ width: '100%' }}
           defaultValue={ this.state.macaddr }
           underlineStyle={{ borderColor: '#D1D2D3', borderWidth: '1px'}}
-          floatingLabelText="Mac address" />
+          floatingLabelText={__("Mac address")} />
         <TextField
-          hintText="Current IP address"
+          hintText={__("Current IP address")}
           style={{ width: '100%' }}
           disabled={ true }
           defaultValue={ this.state.currentIp }
-          floatingLabelText="Current IP address" />
+          floatingLabelText={__("Current IP address")} />
 
-        <h3 style={ styles.h3Top }>Account information</h3>
+        <h3 style={ styles.h3Top }>{__('Account information')}</h3>
 
         <TextField
-          hintText="Account"
+          hintText={__("Account")}
           style={{ width: '100%' }}
           disabled={ true }
           defaultValue={ this.state.user }
-          floatingLabelText="Account" />
+          floatingLabelText={__("Account")} />
         <TextField
-          hintText="Password"
+          hintText={__("Password")}
           disabled={true}
           style={{ width: '100%' }}
           defaultValue={this.state.password}
           type="password"
           floatingLabelText={
             <div>
-              Password <b style={{ color: 'red' }}>*</b>
+              {__('Password')} <b style={{ color: 'red' }}>*</b>
             </div>
           } />
         <RaisedButton
           linkButton={true}
           secondary={true}
-          label="Configure"
+          label={__("Configure")}
           fullWidth={true}
           backgroundColor={ Colors.amber700 }
           onTouchTap={()=>{ this._editPlatformBlock(true)} }
@@ -268,37 +268,37 @@ export default class loginComponent extends React.Component {
         <div style={{ paddingRight: '128px', paddingLeft: '128px', paddingTop: '20px' }}>
           <h3 style={styles.h3}>Platform information</h3>
           <TextField
-            hintText="Device name"
+            hintText={__("Device name")}
             floatingLabelStyle={{ color: 'rgba(0, 0, 0, 0.498039)' }}
             style={{ width: '100%' }}
             defaultValue={this.state.deviceName}
             underlineStyle={{ borderColor: Colors.amber700 }}
             underlineFocusStyle={{ borderColor: Colors.amber700, borderWidth: '2px' }}
             onChange={ (e) => {this.setState({deviceName: e.target.value})} }
-            floatingLabelText="Device name" />
+            floatingLabelText={__("Device name")} />
           <TextField
-            hintText="Mac address"
+            hintText={__("Mac address")}
             disabled={true}
             style={{width: '100%'}}
             defaultValue={this.state.macaddr}
-            floatingLabelText="Mac address" />
+            floatingLabelText={__("Mac address")} />
           <TextField
-            hintText="Current IP address"
+            hintText={__("Current IP address")}
             style={{width: '100%'}}
             disabled={true}
             defaultValue={this.state.currentIp}
-            floatingLabelText="Current IP address" />
+            floatingLabelText={__("Current IP address")} />
 
-          <h3 style={styles.h3Top}>Account information</h3>
+          <h3 style={styles.h3Top}>{__('Account information')}</h3>
 
           <TextField
-            hintText="Account"
+            hintText={__("Account")}
             style={{width: '100%'}}
             disabled={true}
             defaultValue="root(default)"
-            floatingLabelText="Account" />
+            floatingLabelText={__("Account")} />
           <TextField
-            hintText="Password"
+            hintText={__("Password")}
             style={{width: '100%'}}
             underlineStyle={{ borderColor: Colors.amber700 }}
             defaultValue={ this.state.password }
@@ -308,14 +308,14 @@ export default class loginComponent extends React.Component {
             onChange={ (e) => {this.setState({ password: e.target.value })} }
             floatingLabelText={
               <div>
-                Password <b style={{ color: 'red' }}>*</b>
+                {__('Password')} <b style={{ color: 'red' }}>*</b>
               </div>
             } />
 
           <div style={{ display: 'flex',flexDirection: 'row', justifyContent:'space-between', }}>
             <RaisedButton
               linkButton={ true }
-              label="Cancel"
+              label={__("Cancel")}
               onTouchTap={ ()=>{ this._editPlatformBlock(false) } }
               backgroundColor="#EDEDED"
               labelColor="#999A94"
@@ -324,7 +324,7 @@ export default class loginComponent extends React.Component {
             <RaisedButton
               linkButton={true}
               secondary={true}
-              label="Configure & Restart"
+              label={__("Configure & Restart")}
               onTouchTap={ 
                 () => { 
                   this._submitPlatformBlock(false)
@@ -339,23 +339,23 @@ export default class loginComponent extends React.Component {
 
     var softwareBlock =
       <div style={{ paddingRight: '128px', paddingLeft: '128px', paddingTop: '20px' }}>
-        <h3 style={styles.h3}>Software information</h3>
+        <h3 style={styles.h3}>{__('Software information')}</h3>
         <TextField
-          hintText="Boot loader version"
+          hintText={__("Boot loader version")}
           disabled={true}
           style={{width: '100%'}}
           defaultValue={this.state.bootLoaderVersion}
-          floatingLabelText="Boot loader version" />
+          floatingLabelText={__("Boot loader version")} />
         <TextField
-          hintText="Firmware version"
+          hintText={__("Firmware version")}
           style={{width: '100%'}}
           disabled={true}
           defaultValue={this.state.firmwareVersion}
-          floatingLabelText="Firmware version" />
+          floatingLabelText={__("Firmware version")} />
         <RaisedButton
           linkButton={true}
           secondary={true}
-          label="Upgrade firmware"
+          label={__("Upgrade firmware")}
           backgroundColor={Colors.amber700}
           onTouchTap={()=>{this._editSoftwareBlock(true)}}
           style={{
@@ -370,17 +370,17 @@ export default class loginComponent extends React.Component {
       softwareBlock =
         <div style={{ paddingRight: '128px', paddingLeft: '128px', paddingTop: '20px' }}>
           <TextField
-            hintText="Boot loader version"
+            hintText={__("Boot loader version")}
             disabled={ true }
             style={{ width: '100%' }}
             defaultValue={ this.state.bootLoaderVersion }
-            floatingLabelText="Boot loader version" />
+            floatingLabelText={__("Boot loader version")} />
           <TextField
-            hintText="Firmware version"
+            hintText={__("Firmware version")}
             style={{ width: '100%' }}
             disabled={ true }
             defaultValue={ this.state.firmwareVersion }
-            floatingLabelText="Firmware version" />
+            floatingLabelText={__("Firmware version")} />
           <Dropzone onDrop={ this._onDrop } style={{ width: '100%', border: '3px dotted #ffa000' }}>
             <div>
               <h3 style={{ textAlign: 'center' }}>Firmware upgrade</h3>
@@ -398,14 +398,14 @@ export default class loginComponent extends React.Component {
             justifyContent:'space-between'
           }}>
             <Dialog
-              title="Upload Firmware"
+              title={__("Upload Firmware")}
               ref="uploadDialog"
               modal={this.state.upgradeFirmware}>
               <p>Uploading ...</p>
             </Dialog>
             <RaisedButton
               linkButton={true}
-              label="Cancel"
+              label={__("Cancel")}
               backgroundColor="#EDEDED"
               labelColor="#999A94"
               style={{ width: '236px', flexGrow:1, textAlign: 'center', marginTop: '20px', marginBottom: '20px', marginRight: '10px' }}
@@ -416,7 +416,7 @@ export default class loginComponent extends React.Component {
             <RaisedButton
               linkButton={true}
               secondary={true}
-              label="Upgrade & Restart"
+              label={__("Upgrade & Restart")}
               backgroundColor={ Colors.amber700 }
               disabled={ this.state.upgradeFirmware }
               onTouchTap={ ()=>{ this._onSubmitFirmware(this.state.files[0]) } }
@@ -429,12 +429,12 @@ export default class loginComponent extends React.Component {
 
     let standardActions = [
       <FlatButton
-        label="Cancel"
+        label={__("Cancel")}
         labelStyle={{ color: Colors.amber700 }}
         onTouchTap={ this._cancelDialog }
         hoverColor="none" />,
       <FlatButton
-        label="Reset"
+        label={__("Reset")}
         labelStyle={{ color: Colors.amber700 }}
         hoverColor="none"
         onTouchTap={this._onFactorySubmit} />
@@ -448,22 +448,22 @@ export default class loginComponent extends React.Component {
           { softwareBlock }
           <hr style={{ border: '1px solid rgba(0,0,0,0.12)', marginTop: '20px', marginBottom: '0px' }} />
           <div style={{ paddingRight: '128px', paddingLeft: '128px', paddingTop: '20px' }}>
-            <h3 style={ styles.h3 }>Factory reset</h3>
-            <p>Reset the device to its default settings.</p>
-            <b style={{ color: '#DB4437' }}>Important: This action will remove all your data and settings from the device.</b>
+            <h3 style={ styles.h3 }>{__('Factory reset')}</h3>
+            <p>{__('Reset the device to its default settings.')}</p>
+            <b style={{ color: '#DB4437' }}>{__('Important: This action will remove all your data and settings from the device.')}</b>
             <p>{ this.state.modal }</p>
             <Dialog
-              title="Are you sure you want to reset?"
+              title={__("Are you sure you want to reset?")}
               actions={ standardActions }
               actionFocus="submit"
               ref="standardDialog"
               modal={ this.state.modal }>
-              <p style={{ color: '#999A94', marginTop: '-20px' }}>This action will remove all your data and settings from the device. You cannot undo this action.</p>
+              <p style={{ color: '#999A94', marginTop: '-20px' }}>{__('This action will remove all your data and settings from the device. You cannot undo this action.')}</p>
             </Dialog>
             <RaisedButton
               linkButton={ true }
               secondary={ true }
-              label="Reset"
+              label={__("Reset")}
               onTouchTap={ this._handleStandardDialogTouchTap }
               backgroundColor={ Colors.amber700 }
               style={{

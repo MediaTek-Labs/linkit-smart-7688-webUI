@@ -39,20 +39,23 @@ export default class contentComponent extends React.Component {
     return (
       <div style={styles.block}>
         <header style={ styles.header }>
-          <p style={{ lineHeight: '35px' }}> Welcome to <b>LinkIt Smart 7688</b></p>
-          <p style={{ lineHeight: '35px' }}>For advanced network configuration, go to <a style={{ color:'#00a1de', textDecoration: 'none' }} href="/cgi-bin/luci">OpenWrt</a>.</p>
+          <p style={{ lineHeight: '35px' }}>{__('Welcome to')} <b>LinkIt Smart 7688</b></p>
+          <p style={{ lineHeight: '35px' }}>{__('For advanced network configuration, go to ')}<a style={{ color:'#00a1de', textDecoration: 'none' }} href="/cgi-bin/luci">OpenWrt</a>.</p>
         </header>
         <Tabs
           valueLink={{ value: this.state.tabsValue }}
           tabItemContainerStyle={{ backgroundColor: Colors.amber700 }}
           style={styles.content}>
           <Tab
-            label="System information"
+            label={__("System information")}
             value="sysinfo"
             onClick={this._handleTabsChangeSYS.bind(this)}>
             <Sysinfo boardInfo={ this.props.boardInfo } />
           </Tab>
-          <Tab label="Network" value="network" onClick={this._handleTabsChangeNetWork.bind(this)}>
+          <Tab 
+            label={__("Network")} 
+            value="network" 
+            onClick={this._handleTabsChangeNetWork.bind(this)}>
             <Network boardInfo={ this.props.boardInfo } />
           </Tab>
         </Tabs>

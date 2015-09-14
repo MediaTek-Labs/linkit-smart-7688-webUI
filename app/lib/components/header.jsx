@@ -1,11 +1,13 @@
 import React from 'react';
 import Radium from 'radium';
 import mui from 'material-ui';
+
 let {
   AppBar, 
   Card,
   DropDownMenu
 } = mui;
+
 import Logo from '../../img/mediatek.png';
 var AppDispatcher  = require('../dispatcher/appDispatcher');
 var ThemeManager = new mui.Styles.ThemeManager();
@@ -34,8 +36,6 @@ export default class loginComponent extends React.Component {
       successMsg: null,
       errorMsg: null
     });
-  }
-  componentDidMount() {
   }
 
   getChildContext() {
@@ -87,14 +87,19 @@ export default class loginComponent extends React.Component {
                   lineHeight: '63px', 
                   fontSize: '16px' }} 
                 underlineStyle={{ border: '0px' }}/>
-              <a onTouchTap={this._logOut} style={{ color: Colors.amber700, textDecoration: 'none', cursor: 'pointer' }}>Sign out</a>
+              <a 
+                onTouchTap={this._logOut} 
+                style={{ 
+                  color: Colors.amber700, 
+                  textDecoration: 'none', 
+                  cursor: 'pointer' 
+                }}>{__('Sign out')}</a>
             </div>
           </div>
         </header>
       </div>
     )
   }
-
 }
 
 loginComponent.childContextTypes = {
@@ -117,7 +122,6 @@ var styles = {
     zIndex: 99,
     position: 'fixed',
     background: '#fff',
-        // -webkit-tap-highlight-color: rgba(0,0,0,0);
     boxShadow: '1px 2px 1px 0 rgba(0,0,0,0.1), 0 0 0 rgba(0,0,0,0.1)'
   },
   container: {

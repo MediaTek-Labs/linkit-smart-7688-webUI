@@ -71,7 +71,10 @@ export default class loginComponent extends React.Component {
             alignItems: 'center' 
           }}>
             <img src={ Logo } style={ styles.img }/>
-            <p style={{ lineHeight: '22px', marginTop: '40px' }}>{__('Welcome to')} <b>LinkIt Smart 7688</b>.</p>
+            <p style={{ 
+              lineHeight: '22px', 
+              marginTop: '40px' 
+            }}>{__('Welcome to')} <b>LinkIt Smart 7688</b>.</p>
             <TextField
               hintText={__("Input your Account")}
               color={ Colors.amber700 }
@@ -80,7 +83,7 @@ export default class loginComponent extends React.Component {
               underlineFocusStyle={{ borderColor: Colors.amber700 }}
               required
               minLength="6"
-              floatingLabelText="Account" />
+              floatingLabelText={__("Account")} />
             <TextField
               hintText={__("Please enter your password")}
               type={ textType }
@@ -95,7 +98,7 @@ export default class loginComponent extends React.Component {
               floatingLabelText=
                 {
                   <div>
-                    Password <b style={{ color: 'red' }}>*</b>
+                    {__('Password')} <b style={{ color: 'red' }}>*</b>
                   </div>
                 } />
             <div style={{ width: '100%', marginBottom: '24px' }}>
@@ -127,7 +130,11 @@ export default class loginComponent extends React.Component {
                 className="muidocs-icon-custom-github"/>
             </RaisedButton>
           </div>
-          <p style={{ marginTop: '80px', borderTop: '1px solid rgba(0,0,0,0.12)', paddingTop: '10px'}} >{__('For advanced network configuration, go to ')}<a style={{ color:'#00a1de', textDecoration: 'none' }} href="/cgi-bin/luci">OpenWrt</a>.</p>
+          <p style={{ 
+            marginTop: '80px', 
+            borderTop: '1px solid rgba(0,0,0,0.12)', 
+            paddingTop: '10px'
+          }} >{__('For advanced network configuration, go to ')}<a style={{ color:'#00a1de', textDecoration: 'none' }} href="/cgi-bin/luci">OpenWrt</a>.</p>
         </div>
         <Snackbar 
           message="Event added to your calendar"

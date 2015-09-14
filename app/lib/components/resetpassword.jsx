@@ -67,7 +67,11 @@ export default class loginComponent extends React.Component {
     if (this.state.notPassPassword) {
       var errorText = 
         <div>
-          <p style={{ color:'#69BE28', textAlign: 'left', marginTop: '2px' }}>Please use at least 6 alphanumeric characters.</p>
+          <p style={{ 
+            color:'#69BE28', 
+            textAlign: 'left', 
+            marginTop: '2px' 
+          }}>{__('Please use at least 6 alphanumeric characters.')}</p>
         </div>
       var showPasswordStyle = {
         marginTop: '20px',
@@ -86,9 +90,9 @@ export default class loginComponent extends React.Component {
       <div style={ styles.frame }>
         <div style={ styles.block }>
           <img src={ Logo } style={ styles.img }/>
-          <p style={{ lineHeight: '22px', marginTop: '40px' }}>Welcome to <b>LinkIt Smart 7688</b></p>
+          <p style={{ lineHeight: '22px', marginTop: '40px' }}>{__('Welcome to')} <b>LinkIt Smart 7688</b></p>
           <TextField
-            hintText="Input your Account"
+            hintText={__("Input your Account")}
             ref="password"
             value="root (default)"
             underlineFocusStyle={{ borderColor: Colors.amber700 }}
@@ -96,9 +100,9 @@ export default class loginComponent extends React.Component {
             floatingLabelStyle={{ color: 'rgba(0, 0, 0, 0.498039)' }}
             required
             minLength="6"
-            floatingLabelText="Account" />
+            floatingLabelText={__("Account")} />
           <TextField
-            hintText="Please set a password"
+            hintText={__("Please set a password")}
             type={ textType }
             floatingLabelStyle={{ color: 'rgba(0, 0, 0, 0.498039)' }}
             underlineFocusStyle={{ borderColor: Colors.amber700 }}
@@ -119,22 +123,29 @@ export default class loginComponent extends React.Component {
             floatingLabelText=
             {
               <div>
-                Password <b style={{ color: 'red' }}>*</b>
+                {__('Password')} <b style={{ color: 'red' }}>*</b>
               </div>
             } />
           <div style={ showPasswordStyle }>
             <a 
               onTouchTap={
                 (e) => {
-                  this.setState({ showPassword: !this.state.showPassword });
+                  this.setState({ 
+                    showPassword: !this.state.showPassword 
+                  });
                 }
               }
-              style={{ textAlign: 'left', color: Colors.amber700, textDecoration: 'none', cursor: 'pointer' }}>SHOW PASSWORD</a>
+              style={{ 
+                textAlign: 'left', 
+                color: Colors.amber700, 
+                textDecoration: 'none', 
+                cursor: 'pointer' 
+              }}>{__('SHOW PASSWORD')}</a>
           </div>
           <RaisedButton
             linkButton={true}
             secondary={true}
-            label="Submit"
+            label={__("Submit")}
             backgroundColor={Colors.amber700}
             onTouchTap={this._handleResetPassword}
             style={styles.basicWidth}>

@@ -142,7 +142,7 @@ export default class loginComponent extends React.Component {
         elem =
           <div>
             <TextField
-            hintText="Input your SSID"
+            hintText={__("Input your SSID")}
             type="text"
             value={ this.state.apContent.ssid }
             style={{ width: '100%' }}
@@ -156,14 +156,14 @@ export default class loginComponent extends React.Component {
                 })
               }
             }
-            underlineFocusStyle={{borderColor: Colors.amber700}}
-            floatingLabelStyle={{color: Colors.amber700}}
+            underlineFocusStyle={{ borderColor: Colors.amber700 }}
+            floatingLabelStyle={{ color: Colors.amber700 }}
             floatingLabelText="Network name" />
             <TextField
-              hintText="Input your password"
+              hintText={__("Input your password")}
               type="password"
-              underlineFocusStyle={{borderColor: Colors.amber700}}
-              floatingLabelStyle={{color: Colors.amber700}}
+              underlineFocusStyle={{ borderColor: Colors.amber700 }}
+              floatingLabelStyle={{ color: Colors.amber700 }}
               value={ this.state.apContent.key }
               onChange={
                 (e)=>{
@@ -176,7 +176,7 @@ export default class loginComponent extends React.Component {
                 }
               }
               style={{ width: '100%' }}
-              floatingLabelText="Password" />
+              floatingLabelText={__("Password")} />
           </div>
         break;
       case 'station':
@@ -188,14 +188,14 @@ export default class loginComponent extends React.Component {
               underlineStyle={{ maxHeight:'100px', overflow: 'hidden' }}
               menuItemStyle={{  maxHeight:'100px' }}
               onChange={ this._handleSelectValueChange.bind(null, 'selectValue') }
-              hintText="Detected wifi network"
+              hintText={__("Detected wifi network")}
               menuItems={ this.state.wifiList } />
-            <RaisedButton label="Refresh" onTouchTap={ this._scanWifi }/>
+            <RaisedButton label={__("Refresh")} onTouchTap={ this._scanWifi }/>
             <br />
             <TextField
               style={{ width: '100%' }}
               value={ this.state.stationContent.key }
-              hintText="Input your Password"
+              hintText={__("Input your Password")}
               underlineFocusStyle={{ borderColor: Colors.amber700 }}
               floatingLabelStyle={{ color: Colors.amber700 }}
               type="password"
@@ -209,7 +209,7 @@ export default class loginComponent extends React.Component {
                   })
                 }
               }
-              floatingLabelText="Password" />
+              floatingLabelText={__("Password")} />
           </div>
         break;
     }
@@ -218,23 +218,30 @@ export default class loginComponent extends React.Component {
         <Card style={{ paddingRight: '20px', paddingLeft: '20px' }}>
           <h3>Network setting</h3>
           <h4>Network mode</h4>
-          <RadioButtonGroup name="shipSpeed" defaultSelected={this.state.mode}>
+          <RadioButtonGroup name="shipSpeed" defaultSelected={ this.state.mode } >
             <RadioButton
               value="ap"
               style={{color: Colors.amber700, marginBottom:16}}
-              label="AP mode"
+              label={__("AP mode")}
               onTouchTap={() => this._onRadioButtonClick('ap')}/>
             <RadioButton
               value="station"
-              label="Station mode"
+              label={__("Station mode")}
               onTouchTap={() => this._onRadioButtonClick('station')}
               style={{color: Colors.amber700, marginBottom:16}}/>
           </RadioButtonGroup>
           { elem }
           <RaisedButton
             linkButton={true}
-            label="Cancel"
-            style={{ width: '236px', flexGrow:1, textAlign: 'center', marginTop: '20px', marginBottom: '20px', marginLeft: '10px'}}
+            label={__("Cancel")}
+            style={{ 
+              width: '236px', 
+              flexGrow:1, 
+              textAlign: 'center', 
+              marginTop: '20px', 
+              marginBottom: '20px', 
+              marginLeft: '10px'
+            }}
             backgroundColor="#EDEDED"
             labelColor="#999A94"
           >              
@@ -242,10 +249,17 @@ export default class loginComponent extends React.Component {
           <RaisedButton
             linkButton={true}
             secondary={true}
-            label="Configure & Restart"
-            backgroundColor={Colors.amber700}
-            onTouchTap={this._handleSettingMode}
-            style={{ width: '236px', flexGrow:1, textAlign: 'center', marginTop: '20px', marginBottom: '20px', marginLeft: '10px'}}
+            label={__("Configure & Restart")}
+            backgroundColor={ Colors.amber700 }
+            onTouchTap={ this._handleSettingMode }
+            style={{ 
+              width: '236px', 
+              flexGrow: 1, 
+              textAlign: 'center', 
+              marginTop: '20px', 
+              marginBottom: '20px', 
+              marginLeft: '10px'
+            }}
           > 
           </RaisedButton>
         </Card>
