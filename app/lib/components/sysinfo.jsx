@@ -205,7 +205,6 @@ export default class loginComponent extends React.Component {
     var PlatformBlock =
       <div style={{ paddingRight: '128px', paddingLeft: '128px', paddingTop: '20px' }}>
         <h3 style={ styles.h3 }>{__('Platform information')}</h3>
-
         <TextField
           hintText={__("Device name")}
           style={ styles.editTextField }

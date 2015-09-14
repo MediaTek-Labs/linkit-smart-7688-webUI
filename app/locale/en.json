@@ -26,7 +26,7 @@
   "Are you sure you want to reset?": "Are you sure you want to reset?",
   "Input your SSID": "Input your SSID",
   "Input your password": "Input your password",
-  "Detected wifi network": "Detected wifi network",
+  "Detected Wi-Fi network": "Detected Wi-Fi network",
   "Refresh": "Refresh",
   "AP mode": "AP mode",
   "Station mode": "Station mode",
@@ -41,5 +41,8 @@
   "Important: This action will remove all your data and settings from the device.": "Important: This action will remove all your data and settings from the device.",
   "This action will remove all your data and settings from the device. You cannot undo this action.": "This action will remove all your data and settings from the device. You cannot undo this action.",
   "System information": "System information",
-  "Network": "Network"
+  "Network": "Network",
+  "Network name": "Network name",
+  "Network setting": "Network setting",
+  "Network mode": "Network mode"
 }

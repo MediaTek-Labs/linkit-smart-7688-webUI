@@ -26,7 +26,7 @@
   "Are you sure you want to reset?": "您确定您要还原?",
   "Input your SSID": "输入您的 SSID",
   "Input your password": "输入您的密码",
-  "Detected wifi network": "侦测 wifi 网路",
+  "Detected Wi-Fi network": "侦测 Wi-Fi 网路",
   "Refresh": "重新整理",
   "AP mode": "AP 模式",
   "Station mode": "Station 模式",
@@ -41,5 +41,8 @@
   "Important: This action will remove all your data and settings from the device.": "重要: 这个动作会移除您在设备上的资料和设定.",
   "This action will remove all your data and settings from the device. You cannot undo this action.": "这个动作会移除您在设备上的资料和设定, 您不可再恢复.",
   "System information": "系统资讯",
-  "Network": "网路设定"
+  "Network": "网路设定",
+  "Network name": "网路名称",
+  "Network setting": "网路设定",
+  "Network mode": "网路模式"
 }

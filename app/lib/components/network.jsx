@@ -157,13 +157,17 @@ export default class loginComponent extends React.Component {
               }
             }
             underlineFocusStyle={{ borderColor: Colors.amber700 }}
-            floatingLabelStyle={{ color: Colors.amber700 }}
-            floatingLabelText="Network name" />
+            floatingLabelStyle={{ color: 'rgba(0, 0, 0, 0.498039)' }}
+            floatingLabelText={
+              <div>
+                { __("Network name") } <b style={{ color: 'red' }}>*</b>
+              </div>
+            } />
             <TextField
-              hintText={__("Input your password")}
+              hintText={__("Please enter your password")}
               type="password"
               underlineFocusStyle={{ borderColor: Colors.amber700 }}
-              floatingLabelStyle={{ color: Colors.amber700 }}
+              floatingLabelStyle={{ color: 'rgba(0, 0, 0, 0.498039)' }}
               value={ this.state.apContent.key }
               onChange={
                 (e)=>{
@@ -187,8 +191,13 @@ export default class loginComponent extends React.Component {
               multiLine={ true }
               underlineStyle={{ maxHeight:'100px', overflow: 'hidden' }}
               menuItemStyle={{  maxHeight:'100px' }}
+              floatingLabelStyle={{ color: 'rgba(0, 0, 0, 0.498039)' }}
               onChange={ this._handleSelectValueChange.bind(null, 'selectValue') }
-              hintText={__("Detected wifi network")}
+              hintText={
+                <div>
+                  { __("Detected Wi-Fi network") } <b style={{ color: 'red' }}>*</b>
+                </div>
+              }
               menuItems={ this.state.wifiList } />
             <RaisedButton label={__("Refresh")} onTouchTap={ this._scanWifi }/>
             <br />
@@ -196,8 +205,8 @@ export default class loginComponent extends React.Component {
               style={{ width: '100%' }}
               value={ this.state.stationContent.key }
               hintText={__("Input your Password")}
+              floatingLabelStyle={{ color: 'rgba(0, 0, 0, 0.498039)' }}
               underlineFocusStyle={{ borderColor: Colors.amber700 }}
-              floatingLabelStyle={{ color: Colors.amber700 }}
               type="password"
               onChange={
                 (e)=>{
@@ -215,20 +224,20 @@ export default class loginComponent extends React.Component {
     }
     return (
       <div>
-        <Card style={{ paddingRight: '20px', paddingLeft: '20px' }}>
-          <h3>Network setting</h3>
-          <h4>Network mode</h4>
+        <Card style={{ paddingRight: '128px', paddingLeft: '128px' }}>
+          <h3>{__('Network setting')}</h3>
+          <h4>{__('Network mode')}</h4>
           <RadioButtonGroup name="shipSpeed" defaultSelected={ this.state.mode } >
             <RadioButton
               value="ap"
-              style={{color: Colors.amber700, marginBottom:16}}
+              style={{color: Colors.amber700, marginBottom: 16}}
               label={__("AP mode")}
               onTouchTap={() => this._onRadioButtonClick('ap')}/>
             <RadioButton
               value="station"
               label={__("Station mode")}
               onTouchTap={() => this._onRadioButtonClick('station')}
-              style={{color: Colors.amber700, marginBottom:16}}/>
+              style={{color: Colors.amber700, marginBottom: 16}}/>
           </RadioButtonGroup>
           { elem }
           <RaisedButton
