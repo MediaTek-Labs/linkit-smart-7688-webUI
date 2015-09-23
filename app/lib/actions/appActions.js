@@ -10,7 +10,9 @@ var appActions = {
       return rpc.reboot(session);
     })
   },
-
+  loadModel: function(session) {
+    return rpc.loadModel(session);
+  },
   setWifi: function(section, ssid, key, session) {
     var disabled = 1;
 

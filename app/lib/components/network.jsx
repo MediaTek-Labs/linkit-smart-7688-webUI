@@ -77,7 +77,6 @@ export default class loginComponent extends React.Component {
     .then(function(data) {
       var selectValue ;
       for(var i = 0; i < data.body.result[1].results.length; i++ ){
-        console.log(i)
         data.body.result[1].results[i].payload = i+1;
         data.body.result[1].results[i].text = data.body.result[1].results[i].ssid + ' - ' + data.body.result[1].results[i].quality + ' %';
         // 抓現在版子上的 wifi ssid 是誰
@@ -156,7 +155,6 @@ export default class loginComponent extends React.Component {
   }
   
   render() {
-    console.log(this.state.wifiList)
     let errMsgActions = [
       <FlatButton
         label={__("SIGN IN")}

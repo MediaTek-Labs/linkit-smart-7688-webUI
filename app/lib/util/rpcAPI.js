@@ -60,7 +60,16 @@ var rpcAPI = {
     return this.request(config);
 
   },
-
+  loadModel: function(session) {
+    var config = { 
+      jsonrpc: "2.0", 
+      id: id++, 
+      method: "call",
+      params: [ session, "system", "board", { dummy: 0 }]
+    };
+  
+    return this.request(config);
+  },
   grantCode: function(session) {
 
     var config = {

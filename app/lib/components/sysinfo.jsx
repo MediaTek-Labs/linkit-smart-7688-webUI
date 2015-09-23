@@ -137,6 +137,8 @@ export default class loginComponent extends React.Component {
       })
     })
     .then(function(data) {
+      window.localStorage.removeItem('session');
+      window.localStorage.removeItem('info');
       return AppDispatcher.dispatch({
         APP_PAGE: 'LOGIN',
         successMsg: __('Configuration saved. You can sign in to the console after your device has restarted.'),
@@ -328,7 +330,7 @@ export default class loginComponent extends React.Component {
     if (this.state.PlatformBlockIsEdit) {
       PlatformBlock =
         <div style={ styles.content } key="PlatformBlockIsEdit">
-          <h3 style={styles.h3}>Platform information</h3>
+          <h3 style={styles.h3}>{__('Platform information')}</h3>
           <TextField
             hintText={__("Device name")}
             floatingLabelStyle={{ color: 'rgba(0, 0, 0, 0.498039)' }}
