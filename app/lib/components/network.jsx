@@ -153,7 +153,7 @@ export default class loginComponent extends React.Component {
     this.refs.errorDialog.dismiss();
     this._returnToIndex();
   }
-  
+
   render() {
     let errMsgActions = [
       <FlatButton
@@ -267,8 +267,8 @@ export default class loginComponent extends React.Component {
               <RadioButton
                 value="ap"
                 style={{
-                  color: Colors.amber700, 
-                  marginBottom: 16, 
+                  color: Colors.amber700,
+                  marginBottom: 16,
                   width: '150px'
                 }}
                 label={__("AP mode")}
@@ -278,8 +278,8 @@ export default class loginComponent extends React.Component {
                 label={__("Station mode")}
                 onTouchTap={() => this._onRadioButtonClick('station')}
                 style={{
-                  color: Colors.amber700, 
-                  marginBottom: 16, 
+                  color: Colors.amber700,
+                  marginBottom: 16,
                   width: '170px'
                 }}/>
             </RadioButtonGroup>
@@ -292,17 +292,17 @@ export default class loginComponent extends React.Component {
               <RaisedButton
                 linkButton={true}
                 label={__("Cancel")}
-                style={{ 
-                  width: '236px', 
-                  flexGrow:1, 
-                  textAlign: 'center', 
-                  marginTop: '20px', 
-                  marginBottom: '20px', 
+                style={{
+                  width: '236px',
+                  flexGrow:1,
+                  textAlign: 'center',
+                  marginTop: '20px',
+                  marginBottom: '20px',
                   marginRight: '10px'
                 }}
                 backgroundColor="#EDEDED"
                 labelColor="#999A94"
-              >              
+              >
               </RaisedButton>
               <RaisedButton
                 linkButton={true}
@@ -310,15 +310,15 @@ export default class loginComponent extends React.Component {
                 label={__("Configure & Restart")}
                 backgroundColor={ Colors.amber700 }
                 onTouchTap={ this._handleSettingMode }
-                style={{ 
-                  width: '236px', 
-                  flexGrow: 1, 
-                  textAlign: 'center', 
-                  marginTop: '20px', 
-                  marginBottom: '20px', 
+                style={{
+                  width: '236px',
+                  flexGrow: 1,
+                  textAlign: 'center',
+                  marginTop: '20px',
+                  marginBottom: '20px',
                   marginLeft: '10px'
                 }}
-              > 
+              >
               </RaisedButton>
             </div>
           </div>
@@ -336,10 +336,10 @@ loginComponent.childContextTypes = {
 var styles = {
 
   content: {
-    paddingRight: '128px', 
+    paddingRight: '128px',
     paddingLeft: '128px',
     '@media (max-width: 760px)': {
-      paddingRight: '20px', 
+      paddingRight: '20px',
       paddingLeft: '20px',
     }
   }

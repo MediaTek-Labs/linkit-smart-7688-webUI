@@ -29,6 +29,9 @@ export default class loginComponent extends React.Component {
     this.state.files = [{ name:'' }];
     this.state.modal = false;
     this.state.upgradeFirmware = false;
+    this.state.showPassword = false;
+    this.state.notPassPassword = false;
+
     var info = JSON.parse(localStorage.getItem('info'));
 
     if (this.props.boardInfo) {
@@ -118,6 +121,10 @@ export default class loginComponent extends React.Component {
 
   _submitPlatformBlock() {
     var _this = this;
+    var password = this.state.password;
+    if (password.length < 6) {
+      return ;
+    }
     return AppActions.resetHostName(_this.state.deviceName, window.session)
     .then(function(data) {
       return AppActions.resetPassword('root', _this.state.password, window.session);
@@ -150,7 +157,8 @@ export default class loginComponent extends React.Component {
         return _this.refs.errorMsg.show();
       }
       alert(err);
-    })
+    });
+
   }
 
   _cancelDialog() {
@@ -221,6 +229,49 @@ export default class loginComponent extends React.Component {
   }
 
   render() {
+    if (this.state.showPassword) {
+      var textType = 'text';
+    } else {
+      var textType = 'password';
+    }
+    if (this.state.files.length !== 0) {
+      var DropzoneContent =
+        <div>
+          <h3 style={{
+            tapHighlightColor: 'rgba(0,0,0,0)',
+            color: 'rgba(0,0,0,0.5)',
+            fontSize: '16px',
+            transform: 'perspective(1px) scale(0.75) translate3d(2px, -28px, 0)',
+            transformOrigin: 'left top',
+            marginBottom: '0px',
+            marginTop: '40px'}}>{__('Upgrade firmware file')}</h3>
+          <p style={{
+            borderBottom: '1px solid #D1D2D3',
+            fontSize: '16px',
+            marginTop: '-10px',
+            paddingBottom: '5px'
+          }}>{this.state.files[0].name || __('Choose the file')}</p>
+        </div>
+    } else {
+      var DropzoneContent =
+        <div>
+          <h3 style={{
+          tapHighlightColor: 'rgba(0,0,0,0)',
+          color: 'rgba(0,0,0,0.5)',
+          fontSize: '16px',
+          transform: 'perspective(1px) scale(0.75) translate3d(2px, -28px, 0)',
+          transformOrigin: 'left top',
+          marginBottom: '0px',
+          marginTop: '40px'}}>__('Upgrade firmware file')</h3>
+          <p style={{
+            borderBottom: '1px solid #D1D2D3',
+            fontSize: '16px',
+            marginTop: '-10px',
+            paddingBottom: '5px'
+          }}>{__('Choose the file')}</p>
+        </div>
+    }
+
     let standardActions = [
       <FlatButton
         label={ __('Cancel') }
@@ -265,51 +316,45 @@ export default class loginComponent extends React.Component {
         onTouchTap={ this._cancelErrorMsgDialog }
         hoverColor="none" />
     ]
+
+    if (this.state.notPassPassword) {
+      var errorText =
+        <div>
+          <p style={{
+            color:'#69BE28',
+            textAlign: 'left',
+            marginTop: '2px'
+          }}>{ __('Please use at least 6 alphanumeric characters.') }</p>
+        </div>
+      var showPasswordStyle = {
+        marginTop: '20px',
+        width: '100%',
+        marginBottom: '44px'
+      };
+    } else {
+      var showPasswordStyle = {
+        width: '100%',
+        marginBottom: '44px'
+      };
+      var errorText;
+    }
+
     var PlatformBlock =
       <div style={ styles.content } key="PlatformBlock">
 
         <h3 style={ styles.h3 }>{__('Platform information')}</h3>
-        <TextField
-          hintText={__('Device name')}
-          style={ styles.editTextField }
-          disabled={ true }
-          defaultValue={ this.state.deviceName }
-          labelColor="#000"
-          underlineStyle={{ borderColor: '#D1D2D3', borderWidth: '1px' }}
-          floatingLabelText={__('Device name')} />
-        <TextField
-          hintText={__('MAC address')}
-          disabled={ true }
-          style={{ width: '100%' }}
-          defaultValue={ this.state.macaddr }
-          underlineStyle={{ borderColor: '#D1D2D3', borderWidth: '1px' }}
-          floatingLabelText={__('MAC address')} />
-        <TextField
-          hintText={__('Current IP address')}
-          style={{ width: '100%' }}
-          disabled={ true }
-          defaultValue={ this.state.currentIp }
-          floatingLabelText={__('Current IP address')} />
+        <h3 style={ styles.panelTitle }>{__('Device name')}</h3>
+        <p style={ styles.panelContent }>{ this.state.deviceName }</p>
+        <h3 style={ styles.panelTitle }>{__('MAC address')}</h3>
+        <p style={ styles.panelContent }>{ this.state.macaddr }</p>
+        <h3 style={ styles.panelTitle }>{__('Current IP address')}</h3>
+        <p style={ styles.panelContent }>{ this.state.currentIp }</p>
 
-        <h3 style={ styles.h3Top }>{__('Account information')}</h3>
-
-        <TextField
-          hintText={__('Account')}
-          style={{ width: '100%' }}
-          disabled={ true }
-          defaultValue={ this.state.user }
-          floatingLabelText={__('Account')} />
-        <TextField
-          hintText={__('Password')}
-          disabled={true}
-          style={{ width: '100%' }}
-          defaultValue={this.state.password}
-          type="password"
-          floatingLabelText={
-            <div>
-              {__('Password')} <b style={{ color: 'red' }}>*</b>
-            </div>
-          } />
+        <h3 style={[styles.h3Top, {marginTop: '-15px'}]}>{__('Account information')}</h3>
+        <h3 style={ styles.panelTitle }>{__('Account')}</h3>
+        <p style={ styles.panelContent }>root(default)</p>
+        <h3 style={ styles.panelTitle }>{__('Password')} <b style={{ color: 'red' }}>*</b></h3>
+        <p style={ styles.panelContent }><input type="password" disable={true} style={{ border: '0px', fontSize: '18px', letterSpacing: '3px' }}value={this.state.password} /></p>
         <RaisedButton
           linkButton={true}
           secondary={true}
@@ -320,7 +365,7 @@ export default class loginComponent extends React.Component {
           style={{
             width: '100%',
             textAlign: 'center',
-            marginTop: '20px',
+            marginTop: '-20px',
             marginBottom: '20px'
           }}>
         </RaisedButton>
@@ -335,45 +380,39 @@ export default class loginComponent extends React.Component {
             floatingLabelStyle={{ color: 'rgba(0, 0, 0, 0.498039)' }}
             style={{ width: '100%' }}
             defaultValue={this.state.deviceName}
-            underlineStyle={{ borderColor: Colors.amber700 }}
+            underlineStyle={{ borderColor: '#D1D2D3' }}
             underlineFocusStyle={{
               borderColor: Colors.amber700,
               borderWidth: '2px'
             }}
             onChange={ (e) => {this.setState({deviceName: e.target.value})} }
             floatingLabelText={ __('Device name') } />
-          <TextField
-            hintText={ __('MAC address') }
-            disabled={true}
-            style={{ width: '100%' }}
-            defaultValue={ this.state.macaddr }
-            floatingLabelText={ __('MAC address') } />
-          <TextField
-            hintText={ __('Current IP address') }
-            style={{ width: '100%' }}
-            disabled={true}
-            defaultValue={ this.state.currentIp }
-            floatingLabelText={ __('Current IP address') } />
+          <h3 style={ styles.panelTitle }>{__('MAC address')}</h3>
+          <p style={ styles.panelContent }>{ this.state.macaddr }</p>
+          <h3 style={ styles.panelTitle }>{__('Current IP address')}</h3>
+          <p style={ styles.panelContent }>{ this.state.currentIp }</p>
 
-          <h3 style={styles.h3Top}>{ __('Account information') }</h3>
+          <h3 style={[styles.h3Top, {marginTop: '-15px'}]}>{ __('Account information') }</h3>
 
-          <TextField
-            hintText={ __('Account') }
-            style={{width: '100%'}}
-            disabled={true}
-            defaultValue="root(default)"
-            floatingLabelText={ __('Account') } />
+          <h3 style={ styles.panelTitle }>{__('Account')}</h3>
+          <p style={ styles.panelContent }>root(default)</p>
           <TextField
             hintText={ __('Password') }
-            style={{ width: '100%' }}
-            underlineStyle={{ borderColor: Colors.amber700 }}
+            style={{ width: '100%', marginTop: '-40px' }}
+            underlineStyle={{ borderColor: '#D1D2D3' }}
             defaultValue={ this.state.password }
             floatingLabelStyle={{ color: 'rgba(0, 0, 0, 0.498039)' }}
             underlineFocusStyle={{ borderColor: Colors.amber700 }}
-            type="password"
+            type={ textType }
+            errorStyle={{ borderColor: Colors.amber700 }}
+            errorText={ errorText }
             onChange={
               (e) => {
-                this.setState({ password: e.target.value });
+                if (e.target.value.length < 6) {
+                  this.setState({ notPassPassword: true, password: e.target.value });
+                } else {
+                  this.setState({ password: e.target.value, notPassPassword: false });
+                }
               }
             }
             floatingLabelText={
@@ -381,11 +420,29 @@ export default class loginComponent extends React.Component {
                 {__('Password')} <b style={{ color: 'red' }}>*</b>
               </div>
             } />
+          <div style={ showPasswordStyle }>
+            <a
+              onTouchTap={
+                (e) => {
+                  this.setState({
+                    showPassword: !this.state.showPassword
+                  });
+                }
+              }
+              style={{
+                textAlign: 'left',
+                color: Colors.amber700,
+                textDecoration: 'none',
+                cursor: 'pointer',
+                fontSize: '14px'
+              }}>{ __('SHOW PASSWORD') }</a>
+          </div>
 
           <div style={{
             display: 'flex',
             flexDirection: 'row',
-            justifyContent:'space-between'
+            justifyContent:'space-between',
+            marginTop: '-40px'
           }}>
             <RaisedButton
               linkButton={ true }
@@ -426,58 +483,41 @@ export default class loginComponent extends React.Component {
 
     var softwareBlock =
       <div style={ styles.content } key="softwareBlock">
-        <h3 style={styles.h3}>{__('Software information')}</h3>
-        <TextField
-          hintText={__("Boot loader version")}
-          disabled={true}
-          style={{width: '100%'}}
-          defaultValue={this.state.bootLoaderVersion}
-          floatingLabelText={__("Boot loader version")} />
-        <TextField
-          hintText={__("Firmware version")}
-          style={{width: '100%'}}
-          disabled={true}
-          defaultValue={this.state.firmwareVersion}
-          floatingLabelText={__("Firmware version")} />
+        <h3 style={styles.h3}>{ __('Software information') }</h3>
+        <h3 style={ styles.panelTitle }>{ __('Boot loader version') }</h3>
+        <p style={ styles.panelContent }>{ this.state.bootLoaderVersion }</p>
+        <h3 style={ styles.panelTitle }>{ __('Firmware version') }</h3>
+        <p style={ styles.panelContent }>{ this.state.firmwareVersion }</p>
+
         <RaisedButton
           linkButton={true}
           secondary={true}
-          label={__("Upgrade firmware")}
-          backgroundColor={Colors.amber700}
-          onTouchTap={()=>{this._editSoftwareBlock(true)}}
+          label={ __('Upgrade firmware') }
+          backgroundColor={ Colors.amber700}
+          onTouchTap={
+            ()=>{
+              this._editSoftwareBlock(true)
+            }
+          }
           style={{
             width: '100%',
             textAlign: 'center',
-            marginTop: '20px',
+            marginTop: '-20px',
             marginBottom: '20px'
           }}>
         </RaisedButton>
       </div>
+
     if (this.state.SoftwareBlockIsEdit) {
       softwareBlock =
-        <div style={styles.content} key="softwareBlock">
-          <TextField
-            hintText={__("Boot loader version")}
-            disabled={ true }
-            style={{ width: '100%' }}
-            defaultValue={ this.state.bootLoaderVersion }
-            floatingLabelText={__("Boot loader version")} />
-          <TextField
-            hintText={__("Firmware version")}
-            style={{ width: '100%' }}
-            disabled={ true }
-            defaultValue={ this.state.firmwareVersion }
-            floatingLabelText={__("Firmware version")} />
-          <Dropzone onDrop={ this._onDrop } style={{ width: '100%', border: '3px dotted #ffa000' }}>
-            <div>
-              <h3 style={{ textAlign: 'center' }}>{__('Firmware upgrade')}</h3>
-              <p style={{ textAlign: 'center' }}>{__('Try dropping some files here, or click to select files to upload.')}</p>
-            </div>
-            { this.state.files.length !== 0 ?
-              <div>
-                <p style={{ textAlign: 'center' }}>Firmware: { this.state.files[0].name }</p>
-              </div> : null
-            }
+        <div style={ styles.content } key="softwareBlock">
+          <h3 style={ styles.h3 }>{__('Software information')}</h3>
+          <h3 style={ styles.panelTitle }>{ __('Boot loader version') }</h3>
+          <p style={ styles.panelContent }>{ this.state.bootLoaderVersion }</p>
+          <h3 style={ styles.panelTitle }>{ __('Firmware version') }</h3>
+          <p style={ styles.panelContent }>{ this.state.firmwareVersion }</p>
+          <Dropzone onDrop={ this._onDrop } style={{ width: '100%', cursor: 'pointer' }}>
+            { DropzoneContent }
           </Dropzone>
           <div style={{
             display: 'flex',
@@ -485,15 +525,15 @@ export default class loginComponent extends React.Component {
             justifyContent:'space-between'
           }}>
             <Dialog
-              title={__("Firmware upgrade failed.")}
+              title={ __('Firmware upgrade failed.') }
               actions={ upgradeFirmwareFailedActions }
               actionFocus="submit"
               ref="upgradeFirmwareFailedDialog"
               modal={ this.state.modal }>
-              <p style={{ color: '#999A94', marginTop: '-20px' }}>{__('Please consult the troubleshooting guide and then try again.')}</p>
+              <p style={{ color: '#999A94', marginTop: '-20px' }}>{ __('Please consult the troubleshooting guide and then try again.') }</p>
             </Dialog>
             <Dialog
-              title={__("The firmware has been pushed to the device.")}
+              title={ __('The firmware has been pushed to the device.') }
               actions={ upgradeFirmwareSuccessedActions }
               actionFocus="submit"
               ref="upgradeFirmwareSuccessedDialog"
@@ -545,12 +585,12 @@ export default class loginComponent extends React.Component {
             <p style={{ color: '#999A94', marginTop: '-20px' }}>{ this.state.errorMsg }</p>
           </Dialog>
           { PlatformBlock }
-          <hr style={{ border: '1px solid rgba(0,0,0,0.12)', marginTop: '20px', marginBottom: '0px' }} />
+          <div style={{ borderTop: '1px solid rgba(0,0,0,0.12)', marginTop: '20px', marginBottom: '0px' }}></div>
           { softwareBlock }
-          <hr style={{ border: '1px solid rgba(0,0,0,0.12)', marginTop: '20px', marginBottom: '0px' }} />
+          <div style={{ borderTop: '1px solid rgba(0,0,0,0.12)', marginTop: '20px', marginBottom: '0px' }}></div>
           <div style={ styles.content } key="reset">
             <h3 style={ styles.h3 }>{__('Factory reset')}</h3>
-            <p>{__('Reset the device to its default settings.')}</p>
+            <p style={{ marginBottom: '0px' }}>{__('Reset the device to its default settings.')}</p>
             <b style={{ color: '#DB4437' }}>{__('Important: This action will remove all your data and settings from the device.')}</b>
             <p>{ this.state.modal }</p>
             <Dialog
@@ -564,13 +604,13 @@ export default class loginComponent extends React.Component {
             <RaisedButton
               linkButton={ true }
               secondary={ true }
-              label={__("Reset")}
+              label={ __('Reset') }
               onTouchTap={ this._handleStandardDialogTouchTap }
               backgroundColor={ Colors.amber700 }
               style={{
                 width: '100%',
                 textAlign: 'center',
-                marginTop: '20px',
+                marginTop: '10px',
                 marginBottom: '20px'
               }}>
             </RaisedButton>
@@ -587,6 +627,22 @@ var styles = {
   h3: {
     marginBottom: '0px',
     marginTop:'0px',
+  },
+  panelTitle: {
+    tapHighlightColor: 'rgba(0,0,0,0)',
+    color: 'rgba(0, 0, 0, 0.498039)',
+    fontSize: '16px',
+    transform: 'perspective(1px) scale(0.75) translate3d(0px, -28px, 0)',
+    transformOrigin: 'left top',
+    marginBottom: '0px',
+    marginTop: '40px'
+  },
+  panelContent: {
+    borderBottom: '2px dotted #D1D2D3',
+    fontSize: '16px',
+    marginTop: '-15px',
+    paddingBottom: '5px',
+    marginBottom: '48px'
   },
   content: {
     paddingRight: '128px',

@@ -44,6 +44,17 @@ export default class loginComponent extends React.Component {
     };
   }
 
+  componentWillMount() {
+    ThemeManager.setComponentThemes({
+      textField: {
+        borderColor: Colors.amber700
+      },
+      menuItem: {
+        selectedTextColor: Colors.amber700
+      }
+    });
+  }
+
   render() {
     let menuItems = [
       { payload: '1', text: 'English' },

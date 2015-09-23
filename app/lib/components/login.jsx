@@ -110,22 +110,14 @@ export default class loginComponent extends React.Component {
               marginTop: '40px',
               fontFamily: 'RionaSansLight,Arial,Helvetica,sans-serif'
             }}><span style={{fontFamily: 'RionaSansLight,Arial,Helvetica,sans-serif'}}>{__('Welcome to')}</span> <b style={{ fontFamily: 'RionaSansMedium,Arial,Helvetica,sans-serif' }}>LinkIt Smart 7688</b>.</p>
-            <TextField
-              hintText={__("Input your Account")}
-              color={ Colors.amber700 }
-              value="root (default)"
-              disabled={ true }
-              style={ styles.basicWidth }
-              underlineFocusStyle={{ borderColor: Colors.amber700 }}
-              required
-              minLength="6"
-              floatingLabelText={ __('Account') } />
+            <h3 style={ styles.panelTitle }>{__('Account')}</h3>
+            <p style={ styles.panelContent }>root(default)</p>
             <TextField
               hintText={ __('Please enter your password') }
               type={ textType }
               floatingLabelStyle={{ color: 'rgba(0, 0, 0, 0.498039)' }}
               underlineFocusStyle={{ borderColor: Colors.amber700 }}
-              style={ styles.basicWidth }
+              style={[styles.basicWidth, { marginTop: '-10px' }]}
               onChange={
                 (e) => {
                   this.setState({password:e.target.value});
@@ -194,6 +186,23 @@ var styles = {
     height: '100%',
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  panelTitle: {
+    width: '100%',
+    tapHighlightColor: 'rgba(0,0,0,0)',
+    color: 'rgba(0, 0, 0, 0.498039)',
+    fontSize: '16px',
+    transform: 'perspective(1px) scale(0.75) translate3d(0px, -28px, 0)',
+    transformOrigin: 'left top',
+    marginBottom: '0px',
+    marginTop: '40px'
+  },
+  panelContent: {
+    width: '100%',
+    borderBottom: '1px solid #D1D2D3',
+    fontSize: '16px',
+    marginTop: '-15px',
+    paddingBottom: '5px'
   },
   img: {
     width:'200px'

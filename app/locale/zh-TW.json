@@ -63,5 +63,7 @@
   "Try dropping some files here, or click to select files to upload.": "在這裡放入文件，或者是點擊選擇檔案上傳",
   "Your token was expired, please sign in again.": "你的令牌過期，請重新登錄。",
   "Account / password is incorrect.": "帳號 / 密碼不正確。",
-  "Choose the Wi-Fi network.": "選擇一個 Wi-Fi 網路"
+  "Choose the Wi-Fi network.": "選擇一個 Wi-Fi 網路",
+  "Upgrade firmware file": "Upgrade firmware file",
+  "Choose the file": "Choose the file"
 }

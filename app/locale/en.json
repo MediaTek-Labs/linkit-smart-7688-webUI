@@ -63,6 +63,8 @@
   "Try dropping some files here, or click to select files to upload.": "Try dropping some files here, or click to select files to upload.",
   "Your token was expired, please sign in again.": "Your token was expired, please sign in again.",
   "Account / password is incorrect.": "Account / password is incorrect.",
-  "Choose the Wi-Fi network.": "Choose the Wi-Fi network."
+  "Choose the Wi-Fi network.": "Choose the Wi-Fi network.",
+  "Upgrade firmware file": "Upgrade firmware file",
+  "Choose the file": "Choose the file"
 
 }

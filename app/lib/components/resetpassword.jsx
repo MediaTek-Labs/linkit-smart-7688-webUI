@@ -119,7 +119,7 @@ export default class loginComponent extends React.Component {
             onChange={
               (e) => {
                 if (e.target.value.length < 6) {
-                  this.setState({ notPassPassword: true });
+                  this.setState({ notPassPassword: true, password: e.target.value });
                 } else {
                   this.setState({ password: e.target.value, notPassPassword: false });
                 }

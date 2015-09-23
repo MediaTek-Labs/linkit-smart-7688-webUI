@@ -37,12 +37,15 @@ export default class contentComponent extends React.Component {
       <div key="mainBlock" style={styles.block}>
         <header style={ styles.header }>
           <p style={ styles.welcomeTitle } key="welcome">{ __('Welcome to') } <b>LinkIt Smart 7688</b></p>
-          <p style={ styles.welcomeTitle } key="advanced">{ __('For advanced network configuration, go to ') }<a style={{ color:'#00a1de', textDecoration: 'none' }} href="/cgi-bin/luci">OpenWrt</a>.</p>
+          <p style={[ styles.welcomeTitle, styles.welcomeTitleLine ]} key="advanced">{ __('For advanced network configuration, go to ') }<a style={{ color:'#00a1de', textDecoration: 'none' }} href="/cgi-bin/luci">OpenWrt</a>.</p>
         </header>
         <Tabs
           valueLink={{ value: this.state.tabsValue }}
-          tabItemContainerStyle={{ backgroundColor: Colors.amber700 }}
-          style={styles.content}>
+          tabItemContainerStyle={{
+            backgroundColor: Colors.amber700,
+            borderRadius: '5px 5px 0px 0px'
+          }}
+          style={ styles.content }>
           <Tab
             label={ __('System information') }
             value="sysinfo"
@@ -76,7 +79,8 @@ var styles= {
     '@media (max-width: 760px)': {
       paddingLeft: '10px',
       paddingRight: '10px'
-    }
+    },
+    border: '1px solid #d1d2d3'
   },
   welcomeTitle: {
     lineHeight: '35px',
@@ -84,10 +88,15 @@ var styles= {
       width: '100%'
     }
   },
+  welcomeTitleLine: {
+    '@media (max-width: 760px)': {
+      marginTop: '-20px'
+    }
+  },
   content: {
     maxWidth: '768px',
     width: '100%',
-    paddingBottom: '30px',
+    paddingBottom: '30px'
   },
   header: {
     maxWidth: '768px',
