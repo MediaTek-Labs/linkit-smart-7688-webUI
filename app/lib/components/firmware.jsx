@@ -11,7 +11,6 @@ export default class loginComponent extends React.Component {
   constructor(props) {
     super(props)
     this.state = {}
-    // this.state.wifi = []
   }
 
   componentDidMount() {

@@ -3,7 +3,7 @@ import Radium from 'radium';
 import mui from 'material-ui';
 
 let {
-  AppBar, 
+  AppBar,
   Card,
   DropDownMenu
 } = mui;
@@ -62,10 +62,10 @@ export default class loginComponent extends React.Component {
           <div style={ styles.container }>
             <img style={ styles.img } src={ Logo } />
             <div style={{ display: 'flex' }}>
-              <DropDownMenu 
-                menuItems={menuItems} 
-                value={this.state.language}
-                style={{ width: '130px', borderBottom: '0px' }} 
+              <DropDownMenu
+                menuItems={ menuItems }
+                value={ this.state.language }
+                style={{ width: '130px', borderBottom: '0px' }}
                 onChange={
                   (e, sel, item)=>{
                     switch(sel) {
@@ -73,7 +73,7 @@ export default class loginComponent extends React.Component {
                         console.log('en')
                         window.location.href = defaultRouter + '/';
                         break;
-                      case 1: 
+                      case 1:
                         window.location.href = defaultRouter + '/zh-tw.html';
                         break;
                       case 2:
@@ -82,18 +82,18 @@ export default class loginComponent extends React.Component {
                     }
                   }
                 }
-                labelStyle={{ 
-                  color: Colors.amber700, 
-                  lineHeight: '60px', 
-                  fontSize: '16px' }} 
+                labelStyle={{
+                  color: Colors.amber700,
+                  lineHeight: '60px',
+                  fontSize: '16px' }}
                 underlineStyle={{ border: '0px' }}/>
-              <a 
-                onTouchTap={this._logOut} 
-                style={{ 
-                  color: Colors.amber700, 
-                  textDecoration: 'none', 
-                  cursor: 'pointer' 
-                }}>{__('Sign out')}</a>
+              <a
+                onTouchTap={ this._logOut }
+                style={{
+                  color: Colors.amber700,
+                  textDecoration: 'none',
+                  cursor: 'pointer'
+                }}>{ __('Sign out') }</a>
             </div>
           </div>
         </header>
@@ -133,7 +133,8 @@ var styles = {
     maxWidth: '768px',
     margin: '0 auto',
     '@media (max-width: 760px)': {
-
+      paddingLeft: '10px',
+      paddingRight: '10px'
     }
   }
 }

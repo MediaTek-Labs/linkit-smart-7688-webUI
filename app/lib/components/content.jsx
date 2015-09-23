@@ -15,7 +15,7 @@ export default class contentComponent extends React.Component {
     super(props)
     this._handleTabsChangeNetWork = this._handleTabsChangeNetWork.bind(this);
     this._handleTabsChangeSYS = this._handleTabsChangeSYS.bind(this);
-    this.state = {tabsValue: 'sysinfo'};
+    this.state = { tabsValue: 'sysinfo' };
   }
 
   getChildContext() {
@@ -34,24 +34,24 @@ export default class contentComponent extends React.Component {
 
   render() {
     return (
-      <div style={styles.block}>
+      <div key="mainBlock" style={styles.block}>
         <header style={ styles.header }>
-          <p style={ styles.welcomeTitle } key="welcome">{__('Welcome to')} <b>LinkIt Smart 7688</b></p>
-          <p style={ styles.welcomeTitle } key="advanced">{__('For advanced network configuration, go to ')}<a style={{ color:'#00a1de', textDecoration: 'none' }} href="/cgi-bin/luci">OpenWrt</a>.</p>
+          <p style={ styles.welcomeTitle } key="welcome">{ __('Welcome to') } <b>LinkIt Smart 7688</b></p>
+          <p style={ styles.welcomeTitle } key="advanced">{ __('For advanced network configuration, go to ') }<a style={{ color:'#00a1de', textDecoration: 'none' }} href="/cgi-bin/luci">OpenWrt</a>.</p>
         </header>
         <Tabs
           valueLink={{ value: this.state.tabsValue }}
           tabItemContainerStyle={{ backgroundColor: Colors.amber700 }}
           style={styles.content}>
           <Tab
-            label={__("System information")}
+            label={ __('System information') }
             value="sysinfo"
             onClick={this._handleTabsChangeSYS.bind(this)}>
             <Sysinfo boardInfo={ this.props.boardInfo } />
           </Tab>
-          <Tab 
-            label={__("Network")} 
-            value="network" 
+          <Tab
+            label={ __('Network') }
+            value="network"
             onClick={this._handleTabsChangeNetWork.bind(this)}>
             <Network boardInfo={ this.props.boardInfo } />
           </Tab>
@@ -73,6 +73,10 @@ var styles= {
     justifyContent: 'center',
     backgroundColor: '#FAFAFA',
     alignItems: 'center',
+    '@media (max-width: 760px)': {
+      paddingLeft: '10px',
+      paddingRight: '10px'
+    }
   },
   welcomeTitle: {
     lineHeight: '35px',

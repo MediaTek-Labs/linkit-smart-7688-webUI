@@ -4,9 +4,9 @@ import Logo from '../../img/mediatek.png';
 import mui from 'material-ui';
 import appAction from '../actions/appActions';
 let {
-  RaisedButton, 
-  FontIcon, 
-  TextField, 
+  RaisedButton,
+  FontIcon,
+  TextField,
   Dialog,
   Snackbar
 } = mui;
@@ -37,16 +37,17 @@ export default class loginComponent extends React.Component {
     }
 
     if (this.state.successMsg) {
-      this.refs.snackbar.show();  
+      this.refs.snackbar.show();
     }
+
     var _this = this;
     document.addEventListener('keypress', function (e) {
       var key = e.which || e.keyCode;
       if (key === 13) { // 13 is enter
-        return _this._handleLogin()
+        return _this._handleLogin();
       }
     })
-    
+
   }
 
   getChildContext() {
@@ -67,16 +68,16 @@ export default class loginComponent extends React.Component {
       var textType = 'password';
     }
     if (this.state.successMsg) {
-      var dialogMsg = 
-        <div style={{ 
+      var dialogMsg =
+        <div style={{
           width: '100%',
-          position: 'fixed', 
+          position: 'fixed',
           display: 'flex',
           left:'0px',
           bottom: '0px',
-          justifyContent: 'center' 
+          justifyContent: 'center'
         }}>
-          <Snackbar 
+          <Snackbar
             style={{ fontSize: '14px', height: 'none', minHeight: '48px', bottom: '0px', margin:'0 auto', position: 'relative' }}
             message={ this.state.successMsg }
             ref="snackbar"
@@ -94,18 +95,18 @@ export default class loginComponent extends React.Component {
           <p style={{ lineHeight: '23px', marginTop: '-10px' }}>{__('Please refresh. If problem persists, please ensure your board is not in the process of rebooting, or updating new firmware, or check Wi-Fi connectivity settings.')}</p>
         </Dialog>
         <div style={ styles.block }>
-          <div style={{ 
-            width: '300px', 
-            paddingLeft: '60px', 
+          <div style={{
+            width: '300px',
+            paddingLeft: '60px',
             paddingRight: '60px',
             display: 'flex',
             justifyContent: 'center',
             flexDirection: 'column',
-            alignItems: 'center' 
+            alignItems: 'center'
           }}>
             <img src={ Logo } style={ styles.img }/>
-            <p style={{ 
-              lineHeight: '22px', 
+            <p style={{
+              lineHeight: '22px',
               marginTop: '40px',
               fontFamily: 'RionaSansLight,Arial,Helvetica,sans-serif'
             }}><span style={{fontFamily: 'RionaSansLight,Arial,Helvetica,sans-serif'}}>{__('Welcome to')}</span> <b style={{ fontFamily: 'RionaSansMedium,Arial,Helvetica,sans-serif' }}>LinkIt Smart 7688</b>.</p>
@@ -118,9 +119,9 @@ export default class loginComponent extends React.Component {
               underlineFocusStyle={{ borderColor: Colors.amber700 }}
               required
               minLength="6"
-              floatingLabelText={__("Account")} />
+              floatingLabelText={ __('Account') } />
             <TextField
-              hintText={__("Please enter your password")}
+              hintText={ __('Please enter your password') }
               type={ textType }
               floatingLabelStyle={{ color: 'rgba(0, 0, 0, 0.498039)' }}
               underlineFocusStyle={{ borderColor: Colors.amber700 }}
@@ -137,43 +138,43 @@ export default class loginComponent extends React.Component {
                   </div>
                 } />
             <div style={{ width: '100%', marginBottom: '24px' }}>
-              <a 
+              <a
                 onTouchTap={
                   (e) => {
-                    this.setState({ 
-                      showPassword: !this.state.showPassword 
+                    this.setState({
+                      showPassword: !this.state.showPassword
                     });
                   }
                 }
-                style={{ 
-                  textAlign: 'left', 
-                  color: Colors.amber700, 
-                  textDecoration: 'none', 
+                style={{
+                  textAlign: 'left',
+                  color: Colors.amber700,
+                  textDecoration: 'none',
                   cursor: 'pointer',
                   fontSize: '14px'
-                }}>{__('SHOW PASSWORD')}</a>
+                }}>{ __('SHOW PASSWORD') }</a>
             </div>
             <br />
             <RaisedButton
               linkButton={true}
               secondary={true}
-              label={__("Sign in")}
+              label={ __('Sign in') }
               backgroundColor={ Colors.amber700 }
               onTouchTap={ this._handleLogin }
               type="submit"
               style={ styles.basicWidth }>
-              <FontIcon 
-                style={ styles.exampleButtonIcon } 
+              <FontIcon
+                style={ styles.exampleButtonIcon }
                 className="muidocs-icon-custom-github" />
             </RaisedButton>
           </div>
           <div style={{width: '100%'}}>
-            <p style={{ 
-              marginTop: '80px', 
-              borderTop: '1px solid rgba(0,0,0,0.12)', 
+            <p style={{
+              marginTop: '80px',
+              borderTop: '1px solid rgba(0,0,0,0.12)',
               paddingTop: '10px',
               textAlign: 'center'
-            }} >{__('For advanced network configuration, go to ')}<a style={{ color:'#00a1de', textDecoration: 'none' }} href="/cgi-bin/luci">OpenWrt</a>.</p>
+            }} >{ __('For advanced network configuration, go to ') }<a style={{ color:'#00a1de', textDecoration: 'none' }} href="/cgi-bin/luci">OpenWrt</a>.</p>
           </div>
         </div>
         { dialogMsg }

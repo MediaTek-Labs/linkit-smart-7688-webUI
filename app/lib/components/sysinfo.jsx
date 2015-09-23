@@ -38,7 +38,7 @@ export default class loginComponent extends React.Component {
       this.state.bootLoaderVersion = this.props.boardInfo.system[Object.keys(this.props.boardInfo.system)[0]].loader_version;
       this.state.firmwareVersion = this.props.boardInfo.system[Object.keys(this.props.boardInfo.system)[0]].firmware_version;
 
-      if (this.props.boardInfo.wifi.sta.disabled === "1") {
+      if (this.props.boardInfo.wifi.sta.disabled === '1') {
         this.state.mode = 'ap';
         this.state.macaddr = this.props.boardInfo.network.lan.macaddr;
         this.state.currentIp = this.props.boardInfo.lan['ipv4-address'][0].address;
@@ -47,7 +47,6 @@ export default class loginComponent extends React.Component {
         this.state.macaddr = this.props.boardInfo.network.wan.macaddr;
         this.state.currentIp = this.props.boardInfo.wan['ipv4-address'][0].address;
       }
-
     }
     this._editPlatformBlock = this._editPlatformBlock.bind(this);
     this._editSoftwareBlock = this._editSoftwareBlock.bind(this);
@@ -60,8 +59,8 @@ export default class loginComponent extends React.Component {
     this._cancelDialog = this._cancelDialog.bind(this);
     this._returnToIndex = this._returnToIndex.bind(this);
     this._cancelErrorMsgDialog = this._cancelErrorMsgDialog.bind(this);
-    this._cancelConfigureFailedDialog = this._cancelConfigureFailedDialog.bind(this); 
-    this._cancelUpgradeFirmwareFailedDialog = this._cancelUpgradeFirmwareFailedDialog.bind(this); 
+    this._cancelConfigureFailedDialog = this._cancelConfigureFailedDialog.bind(this);
+    this._cancelUpgradeFirmwareFailedDialog = this._cancelUpgradeFirmwareFailedDialog.bind(this);
     this._cancelUpgradeFirmwareSuccessedDialog = this._cancelUpgradeFirmwareSuccessedDialog.bind(this);
   }
 
@@ -87,7 +86,7 @@ export default class loginComponent extends React.Component {
       return AppDispatcher.dispatch({
         APP_PAGE: 'LOGIN',
         successMsg: __('Configuration saved. You can sign in to the console after your device has restarted.'),
-        errorMsg: null 
+        errorMsg: null
       });
     })
     .catch(function(err) {
@@ -177,7 +176,7 @@ export default class loginComponent extends React.Component {
     })
     .then(function(data) {
       _this.refs.uploadDialog.dismiss();
-      return _this.refs.upgradeFirmwareSuccessedDialog.show();      
+      return _this.refs.upgradeFirmwareSuccessedDialog.show();
     })
     .catch(function(err) {
       _this.refs.uploadDialog.dismiss();
@@ -207,11 +206,11 @@ export default class loginComponent extends React.Component {
     this.refs.errorDialog.dismiss();
     this._returnToIndex();
   }
-  
+
   _cancelConfigureFailedDialog() {
     this.refs.configureFailedDialog.dismiss();
   }
-  
+
   _cancelUpgradeFirmwareFailedDialog() {
     this.refs.upgradeFirmwareFailedDialog.dismiss();
   }
@@ -224,20 +223,20 @@ export default class loginComponent extends React.Component {
   render() {
     let standardActions = [
       <FlatButton
-        label={__("Cancel")}
+        label={ __('Cancel') }
         labelStyle={{ color: Colors.amber700 }}
         onTouchTap={ this._cancelDialog }
         hoverColor="none" />,
       <FlatButton
-        label={__("Reset")}
+        label={ __('Reset') }
         labelStyle={{ color: Colors.amber700 }}
         hoverColor="none"
-        onTouchTap={this._onFactorySubmit} />
+        onTouchTap={ this._onFactorySubmit } />
     ];
 
     let configureFailedActions = [
       <FlatButton
-        label={__("OK")}
+        label={ __('OK') }
         labelStyle={{ color: Colors.amber700 }}
         onTouchTap={ this._cancelConfigureFailedDialog }
         hoverColor="none" />
@@ -245,7 +244,7 @@ export default class loginComponent extends React.Component {
 
     let upgradeFirmwareFailedActions = [
       <FlatButton
-        label={__("OK")}
+        label={__('OK')}
         labelStyle={{ color: Colors.amber700 }}
         onTouchTap={ this._cancelUpgradeFirmwareFailedDialog }
         hoverColor="none" />
@@ -253,7 +252,7 @@ export default class loginComponent extends React.Component {
 
     let upgradeFirmwareSuccessedActions = [
       <FlatButton
-        label={__("SIGN IN")}
+        label={__('SIGN IN')}
         labelStyle={{ color: Colors.amber700 }}
         onTouchTap={ this._cancelUpgradeFirmwareSuccessedDialog }
         hoverColor="none" />
@@ -261,47 +260,47 @@ export default class loginComponent extends React.Component {
 
     let errMsgActions = [
       <FlatButton
-        label={__("SIGN IN")}
+        label={__('SIGN IN')}
         labelStyle={{ color: Colors.amber700 }}
         onTouchTap={ this._cancelErrorMsgDialog }
         hoverColor="none" />
     ]
     var PlatformBlock =
       <div style={ styles.content } key="PlatformBlock">
-        
+
         <h3 style={ styles.h3 }>{__('Platform information')}</h3>
         <TextField
-          hintText={__("Device name")}
+          hintText={__('Device name')}
           style={ styles.editTextField }
           disabled={ true }
           defaultValue={ this.state.deviceName }
           labelColor="#000"
-          underlineStyle={{ borderColor: '#D1D2D3', borderWidth: '1px'}}
-          floatingLabelText={__("Device name")} />
+          underlineStyle={{ borderColor: '#D1D2D3', borderWidth: '1px' }}
+          floatingLabelText={__('Device name')} />
         <TextField
-          hintText={__("Mac address")}
+          hintText={__('MAC address')}
           disabled={ true }
           style={{ width: '100%' }}
           defaultValue={ this.state.macaddr }
-          underlineStyle={{ borderColor: '#D1D2D3', borderWidth: '1px'}}
-          floatingLabelText={__("Mac address")} />
+          underlineStyle={{ borderColor: '#D1D2D3', borderWidth: '1px' }}
+          floatingLabelText={__('MAC address')} />
         <TextField
-          hintText={__("Current IP address")}
+          hintText={__('Current IP address')}
           style={{ width: '100%' }}
           disabled={ true }
           defaultValue={ this.state.currentIp }
-          floatingLabelText={__("Current IP address")} />
+          floatingLabelText={__('Current IP address')} />
 
         <h3 style={ styles.h3Top }>{__('Account information')}</h3>
 
         <TextField
-          hintText={__("Account")}
+          hintText={__('Account')}
           style={{ width: '100%' }}
           disabled={ true }
           defaultValue={ this.state.user }
-          floatingLabelText={__("Account")} />
+          floatingLabelText={__('Account')} />
         <TextField
-          hintText={__("Password")}
+          hintText={__('Password')}
           disabled={true}
           style={{ width: '100%' }}
           defaultValue={this.state.password}
@@ -314,14 +313,14 @@ export default class loginComponent extends React.Component {
         <RaisedButton
           linkButton={true}
           secondary={true}
-          label={__("Configure")}
+          label={ __('Configure') }
           fullWidth={true}
           backgroundColor={ Colors.amber700 }
           onTouchTap={()=>{ this._editPlatformBlock(true)} }
           style={{
-            width: '100%', 
-            textAlign: 'center', 
-            marginTop: '20px', 
+            width: '100%',
+            textAlign: 'center',
+            marginTop: '20px',
             marginBottom: '20px'
           }}>
         </RaisedButton>
@@ -332,75 +331,93 @@ export default class loginComponent extends React.Component {
         <div style={ styles.content } key="PlatformBlockIsEdit">
           <h3 style={styles.h3}>{__('Platform information')}</h3>
           <TextField
-            hintText={__("Device name")}
+            hintText={__('Device name')}
             floatingLabelStyle={{ color: 'rgba(0, 0, 0, 0.498039)' }}
             style={{ width: '100%' }}
             defaultValue={this.state.deviceName}
             underlineStyle={{ borderColor: Colors.amber700 }}
-            underlineFocusStyle={{ borderColor: Colors.amber700, borderWidth: '2px' }}
+            underlineFocusStyle={{
+              borderColor: Colors.amber700,
+              borderWidth: '2px'
+            }}
             onChange={ (e) => {this.setState({deviceName: e.target.value})} }
-            floatingLabelText={__("Device name")} />
+            floatingLabelText={ __('Device name') } />
           <TextField
-            hintText={__("Mac address")}
+            hintText={ __('MAC address') }
             disabled={true}
-            style={{width: '100%'}}
-            defaultValue={this.state.macaddr}
-            floatingLabelText={__("Mac address")} />
+            style={{ width: '100%' }}
+            defaultValue={ this.state.macaddr }
+            floatingLabelText={ __('MAC address') } />
           <TextField
-            hintText={__("Current IP address")}
-            style={{width: '100%'}}
+            hintText={ __('Current IP address') }
+            style={{ width: '100%' }}
             disabled={true}
-            defaultValue={this.state.currentIp}
-            floatingLabelText={__("Current IP address")} />
+            defaultValue={ this.state.currentIp }
+            floatingLabelText={ __('Current IP address') } />
 
-          <h3 style={styles.h3Top}>{__('Account information')}</h3>
+          <h3 style={styles.h3Top}>{ __('Account information') }</h3>
 
           <TextField
-            hintText={__("Account")}
+            hintText={ __('Account') }
             style={{width: '100%'}}
             disabled={true}
             defaultValue="root(default)"
-            floatingLabelText={__("Account")} />
+            floatingLabelText={ __('Account') } />
           <TextField
-            hintText={__("Password")}
-            style={{width: '100%'}}
+            hintText={ __('Password') }
+            style={{ width: '100%' }}
             underlineStyle={{ borderColor: Colors.amber700 }}
             defaultValue={ this.state.password }
             floatingLabelStyle={{ color: 'rgba(0, 0, 0, 0.498039)' }}
             underlineFocusStyle={{ borderColor: Colors.amber700 }}
             type="password"
-            onChange={ (e) => {this.setState({ password: e.target.value })} }
+            onChange={
+              (e) => {
+                this.setState({ password: e.target.value });
+              }
+            }
             floatingLabelText={
               <div>
                 {__('Password')} <b style={{ color: 'red' }}>*</b>
               </div>
             } />
 
-          <div style={{ display: 'flex',flexDirection: 'row', justifyContent:'space-between', }}>
+          <div style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent:'space-between'
+          }}>
             <RaisedButton
               linkButton={ true }
-              label={__("Cancel")}
+              label={ __('Cancel') }
               onTouchTap={ ()=>{ this._editPlatformBlock(false) } }
               backgroundColor="#EDEDED"
               labelColor="#999A94"
-              style={{ width: '236px', flexGrow:1, textAlign: 'center', marginTop: '20px', marginBottom: '20px', marginRight: '10px' }}>
+              style={{
+                width: '236px',
+                flexGrow: 1,
+                textAlign: 'center',
+                marginTop: '20px',
+                marginBottom: '20px',
+                marginRight: '10px'
+              }}>
             </RaisedButton>
             <RaisedButton
               linkButton={true}
               secondary={true}
-              label={__("Configure & Restart")}
-              onTouchTap={ 
-                () => { 
+              label={ __('Configure & Restart') }
+              onTouchTap={
+                () => {
                   this._submitPlatformBlock(false)
-                } 
+                }
               }
               backgroundColor={ Colors.amber700 }
-              style={{ 
-                width: '236px', 
-                flexGrow:1, 
-                textAlign: 'center', 
-                marginTop: '20px', 
-                marginBottom: '20px', 
+              style={{
+                width: '236px',
+                flexGrow:1,
+                textAlign: 'center',
+                marginTop: '20px',
+                marginBottom: '20px',
                 marginLeft: '10px'}}>
             </RaisedButton>
           </div>
@@ -572,18 +589,18 @@ var styles = {
     marginTop:'0px',
   },
   content: {
-    paddingRight: '128px', 
-    paddingLeft: '128px', 
+    paddingRight: '128px',
+    paddingLeft: '128px',
     paddingTop: '20px',
     '@media (max-width: 760px)': {
-      paddingRight: '20px', 
+      paddingRight: '20px',
       paddingLeft: '20px',
     }
   },
   editTextField: {
     pointerEvent: 'none',
-    width: '100%', 
-    color: '#353630', 
+    width: '100%',
+    color: '#353630',
     cursor: 'auto',
     ':hover': {
       cursor: 'auto'
