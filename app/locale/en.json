@@ -65,6 +65,12 @@
   "Account / password is incorrect.": "Account / password is incorrect.",
   "Choose the Wi-Fi network.": "Choose the Wi-Fi network.",
   "Upgrade firmware file": "Upgrade firmware file",
-  "Choose the file": "Choose the file"
-
+  "Choose the file": "Choose the file",
+  "Please set a password.": "Please set a password.",
+  "Device Restarting. Please Wait…": "Device Restarting. Please Wait…",
+  "Please use at least 8 alphanumeric characters.": "Please use at least 8 alphanumeric characters.",
+  "See the Wi-Fi LED, it will light on steadily and start to blink or turn off afterwards. When the LED starts to blink or turn off, reload this webpage to sign in again.": "See the Wi-Fi LED, it will light on steadily and start to blink or turn off afterwards. When the LED starts to blink or turn off, reload this webpage to sign in again.",
+  "Please make sure your host computer connects to the same local network as what the device connects to. Or you won’t be able to connect to this page again.": "Please make sure your host computer connects to the same local network as what the device connects to. Or you won’t be able to connect to this page again.",
+  "Note: Please make sure your host computer is in the ": "Note: Please make sure your host computer is in the ",
+  "network. You can’t access this page if it’s in a different network.": "network. You can’t access this page if it’s in a different network."
 }

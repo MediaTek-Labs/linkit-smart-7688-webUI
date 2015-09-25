@@ -1,6 +1,7 @@
 import React from 'react';
 import Radium from 'radium';
 import mui from 'material-ui';
+import Logo from '../../img/mediatek.png';
 
 let {
   AppBar,
@@ -8,7 +9,6 @@ let {
   DropDownMenu
 } = mui;
 
-import Logo from '../../img/mediatek.png';
 var AppDispatcher  = require('../dispatcher/appDispatcher');
 var ThemeManager = new mui.Styles.ThemeManager();
 var Colors = mui.Styles.Colors;
@@ -27,7 +27,8 @@ export default class loginComponent extends React.Component {
       this.state.language = '1';
     }
   }
-  _logOut () {
+
+  _logOut() {
     window.localStorage.removeItem('info');
     window.localStorage.removeItem('session');
     window.session = '';
@@ -63,6 +64,7 @@ export default class loginComponent extends React.Component {
     ];
 
     var defaultRouter = '';
+
     if (/127.0.0.1/.test(window.location.host)) {
       defaultRouter = '/app';
     }

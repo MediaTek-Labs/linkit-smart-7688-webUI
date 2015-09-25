@@ -29,7 +29,7 @@ module.exports =  Object.keys(languages).map(function(language) {
     plugins = plugins.concat(new webpack.HotModuleReplacementPlugin());
   }
 
-  return {
+  var config = {
     name: language,
     entry: path.join(__dirname, '/lib/app.jsx'),
     output: {
@@ -53,7 +53,6 @@ module.exports =  Object.keys(languages).map(function(language) {
         { test: /\.svg\?v=[0-9]\.[0-9]\.[0-9]$/, loader: 'url?limit=10000&minetype=application/font-woff&name=[name].[ext]' },
         { test: /\.(svg|png|jpg|jpeg)$/, loaders: ['url?limit=10000&name=[name].[ext]'] },
         { test: /\.json$/, loaders: ['json'] }
-
       ]
     },
     plugins: plugins,
@@ -62,6 +61,13 @@ module.exports =  Object.keys(languages).map(function(language) {
       __dirname: true
     }
   };
+
+  if (ISPRODUCTION) {
+    config.output.publicPath = '/build/'
+    return config;
+  } else {
+    return config;
+  }
 });
 
 module.exports.output = {

@@ -2,6 +2,9 @@ import React from 'react';
 import Radium from 'radium';
 import Dropzone from 'react-dropzone';
 import mui from 'material-ui';
+import icon_7688 from '../../img/7688.png';
+import icon_7688Duo from '../../img/7688_duo.png';
+
 var AppActions     = require('../actions/appActions');
 var AppDispatcher  = require('../dispatcher/appDispatcher');
 
@@ -27,10 +30,11 @@ export default class loginComponent extends React.Component {
     this.state.PlatformBlockIsEdit = false;
     this.state.SoftwareBlockIsEdit = false;
     this.state.files = [{ name:'' }];
-    this.state.modal = false;
+    this.state.modal = true;
     this.state.upgradeFirmware = false;
     this.state.showPassword = false;
     this.state.notPassPassword = false;
+    this.state.boardModel = '';
 
     var info = JSON.parse(localStorage.getItem('info'));
 
@@ -51,6 +55,7 @@ export default class loginComponent extends React.Component {
         this.state.currentIp = this.props.boardInfo.wan['ipv4-address'][0].address;
       }
     }
+
     this._editPlatformBlock = this._editPlatformBlock.bind(this);
     this._editSoftwareBlock = this._editSoftwareBlock.bind(this);
     this._onDrop = this._onDrop.bind(this);
@@ -65,6 +70,15 @@ export default class loginComponent extends React.Component {
     this._cancelConfigureFailedDialog = this._cancelConfigureFailedDialog.bind(this);
     this._cancelUpgradeFirmwareFailedDialog = this._cancelUpgradeFirmwareFailedDialog.bind(this);
     this._cancelUpgradeFirmwareSuccessedDialog = this._cancelUpgradeFirmwareSuccessedDialog.bind(this);
+    this._cancelBoardMsgDialog = this._cancelBoardMsgDialog.bind(this);
+  }
+
+  componentWillMount () {
+    var self = this;
+    AppActions.loadModel(window.session)
+    .then(function(data) {
+      return self.setState({ boardModel: data.body.result[1].model });
+    });
   }
 
   getChildContext() {
@@ -84,13 +98,13 @@ export default class loginComponent extends React.Component {
   }
 
   _onFactorySubmit() {
+    var _this = this;
     return AppActions.resetFactory(window.session)
     .then(function(data) {
-      return AppDispatcher.dispatch({
-        APP_PAGE: 'LOGIN',
-        successMsg: __('Configuration saved. You can sign in to the console after your device has restarted.'),
-        errorMsg: null
-      });
+      return _this.refs.standardDialog.dismiss();
+    })
+    .then(function(data) {
+      return _this._returnToIndex(__('Configuration saved. You can sign in to the console after your device has restarted.'));
     })
     .catch(function(err) {
       if (err === 'Access denied') {
@@ -143,13 +157,7 @@ export default class loginComponent extends React.Component {
       })
     })
     .then(function(data) {
-      window.localStorage.removeItem('session');
-      window.localStorage.removeItem('info');
-      return AppDispatcher.dispatch({
-        APP_PAGE: 'LOGIN',
-        successMsg: __('Configuration saved. You can sign in to the console after your device has restarted.'),
-        errorMsg: null
-      });
+      return _this._returnToIndex(__('Configuration saved. You can sign in to the console after your device has restarted.'));
     })
     .catch(function(err) {
       if (err === 'Access denied') {
@@ -196,14 +204,19 @@ export default class loginComponent extends React.Component {
     })
   }
 
-  _returnToIndex() {
-    window.localStorage.removeItem('session');
-    window.localStorage.removeItem('info');
-    return AppDispatcher.dispatch({
-      APP_PAGE: 'LOGIN',
-      successMsg: null,
-      errorMsg: null
-    });
+  _returnToIndex(successMsg, errorMsg) {
+    if (successMsg) {
+      this.refs.boardMsgDialog.show();
+      this.setState({ boardSuccessMsg: successMsg });
+    } else {
+      window.localStorage.removeItem('session');
+      window.localStorage.removeItem('info');
+      return AppDispatcher.dispatch({
+        APP_PAGE: 'LOGIN',
+        successMsg: successMsg || null,
+        errorMsg: errorMsg|| null
+      });
+    }
   }
 
   _handleStandardDialogTouchTap() {
@@ -225,7 +238,19 @@ export default class loginComponent extends React.Component {
 
   _cancelUpgradeFirmwareSuccessedDialog() {
     this.refs.upgradeFirmwareSuccessedDialog.dismiss();
-    return this._returnToIndex();
+    this.refs.boardMsgDialog.show();
+  }
+
+  _cancelBoardMsgDialog() {
+    this.refs.boardMsgDialog.dismiss();
+    window.localStorage.removeItem('session');
+    window.localStorage.removeItem('info');
+    var _this = this;
+    return AppDispatcher.dispatch({
+      APP_PAGE: 'LOGIN',
+      successMsg: _this.state.boardSuccessMsg || null,
+      errorMsg: null
+    });
   }
 
   render() {
@@ -250,7 +275,7 @@ export default class loginComponent extends React.Component {
             fontSize: '16px',
             marginTop: '-10px',
             paddingBottom: '5px'
-          }}>{this.state.files[0].name || __('Choose the file')}</p>
+          }}>{ this.state.files[0].name || __('Choose the file') }</p>
         </div>
     } else {
       var DropzoneContent =
@@ -262,7 +287,8 @@ export default class loginComponent extends React.Component {
           transform: 'perspective(1px) scale(0.75) translate3d(2px, -28px, 0)',
           transformOrigin: 'left top',
           marginBottom: '0px',
-          marginTop: '40px'}}>__('Upgrade firmware file')</h3>
+          marginTop: '40px'
+        }}>__('Upgrade firmware file')</h3>
           <p style={{
             borderBottom: '1px solid #D1D2D3',
             fontSize: '16px',
@@ -285,6 +311,14 @@ export default class loginComponent extends React.Component {
         onTouchTap={ this._onFactorySubmit } />
     ];
 
+    let boardMsgActions = [
+      <FlatButton
+        label={ __('OK') }
+        labelStyle={{ color: Colors.amber700 }}
+        onTouchTap={ this._cancelBoardMsgDialog }
+        hoverColor="none" />
+    ];
+
     let configureFailedActions = [
       <FlatButton
         label={ __('OK') }
@@ -295,7 +329,7 @@ export default class loginComponent extends React.Component {
 
     let upgradeFirmwareFailedActions = [
       <FlatButton
-        label={__('OK')}
+        label={ __('OK') }
         labelStyle={{ color: Colors.amber700 }}
         onTouchTap={ this._cancelUpgradeFirmwareFailedDialog }
         hoverColor="none" />
@@ -303,7 +337,7 @@ export default class loginComponent extends React.Component {
 
     let upgradeFirmwareSuccessedActions = [
       <FlatButton
-        label={__('SIGN IN')}
+        label={ __('OK') }
         labelStyle={{ color: Colors.amber700 }}
         onTouchTap={ this._cancelUpgradeFirmwareSuccessedDialog }
         hoverColor="none" />
@@ -339,21 +373,26 @@ export default class loginComponent extends React.Component {
       var errorText;
     }
 
+    if (this.state.boardModel === 'MediaTek LinkIt Smart7688') {
+      var boardImg = icon_7688;
+    } else {
+      var boardImg = icon_7688Duo;
+    }
+
     var PlatformBlock =
       <div style={ styles.content } key="PlatformBlock">
-
-        <h3 style={ styles.h3 }>{__('Platform information')}</h3>
-        <h3 style={ styles.panelTitle }>{__('Device name')}</h3>
+        <h3 style={ styles.h3 }>{ __('Platform information') }</h3>
+        <h3 style={ styles.panelTitle }>{ __('Device name') }</h3>
         <p style={ styles.panelContent }>{ this.state.deviceName }</p>
-        <h3 style={ styles.panelTitle }>{__('MAC address')}</h3>
+        <h3 style={ styles.panelTitle }>{ __('MAC address') }</h3>
         <p style={ styles.panelContent }>{ this.state.macaddr }</p>
-        <h3 style={ styles.panelTitle }>{__('Current IP address')}</h3>
+        <h3 style={ styles.panelTitle }>{ __('Current IP address') }</h3>
         <p style={ styles.panelContent }>{ this.state.currentIp }</p>
 
-        <h3 style={[styles.h3Top, {marginTop: '-15px'}]}>{__('Account information')}</h3>
-        <h3 style={ styles.panelTitle }>{__('Account')}</h3>
+        <h3 style={ [styles.h3Top, { marginTop: '-15px' }] }>{ __('Account information') }</h3>
+        <h3 style={ styles.panelTitle }>{ __('Account') }</h3>
         <p style={ styles.panelContent }>root(default)</p>
-        <h3 style={ styles.panelTitle }>{__('Password')} <b style={{ color: 'red' }}>*</b></h3>
+        <h3 style={ styles.panelTitle }>{ __('Password') } <b style={{ color: 'red' }}>*</b></h3>
         <p style={ styles.panelContent }><input type="password" disable={true} style={{ border: '0px', fontSize: '18px', letterSpacing: '3px' }}value={this.state.password} /></p>
         <RaisedButton
           linkButton={true}
@@ -374,27 +413,31 @@ export default class loginComponent extends React.Component {
     if (this.state.PlatformBlockIsEdit) {
       PlatformBlock =
         <div style={ styles.content } key="PlatformBlockIsEdit">
-          <h3 style={styles.h3}>{__('Platform information')}</h3>
+          <h3 style={ styles.h3 }>{ __('Platform information') }</h3>
           <TextField
-            hintText={__('Device name')}
+            hintText={ __('Device name') }
             floatingLabelStyle={{ color: 'rgba(0, 0, 0, 0.498039)' }}
             style={{ width: '100%' }}
-            defaultValue={this.state.deviceName}
+            defaultValue={ this.state.deviceName }
             underlineStyle={{ borderColor: '#D1D2D3' }}
             underlineFocusStyle={{
               borderColor: Colors.amber700,
               borderWidth: '2px'
             }}
-            onChange={ (e) => {this.setState({deviceName: e.target.value})} }
+            onChange={
+              (e) => {
+                this.setState({ deviceName: e.target.value });
+              }
+            }
             floatingLabelText={ __('Device name') } />
-          <h3 style={ styles.panelTitle }>{__('MAC address')}</h3>
+          <h3 style={ styles.panelTitle }>{ __('MAC address') }</h3>
           <p style={ styles.panelContent }>{ this.state.macaddr }</p>
-          <h3 style={ styles.panelTitle }>{__('Current IP address')}</h3>
+          <h3 style={ styles.panelTitle }>{ __('Current IP address') }</h3>
           <p style={ styles.panelContent }>{ this.state.currentIp }</p>
 
-          <h3 style={[styles.h3Top, {marginTop: '-15px'}]}>{ __('Account information') }</h3>
+          <h3 style={ [styles.h3Top, { marginTop: '-15px' }] }>{ __('Account information') }</h3>
 
-          <h3 style={ styles.panelTitle }>{__('Account')}</h3>
+          <h3 style={ styles.panelTitle }>{ __('Account') }</h3>
           <p style={ styles.panelContent }>root(default)</p>
           <TextField
             hintText={ __('Password') }
@@ -417,7 +460,7 @@ export default class loginComponent extends React.Component {
             }
             floatingLabelText={
               <div>
-                {__('Password')} <b style={{ color: 'red' }}>*</b>
+                { __('Password') } <b style={{ color: 'red' }}>*</b>
               </div>
             } />
           <div style={ showPasswordStyle }>
@@ -493,7 +536,7 @@ export default class loginComponent extends React.Component {
           linkButton={true}
           secondary={true}
           label={ __('Upgrade firmware') }
-          backgroundColor={ Colors.amber700}
+          backgroundColor={ Colors.amber700 }
           onTouchTap={
             ()=>{
               this._editSoftwareBlock(true)
@@ -542,31 +585,52 @@ export default class loginComponent extends React.Component {
               <p style={{ color: '#999A94', marginTop: '0px' }}>{__('Note: Do not disconnect the device from power source during firmware upgrade, or else the device will fail to boot up.')}</p>
               <p style={{ color: '#999A94', marginTop: '0px' }}>{__('Check troubleshooting guide for more information.')}</p>
             </Dialog>
-
             <Dialog
-              title={__("Upload Firmware")}
+              title={ __("Upload Firmware") }
               ref="uploadDialog"
-              modal={this.state.upgradeFirmware}>
-              <p>{__('Uploading ...')}</p>
+              modal={ this.state.upgradeFirmware }>
+              <p>{ __('Uploading ...') }</p>
             </Dialog>
             <RaisedButton
               linkButton={true}
-              label={__("Cancel")}
+              label={ __("Cancel") }
               backgroundColor="#EDEDED"
               labelColor="#999A94"
-              style={{ width: '236px', flexGrow:1, textAlign: 'center', marginTop: '20px', marginBottom: '20px', marginRight: '10px' }}
-              disabled={this.state.upgradeFirmware}
-              onTouchTap={ ()=>{ this._editSoftwareBlock(false) } }
+              style={{
+                width: '236px',
+                flexGrow: 1,
+                textAlign: 'center',
+                marginTop: '20px',
+                marginBottom: '20px',
+                marginRight: '10px'
+              }}
+              disabled={ this.state.upgradeFirmware }
+              onTouchTap={
+                ()=>{
+                  this._editSoftwareBlock(false);
+                }
+              }
             >
             </RaisedButton>
             <RaisedButton
               linkButton={true}
               secondary={true}
-              label={__("Upgrade & Restart")}
+              label={ __("Upgrade & Restart") }
               backgroundColor={ Colors.amber700 }
               disabled={ this.state.upgradeFirmware }
-              onTouchTap={ ()=>{ this._onSubmitFirmware(this.state.files[0]) } }
-              style={{ width: '236px', flexGrow:1, textAlign: 'center', marginTop: '20px', marginBottom: '20px', marginLeft: '10px'}}
+              onTouchTap={
+                ()=>{
+                  this._onSubmitFirmware(this.state.files[0]);
+                }
+              }
+              style={{
+                width: '236px',
+                flexGrow:1,
+                textAlign: 'center',
+                marginTop: '20px',
+                marginBottom: '20px',
+                marginLeft: '10px'
+              }}
               >
             </RaisedButton>
           </div>
@@ -574,10 +638,33 @@ export default class loginComponent extends React.Component {
     }
 
     return (
+
       <div>
         <Card>
           <Dialog
-            title={this.state.errorMsgTitle}
+            title={__('Device Restarting. Please Wait…')}
+            actionFocus="submit"
+            ref="boardMsgDialog"
+            actions={ boardMsgActions }
+            modal={ this.state.modal }>
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}>
+            <p style={{
+              fontSize: '16px',
+              color: '#999A94',
+              lineHeight: '18.54px',
+              marginTop: '-15px'
+            }}>{ __('See the Wi-Fi LED, it will light on steadily and start to blink or turn off afterwards. When the LED starts to blink or turn off, reload this webpage to sign in again.') }</p>
+            <img src={ boardImg } style={{ width: "350px" }} />
+            </div>
+          </Dialog>
+
+          <Dialog
+            title={ this.state.errorMsgTitle }
             actions={ errMsgActions }
             actionFocus="submit"
             ref="errorDialog"

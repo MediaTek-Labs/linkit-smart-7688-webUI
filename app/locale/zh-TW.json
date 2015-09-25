@@ -64,6 +64,12 @@
   "Your token was expired, please sign in again.": "你的令牌過期，請重新登錄。",
   "Account / password is incorrect.": "帳號 / 密碼不正確。",
   "Choose the Wi-Fi network.": "選擇一個 Wi-Fi 網路",
-  "Upgrade firmware file": "Upgrade firmware file",
-  "Choose the file": "Choose the file"
+  "Upgrade firmware file": "韌體更新",
+  "Choose the file": "選擇一個檔案",
+  "Please set a password.": "請設定一組密碼。",
+  "Device Restarting. Please Wait…": "系統重啓中，請稍候…",
+  "Please use at least 8 alphanumeric characters.": "請輸入至少 8 個字母",
+  "See the Wi-Fi LED, it will light on steadily and start to blink or turn off afterwards. When the LED starts to blink or turn off, reload this webpage to sign in again.": "請留意 Wi-Fi LED 燈號。系統重啟過程中 Wi-Fi LED 燈號會持續點亮，直到燈號熄滅或開始閃爍時，表示系統已重新啟動完成。此時可重新載入此頁面並再次登入。",
+  "Note: Please make sure your host computer is in the ": "注意: 請確保您的主機是在",
+  "network. You can’t access this page if it’s in a different network.": "網路中，否則您將不能訪問此頁面在不同網路下。"
 }

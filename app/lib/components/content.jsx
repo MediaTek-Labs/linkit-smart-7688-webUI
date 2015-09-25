@@ -1,13 +1,13 @@
 import React from 'react';
 import Radium from 'radium';
-
 import mui from 'material-ui';
-let { Tabs, Tab, TextField} = mui;
-var ThemeManager = new mui.Styles.ThemeManager();
-var Colors = mui.Styles.Colors;
-
 import Sysinfo from './sysinfo.jsx';
 import Network from './network.jsx';
+
+let { Tabs, Tab, TextField } = mui;
+var ThemeManager = new mui.Styles.ThemeManager();
+var Colors       = mui.Styles.Colors;
+var AppActions   = require('../actions/appActions');
 
 @Radium
 export default class contentComponent extends React.Component {
@@ -15,7 +15,7 @@ export default class contentComponent extends React.Component {
     super(props)
     this._handleTabsChangeNetWork = this._handleTabsChangeNetWork.bind(this);
     this._handleTabsChangeSYS = this._handleTabsChangeSYS.bind(this);
-    this.state = { tabsValue: 'sysinfo' };
+    this.state = { tabsValue: 'sysinfo', boardModel: '' };
   }
 
   getChildContext() {
@@ -25,18 +25,26 @@ export default class contentComponent extends React.Component {
   }
 
   _handleTabsChangeNetWork(){
-    this.setState({tabsValue: 'network'});
+    this.setState({ tabsValue: 'network' });
   }
 
   _handleTabsChangeSYS(){
-    this.setState({tabsValue: 'sysinfo'});
+    this.setState({ tabsValue: 'sysinfo' });
   }
 
+  componentWillMount() {
+    var self = this;
+    AppActions.loadModel(window.session)
+    .then(function(data) {
+      console.log(data.body.result[1])
+      return self.setState({ boardModel: data.body.result[1].model });
+    });
+  }
   render() {
     return (
-      <div key="mainBlock" style={styles.block}>
+      <div key="mainBlock" style={ styles.block }>
         <header style={ styles.header }>
-          <p style={ styles.welcomeTitle } key="welcome">{ __('Welcome to') } <b>LinkIt Smart 7688</b></p>
+          <p style={ styles.welcomeTitle } key="welcome">{ __('Welcome to') } <b>{ this.state.boardModel }</b></p>
           <p style={[ styles.welcomeTitle, styles.welcomeTitleLine ]} key="advanced">{ __('For advanced network configuration, go to ') }<a style={{ color:'#00a1de', textDecoration: 'none' }} href="/cgi-bin/luci">OpenWrt</a>.</p>
         </header>
         <Tabs
@@ -45,24 +53,26 @@ export default class contentComponent extends React.Component {
             backgroundColor: Colors.amber700,
             borderRadius: '5px 5px 0px 0px'
           }}
+          inkBarStyle={{
+            backgroundColor: '#54EFE2'
+          }}
           style={ styles.content }>
           <Tab
             label={ __('System information') }
             value="sysinfo"
-            onClick={this._handleTabsChangeSYS.bind(this)}>
+            onClick={ this._handleTabsChangeSYS.bind(this) }>
             <Sysinfo boardInfo={ this.props.boardInfo } />
           </Tab>
           <Tab
             label={ __('Network') }
             value="network"
-            onClick={this._handleTabsChangeNetWork.bind(this)}>
+            onClick={ this._handleTabsChangeNetWork.bind(this) }>
             <Network boardInfo={ this.props.boardInfo } />
           </Tab>
         </Tabs>
       </div>
     )
   }
-
 }
 
 contentComponent.childContextTypes = {

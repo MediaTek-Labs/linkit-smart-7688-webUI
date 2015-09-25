@@ -3,6 +3,8 @@ import Radium from 'radium';
 import mui from 'material-ui';
 var AppActions     = require('../actions/appActions');
 var AppDispatcher  = require('../dispatcher/appDispatcher');
+import icon_7688 from '../../img/7688.png';
+import icon_7688Duo from '../../img/7688_duo.png';
 
 let {
   TextField,
@@ -27,7 +29,7 @@ export default class loginComponent extends React.Component {
     super(props)
 
     this.state = {
-      modal: false,
+      modal: true,
       errorMsgTitle: null,
       errorMsg: null
     };
@@ -40,6 +42,9 @@ export default class loginComponent extends React.Component {
       ssid: this.props.boardInfo.wifi.ap.ssid || '',
       key: this.props.boardInfo.wifi.ap.key || ''
     };
+
+    this.state.showPassword = false;
+    this.state.notPassPassword = false;
     this.state.selectValue = 0;
     this.state.stationContent = {
       ssid: this.props.boardInfo.wifi.sta.ssid || '',
@@ -48,7 +53,9 @@ export default class loginComponent extends React.Component {
 
     if (this.props.boardInfo.wifi.sta.disabled === "1") {
       this.state.mode = 'ap';
-
+      if (this.state.apContent.key.length > 0 && this.state.apContent.key.length < 8 ) {
+        this.state.notPassPassword = true;
+      }
     } else {
       this.state.mode = 'station';
     }
@@ -59,6 +66,29 @@ export default class loginComponent extends React.Component {
     this.selectWifiList = false;
     this._returnToIndex = this._returnToIndex.bind(this);
     this._cancelErrorMsgDialog = this._cancelErrorMsgDialog.bind(this);
+    this._cancelBoardMsgDialog = this._cancelBoardMsgDialog.bind(this);
+  }
+
+  componentWillMount () {
+    var self = this;
+
+    ThemeManager.setComponentThemes({
+      textField: {
+        focusColor: Colors.amber700
+      },
+      menuItem: {
+        selectedTextColor: Colors.amber700
+      },
+      radioButton: {
+        backgroundColor: '#00a1de',
+        checkedColor: '#00a1de'
+      }
+    });
+
+    AppActions.loadModel(window.session)
+    .then(function(data) {
+      return self.setState({ boardModel: data.body.result[1].model });
+    });
   }
 
   componentDidMount() {
@@ -94,17 +124,26 @@ export default class loginComponent extends React.Component {
   }
 
   _onRadioButtonClick(mode) {
-    this.setState({ mode: mode });
+    if (mode === 'ap' && this.state.apContent.key.length > 0 && this.state.apContent.key.length < 8) {
+      this.setState({ mode: mode, notPassPassword: true, showPassword: false });
+    } else {
+      this.setState({ mode: mode, notPassPassword: false, showPassword: false });
+    }
   }
 
-  _returnToIndex() {
-    window.localStorage.removeItem('session');
-    window.localStorage.removeItem('info');
-    return AppDispatcher.dispatch({
-      APP_PAGE: 'LOGIN',
-      successMsg: null,
-      errorMsg: null
-    });
+  _returnToIndex(successMsg, errorMsg) {
+    if (successMsg) {
+      this.refs.boardMsgDialog.show();
+      this.setState({ boardSuccessMsg: successMsg });
+    } else {
+      window.localStorage.removeItem('session');
+      window.localStorage.removeItem('info');
+      return AppDispatcher.dispatch({
+        APP_PAGE: 'LOGIN',
+        successMsg: successMsg || null,
+        errorMsg: errorMsg|| null
+      });
+    }
   }
 
   _handleSelectValueChange(name, e) {
@@ -119,6 +158,9 @@ export default class loginComponent extends React.Component {
 
   _handleSettingMode() {
     var _this = this;
+    if (this.state.notPassPassword) {
+      return ;
+    }
     return AppActions.setWifi(this.state.mode, this.state[ this.state.mode+'Content'].ssid, this.state[ this.state.mode+'Content'].key, window.session)
     .then(function() {
       return AppActions.commitAndReboot(window.session)
@@ -134,11 +176,7 @@ export default class loginComponent extends React.Component {
       })
     })
     .then(function() {
-      return AppDispatcher.dispatch({
-        APP_PAGE: 'LOGIN',
-        successMsg: __('Configuration saved. You can sign in to the console after your device has restarted.'),
-        errorMsg: null
-      });
+      return _this._returnToIndex(__('Configuration saved. You can sign in to the console after your device has restarted.'));
     })
     .catch(function(err) {
       if (err === 'Access denied') {
@@ -149,12 +187,58 @@ export default class loginComponent extends React.Component {
     })
   }
 
+  _cancelBoardMsgDialog() {
+    this.refs.boardMsgDialog.dismiss();
+    window.localStorage.removeItem('session');
+    window.localStorage.removeItem('info');
+    var _this = this;
+    return AppDispatcher.dispatch({
+      APP_PAGE: 'LOGIN',
+      successMsg: _this.state.boardSuccessMsg || null,
+      errorMsg: null
+    });
+  }
+
   _cancelErrorMsgDialog() {
     this.refs.errorDialog.dismiss();
     this._returnToIndex();
   }
 
   render() {
+    if (this.state.showPassword) {
+      var textType = 'text';
+    } else {
+      var textType = 'password';
+    }
+    if (this.state.notPassPassword) {
+      var errorText =
+        <div>
+          <p style={{
+            color:'#69BE28',
+            textAlign: 'left',
+            marginTop: '2px'
+          }}>{ __('Please use at least 8 alphanumeric characters.') }</p>
+        </div>
+      var showPasswordStyle = {
+        marginTop: '20px',
+        width: '100%',
+        marginBottom: '44px'
+      };
+    } else {
+      var showPasswordStyle = {
+        width: '100%',
+        marginBottom: '44px'
+      };
+      var errorText;
+    }
+    let boardMsgActions = [
+      <FlatButton
+        label={ __('OK') }
+        labelStyle={{ color: Colors.amber700 }}
+        onTouchTap={ this._cancelBoardMsgDialog }
+        hoverColor="none" />
+    ];
+
     let errMsgActions = [
       <FlatButton
         label={__("SIGN IN")}
@@ -191,29 +275,71 @@ export default class loginComponent extends React.Component {
             } />
             <TextField
               hintText={__("Please enter your password")}
-              type="password"
+              errorStyle={{ borderColor: Colors.amber700 }}
+              errorText={ errorText }
+              type={ textType }
               underlineFocusStyle={{ borderColor: Colors.amber700 }}
               floatingLabelStyle={{ color: 'rgba(0, 0, 0, 0.498039)' }}
               value={ this.state.apContent.key }
               onChange={
                 (e)=>{
-                  this.setState({
-                    apContent: {
-                      ssid: this.state.apContent.ssid,
-                      key: e.target.value
-                    }
-                  })
+                  if ( e.target.value.length > 0 && e.target.value.length < 8) {
+                    this.setState({
+                      apContent: {
+                        ssid: this.state.apContent.ssid,
+                        key: e.target.value
+                      },
+                      notPassPassword: true
+                    });
+                  } else if (e.target.value.length === 0) {
+                    this.setState({
+                      apContent: {
+                        ssid: this.state.apContent.ssid,
+                        key: e.target.value
+                      },
+                      notPassPassword: false
+                    });
+                  } else {
+                    this.setState({
+                      apContent: {
+                        ssid: this.state.apContent.ssid,
+                        key: e.target.value
+                      },
+                      notPassPassword: false
+                    });
+                  }
                 }
               }
               style={{ width: '100%' }}
               floatingLabelText={__("Password")} />
+              <div style={ showPasswordStyle }>
+              <a
+                onTouchTap={
+                  (e) => {
+                    this.setState({
+                      showPassword: !this.state.showPassword
+                    });
+                  }
+                }
+                style={{
+                  textAlign: 'left',
+                  color: Colors.amber700,
+                  textDecoration: 'none',
+                  cursor: 'pointer',
+                  fontSize: '14px'
+                }}>{ __('SHOW PASSWORD') }</a>
+            </div>
           </div>
         break;
       case 'station':
         elem =
           <div>
             <SelectField
-              style={{ width: '100%', maxWidth: '512px', zIndex: '99', position: 'absolute' }}
+              style={{
+                width: '100%',
+                maxWidth: '512px',
+                position: 'absolute'
+              }}
               multiLine={ true }
               underlineStyle={{ maxHeight:'100px', overflow: 'hidden' }}
               menuItemStyle={{  maxHeight:'100px' }}
@@ -232,10 +358,10 @@ export default class loginComponent extends React.Component {
             <TextField
               style={{ width: '100%' }}
               value={ this.state.stationContent.key }
-              hintText={__("Input your Password")}
+              hintText={__("Please enter your password")}
               floatingLabelStyle={{ color: 'rgba(0, 0, 0, 0.498039)' }}
               underlineFocusStyle={{ borderColor: Colors.amber700 }}
-              type="password"
+              type={ textType }
               onChange={
                 (e)=>{
                   this.setState({
@@ -247,14 +373,61 @@ export default class loginComponent extends React.Component {
                 }
               }
               floatingLabelText={__("Password")} />
+            <a
+              onTouchTap={
+                (e) => {
+                  this.setState({
+                    showPassword: !this.state.showPassword
+                  });
+                }
+              }
+              style={{
+                textAlign: 'left',
+                color: Colors.amber700,
+                textDecoration: 'none',
+                cursor: 'pointer',
+                fontSize: '14px'
+              }}>{ __('SHOW PASSWORD') }</a>
           </div>
         break;
     }
+    if (this.state.boardModel === 'MediaTek LinkIt Smart7688') {
+      var boardImg = icon_7688;
+    } else {
+      var boardImg = icon_7688Duo;
+    }
+
     return (
       <div>
         <Card>
           <Dialog
-            title={this.state.errorMsgTitle}
+            title={__("Device Restarting. Please Wait…")}
+            actionFocus="submit"
+            actions={ boardMsgActions }
+            ref="boardMsgDialog"
+            modal={ this.state.modal }>
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}>
+            <p style={{
+              fontSize: '16px',
+              color: '#999A94',
+              lineHeight: '18.54px',
+              marginTop: '-15px'
+            }}>{ __('See the Wi-Fi LED, it will light on steadily and start to blink or turn off afterwards. When the LED starts to blink or turn off, reload this webpage to sign in again.')}</p>
+            <p style={{
+              fontSize: '16px',
+              color: '#999A94',
+              lineHeight: '18.54px',
+            }}>{ __('Note: Please make sure your host computer is in the ')} { this.state[ this.state.mode+'Content'].ssid } {__('network. You can’t access this page if it’s in a different network.')}</p>
+            <img src={ boardImg } style={{ width: "350px" }} />
+            </div>
+          </Dialog>
+          <Dialog
+            title={ this.state.errorMsgTitle }
             actions={ errMsgActions }
             actionFocus="submit"
             ref="errorDialog"

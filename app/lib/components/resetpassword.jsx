@@ -96,6 +96,7 @@ export default class loginComponent extends React.Component {
             marginTop: '40px',
             fontFamily: 'RionaSansLight,Arial,Helvetica,sans-serif'
           }}>{__('Welcome to')} <b>LinkIt Smart 7688</b></p>
+          <p style={{ color: '#69BE28', marginTop: '-10px' }}>{__('Please set a password.')}</p>
           <TextField
             hintText={ __('Input your Account') }
             ref="password"
