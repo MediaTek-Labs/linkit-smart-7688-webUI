@@ -57,6 +57,7 @@ export default class networkComponent extends React.Component {
     this.state.apContent = {
       ssid: this.props.boardInfo.wifi.ap.ssid || '',
       key: this.props.boardInfo.wifi.ap.key || '',
+      encryption: this.props.boardInfo.wifi.ap.encryption.enabled || false,
     };
 
     this.state.showPassword = false;
@@ -65,6 +66,7 @@ export default class networkComponent extends React.Component {
     this.state.stationContent = {
       ssid: this.props.boardInfo.wifi.sta.ssid || '',
       key: this.props.boardInfo.wifi.sta.key || '',
+      encryption: this.props.boardInfo.wifi.sta.encryption.enabled || false,
     };
 
     if (this.props.boardInfo.wifi.sta.disabled === '1') {
@@ -119,15 +121,17 @@ export default class networkComponent extends React.Component {
 
   render() {
     let textType = 'password';
-    if (this.state.showPassword) {
-      textType = 'text';
-    }
     let errorText;
     let boardImg = icon7688Duo;
     let showPasswordStyle = {
       width: '100%',
       marginBottom: '44px',
     };
+    let elem;
+    let stationPassword;
+    if (this.state.showPassword) {
+      textType = 'text';
+    }
     if (this.state.notPassPassword) {
       errorText = (
         <div>
@@ -161,7 +165,45 @@ export default class networkComponent extends React.Component {
         hoverColor="none" />,
     ];
 
-    let elem;
+    if (this.state.stationContent.encryption) {
+      stationPassword = (
+        <div>
+          <TextField
+            style={{ width: '100%' }}
+            value={ this.state.stationContent.key }
+            hintText={__('Please enter your password')}
+            floatingLabelStyle={{ color: 'rgba(0, 0, 0, 0.498039)' }}
+            underlineFocusStyle={{ borderColor: Colors.amber700 }}
+            type={ textType }
+            onChange={
+              (e) => {
+                this.setState({
+                  stationContent: {
+                    ssid: this.state.stationContent.ssid,
+                    key: e.target.value,
+                  },
+                });
+              }
+            }
+            floatingLabelText={__('Password')} />
+          <a
+            onTouchTap={
+              () => {
+                this.setState({
+                  showPassword: !this.state.showPassword,
+                });
+              }
+            }
+            style={{
+              textAlign: 'left',
+              color: Colors.amber700,
+              textDecoration: 'none',
+              cursor: 'pointer',
+              fontSize: '14px',
+            }}>{ __('SHOW PASSWORD') }</a>
+        </div>
+      );
+    }
     switch (this.state.mode) {
     case 'ap':
       elem = (
@@ -272,39 +314,7 @@ export default class networkComponent extends React.Component {
             menuItems={ this.state.wifiList } />
           <RaisedButton style={{ marginTop: '75px' }} label={__('Refresh')} onTouchTap={ this._scanWifi } />
           <br />
-          <TextField
-            style={{ width: '100%' }}
-            value={ this.state.stationContent.key }
-            hintText={__('Please enter your password')}
-            floatingLabelStyle={{ color: 'rgba(0, 0, 0, 0.498039)' }}
-            underlineFocusStyle={{ borderColor: Colors.amber700 }}
-            type={ textType }
-            onChange={
-              (e) => {
-                this.setState({
-                  stationContent: {
-                    ssid: this.state.stationContent.ssid,
-                    key: e.target.value,
-                  },
-                });
-              }
-            }
-            floatingLabelText={__('Password')} />
-          <a
-            onTouchTap={
-              () => {
-                this.setState({
-                  showPassword: !this.state.showPassword,
-                });
-              }
-            }
-            style={{
-              textAlign: 'left',
-              color: Colors.amber700,
-              textDecoration: 'none',
-              cursor: 'pointer',
-              fontSize: '14px',
-            }}>{ __('SHOW PASSWORD') }</a>
+          { stationPassword }
         </div>
       );
       break;
@@ -418,18 +428,21 @@ export default class networkComponent extends React.Component {
     return AppActions.scanWifi(window.session)
     .then((data) => {
       let selectValue;
+      const stationModeInfo = this$.state.stationContent;
       for (let i = 0; i < data.body.result[1].results.length; i++ ) {
         data.body.result[1].results[i].payload = i + 1;
         data.body.result[1].results[i].text = data.body.result[1].results[i].ssid + ' - ' + data.body.result[1].results[i].quality + ' %';
-        // 抓現在版子上的 wifi ssid 是誰
-        // =========
+
+        // To know which wifi use this wifi ssid.
         if (this$.props.boardInfo.wifi.sta.ssid === data.body.result[1].results[i].ssid) {
           selectValue = i + 1;
+          stationModeInfo.encryption = data.body.result[1].results[i].encryption.enabled;
         }
-        // =========
       }
+
       return this$.setState({
         selectValue: selectValue,
+        stationContent: stationModeInfo,
         wifiList: data.body.result[1].results,
       });
     });
@@ -465,6 +478,7 @@ export default class networkComponent extends React.Component {
     change.stationContent = {};
     change.stationContent.key = '';
     change.stationContent.ssid = this.state.wifiList[e.target.value - 1].ssid;
+    change.stationContent.encryption = this.state.wifiList[e.target.value - 1].encryption.enabled;
     this.setState(change);
   }
 
