@@ -1,22 +1,21 @@
-var Promise = require('bluebird');
-var request = require('superagent');
-var id = 1;
-var ubusStatus = require('./ubusStatus');
-var RPCurl = '/ubus';
+import Promise from 'bluebird';
+import request from 'superagent';
+import ubusStatus from './ubusStatus';
+let id = 1;
+let RPCurl = '/ubus';
 
 if (window.location.hostname === '127.0.0.1') {
   RPCurl = 'http://mylinkit.local/ubus';
 }
 
-var rpcAPI = {
+const rpcAPI = {
   request: function(config) {
-
     return new Promise((resolve, reject) => {
       request
       .post(RPCurl)
       .send(config)
       .set('Accept', 'application/json')
-      .end(function(err, res) {
+      .end((err, res) => {
         // return res.ok ? resolve(res) : reject(err);
         if (!res) {
           return reject('Connection failed');
@@ -30,19 +29,17 @@ var rpcAPI = {
           return reject(res.body.error.message);
         }
 
-        if (!res.body.result || res.body.result[0] != 0) {
+        if (!res.body.result || res.body.result[0] !== 0) {
           return reject(ubusStatus[res.body.result[0]]);
-        } else {
-          return resolve(res);
         }
+        return resolve(res);
       });
     });
   },
 
   // ====== login start ========
   login: function(userId, password) {
-
-    var config = {
+    const config = {
       jsonrpc: '2.0',
       id: id++,
       method: 'call',
@@ -52,27 +49,26 @@ var rpcAPI = {
         'login',
         {
           username: userId,
-          password: password
-        }
-      ]
+          password: password,
+        },
+      ],
     };
-
     return this.request(config);
-
   },
+
   loadModel: function(session) {
-    var config = { 
-      jsonrpc: "2.0", 
-      id: id++, 
-      method: "call",
-      params: [ session, "system", "board", { dummy: 0 }]
+    const config = {
+      jsonrpc: '2.0',
+      id: id++,
+      method: 'call',
+      params: [ session, 'system', 'board', { dummy: 0 }],
     };
-  
+
     return this.request(config);
   },
-  grantCode: function(session) {
 
-    var config = {
+  grantCode: function(session) {
+    const config = {
       jsonrpc: '2.0',
       id: id++,
       method: 'call',
@@ -82,51 +78,48 @@ var rpcAPI = {
         'grant',
         {
           scope: 'uci',
-          objects: [['*', 'read'], ['*', 'write']]
-        }
-    ]};
-
+          objects: [['*', 'read'], ['*', 'write']],
+        },
+      ],
+    };
     return this.request(config);
-
   },
   // ====== login end ========
   changeWifiMode: function(disabled, session) {
-    var config = {
+    const config = {
       jsonrpc: '2.0',
       id: id++,
       method: 'call',
-      params: [ session, 'uci', 'set', {
-        config: 'wireless',
-        section: 'sta',
-        values: {
-          disabled: disabled
-        }}
-      ]
+      params: [ session, 'uci', 'set',
+        {
+          config: 'wireless',
+          section: 'sta',
+          values: {
+            disabled: disabled,
+          },
+        },
+      ],
     };
 
     return this.request(config);
-
   },
-
   scanWifi: function(session) {
-    var config = {
+    const config = {
       jsonrpc: '2.0',
       id: id++,
       method: 'call',
-      params: [session, 'iwinfo', 'scan', { device: 'ra0' }]
+      params: [session, 'iwinfo', 'scan', { device: 'ra0' }],
     };
 
     return this.request(config);
-
   },
-
   setWifi: function(section, ssid, key, session) {
-    var enc = 'none';
+    let enc = 'none';
     if (key.length > 1) {
-      enc = 'psk2'
-    };
+      enc = 'psk2';
+    }
 
-    var config = {
+    const config = {
       jsonrpc: '2.0',
       id: id++,
       method: 'call',
@@ -140,42 +133,35 @@ var rpcAPI = {
           values: {
             ssid: ssid,
             key: key,
-            encryption: enc
-          }
-        }
-      ]
+            encryption: enc,
+          },
+        },
+      ],
     };
 
     return this.request(config);
-
   },
-
   commitWifi: function(session) {
-    var config = {
+    const config = {
       jsonrpc: '2.0',
       id: id++,
       method: 'call',
       params: [session, 'uci', 'apply', { commit: true }]};
 
     return this.request(config);
-
   },
-
   reboot: function(session) {
-    var config = {
+    const config = {
       jsonrpc: '2.0',
       id: id++,
       method: 'call',
-      params: [session, 'rpc-sys', 'reboot', { dummy: 0}]
+      params: [session, 'rpc-sys', 'reboot', { dummy: 0}],
     };
 
     return this.request(config);
-
   },
-
   resetPassword: function(user, password, session) {
-
-    var config = {
+    const config = {
       jsonrpc: '2.0',
       id: id++,
       method: 'call',
@@ -185,17 +171,15 @@ var rpcAPI = {
         'password_set',
         {
           user: user,
-          password: password
-        }
-      ]
+          password: password,
+        },
+      ],
     };
 
-    return this.request(config)
+    return this.request(config);
   },
-
   loadNetstate: function(iface, session) {
-
-    var config = {
+    const config = {
       jsonrpc: '2.0',
       id: id++,
       method: 'call',
@@ -204,30 +188,25 @@ var rpcAPI = {
         'network.interface',
         'status',
         {
-          interface: iface
-        }
-      ]
+          interface: iface,
+        },
+      ],
     };
 
     return this.request(config);
-
   },
-
   loadNetwork: function(session) {
-    var config = {
+    const config = {
       jsonrpc: '2.0',
       id: id++,
       method: 'call',
-      params: [session, 'uci', 'get', { config: 'network' }]
+      params: [session, 'uci', 'get', { config: 'network' }],
     };
 
     return this.request(config);
-
   },
-
   loadSystem: function(session) {
-
-    var config = {
+    const config = {
       jsonrpc: '2.0',
       id: id++,
       method: 'call',
@@ -237,30 +216,24 @@ var rpcAPI = {
         'get',
         {
           config: 'system',
-          type: 'system'
-        }
-      ]
+          type: 'system',
+        },
+      ],
     };
-
     return this.request(config);
-
   },
-
   loadWifi: function(session) {
-
-    var config = {
+    const config = {
       jsonrpc: '2.0',
       id: id++,
       method: 'call',
-      params: [session, 'uci', 'get', { config: 'wireless' }]
+      params: [session, 'uci', 'get', { config: 'wireless' }],
     };
 
     return this.request(config);
   },
-
   applyConfig: function(session) {
-
-    var config = {
+    const config = {
       jsonrpc: '2.0',
       id: id++,
       method: 'call',
@@ -268,42 +241,34 @@ var rpcAPI = {
         session,
         'uci',
         'apply',
-        { commit: true }
-      ]
+        { commit: true },
+      ],
     };
 
     return this.request(config);
-
   },
-
   activeFirmware: function(session) {
-
-    var config = {
+    const config = {
       jsonrpc: '2.0',
       id: id++,
       method: 'call',
-      params: [session, 'rpc-sys', 'upgrade_start', { keep: 1}]
+      params: [session, 'rpc-sys', 'upgrade_start', { keep: 1}],
     };
 
     return this.request(config);
-
   },
-
   checkFirmware: function(session) {
-
-    var config = {
+    const config = {
       jsonrpc: '2.0',
       id: id++,
       method: 'call',
-      params: [session, 'rpc-sys', 'upgrade_test', { dummy: 0}]
+      params: [session, 'rpc-sys', 'upgrade_test', { dummy: 0}],
     };
 
     return this.request(config);
-
   },
-
   uploadFirmware: function(file, session) {
-    var uploadUrl = RPCurl.replace('/ubus', '/cgi-bin/cgi-upload')
+    const uploadUrl = RPCurl.replace('/ubus', '/cgi-bin/cgi-upload');
     return new Promise((resolve, reject) => {
       request
       .post(uploadUrl)
@@ -311,20 +276,18 @@ var rpcAPI = {
       .field('filemode', '0600')
       .field('filename', '/tmp/firmware.bin')
       .attach('filedata', file, file.name)
-      .end(function(err, res) {
+      .end((err, res) => {
         // return res.ok ? resolve(res) : reject(err);
         if (!res.ok) {
           return reject('Connection failed');
-        } else {
-          return resolve(res);
         }
+        return resolve(res);
       });
     });
   },
 
   reloadConfig: function(session) {
-
-    var config = {
+    const config = {
       jsonrpc: '2.0',
       id: id++,
       method: 'call',
@@ -332,28 +295,26 @@ var rpcAPI = {
         session,
         'uci',
         'reload_config',
-        { commit: true }
-      ]
+        { commit: true },
+      ],
     };
 
     return this.request(config);
-
   },
 
   resetFactory: function(session) {
-
-    var config = {
+    const config = {
       jsonrpc: '2.0',
       id: id++,
       method: 'call',
-      params: [session, 'rpc-sys', 'factory', { dummy: 0}]
+      params: [session, 'rpc-sys', 'factory', { dummy: 0}],
     };
 
     return this.request(config);
   },
 
   resetHostName: function(hostname, session) {
-    var config = {
+    const config = {
       jsonrpc: '2.0',
       id: id++,
       method: 'call',
@@ -363,15 +324,13 @@ var rpcAPI = {
         'set', {
           config: 'system',
           section: '@system[0]',
-          values: { hostname: hostname}
-        }
-      ]
+          values: { hostname: hostname },
+        },
+      ],
     };
 
     return this.request(config);
-
-  }
-
+  },
 };
 
 export default rpcAPI;

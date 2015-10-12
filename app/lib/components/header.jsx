@@ -1,22 +1,55 @@
-import React from 'react';
+import { default as React, PropTypes } from 'react';
 import Radium from 'radium';
 import mui from 'material-ui';
 import Logo from '../../img/mediatek.png';
 
-let {
-  AppBar,
-  Card,
-  DropDownMenu
+const {
+  DropDownMenu,
 } = mui;
 
-var AppDispatcher  = require('../dispatcher/appDispatcher');
-var ThemeManager = new mui.Styles.ThemeManager();
-var Colors = mui.Styles.Colors;
+import AppDispatcher from '../dispatcher/appDispatcher';
+const ThemeManager = new mui.Styles.ThemeManager();
+const Colors = mui.Styles.Colors;
+const styles = {
+  bg: {
+    background: '#fff',
+  },
+
+  img: {
+    width: '130px',
+    marginTop: '15px',
+  },
+
+  header: {
+    width: '100%',
+    height: '60px',
+    boxSizing: 'border-box',
+    tapHighlightColor: 'rgba(0,0,0,0)',
+    zIndex: 99,
+    position: 'fixed',
+    background: '#fff',
+    boxShadow: '1px 2px 1px 0 rgba(0,0,0,0.1), 0 0 0 rgba(0,0,0,0.1)',
+  },
+
+  container: {
+    display: 'flex',
+    flexDirection: 'row',
+    height: '45px',
+    lineHeight: '60px',
+    justifyContent: 'space-between',
+    maxWidth: '768px',
+    margin: '0 auto',
+    '@media (max-width: 760px)': {
+      paddingLeft: '10px',
+      paddingRight: '10px',
+    },
+  },
+};
 
 @Radium
 export default class loginComponent extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {};
     this._logOut = this._logOut.bind(this);
     if (/zh\-tw/.test(window.location.pathname)) {
@@ -28,42 +61,31 @@ export default class loginComponent extends React.Component {
     }
   }
 
-  _logOut() {
-    window.localStorage.removeItem('info');
-    window.localStorage.removeItem('session');
-    window.session = '';
-    return AppDispatcher.dispatch({
-      APP_PAGE: 'LOGIN',
-      successMsg: null,
-      errorMsg: null
-    });
-  }
-
   getChildContext() {
     return {
-      muiTheme: ThemeManager.getCurrentTheme()
+      muiTheme: ThemeManager.getCurrentTheme(),
     };
   }
 
   componentWillMount() {
     ThemeManager.setComponentThemes({
       textField: {
-        borderColor: Colors.amber700
+        borderColor: Colors.amber700,
       },
       menuItem: {
-        selectedTextColor: Colors.amber700
-      }
+        selectedTextColor: Colors.amber700,
+      },
     });
   }
 
   render() {
-    let menuItems = [
+    const menuItems = [
       { payload: '1', text: 'English' },
       { payload: '2', text: '繁體中文' },
       { payload: '3', text: '简体中文' },
     ];
 
-    var defaultRouter = '';
+    let defaultRouter = '';
 
     if (/127.0.0.1/.test(window.location.host)) {
       defaultRouter = '/app';
@@ -80,18 +102,17 @@ export default class loginComponent extends React.Component {
                 value={ this.state.language }
                 style={{ width: '130px', borderBottom: '0px' }}
                 onChange={
-                  (e, sel, item)=>{
-                    switch(sel) {
-                      case 0:
-                        console.log('en')
-                        window.location.href = defaultRouter + '/';
-                        break;
-                      case 1:
-                        window.location.href = defaultRouter + '/zh-tw.html';
-                        break;
-                      case 2:
-                        window.location.href = defaultRouter + '/zh-cn.html';
-                        break;
+                  (e, sel)=> {
+                    switch (sel) {
+                    case 1:
+                      window.location.href = defaultRouter + '/zh-tw.html';
+                      break;
+                    case 2:
+                      window.location.href = defaultRouter + '/zh-cn.html';
+                      break;
+                    default:
+                      window.location.href = defaultRouter + '/';
+                      break;
                     }
                   }
                 }
@@ -105,51 +126,27 @@ export default class loginComponent extends React.Component {
                 style={{
                   color: Colors.amber700,
                   textDecoration: 'none',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
                 }}>{ __('Sign out') }</a>
             </div>
           </div>
         </header>
       </div>
-    )
+    );
+  }
+
+  _logOut() {
+    window.localStorage.removeItem('info');
+    window.localStorage.removeItem('session');
+    window.session = '';
+    return AppDispatcher.dispatch({
+      APP_PAGE: 'LOGIN',
+      successMsg: null,
+      errorMsg: null,
+    });
   }
 }
 
 loginComponent.childContextTypes = {
-  muiTheme: React.PropTypes.object
+  muiTheme: React.PropTypes.object,
 };
-
-var styles = {
-  bg: {
-    background: '#fff'
-  },
-  img: {
-    width: '130px',
-    marginTop: '15px'
-  },
-  header: {
-    width: '100%',
-    height: '60px',
-    boxSizing: 'border-box',
-    tapHighlightColor: 'rgba(0,0,0,0)',
-    zIndex: 99,
-    position: 'fixed',
-    background: '#fff',
-    boxShadow: '1px 2px 1px 0 rgba(0,0,0,0.1), 0 0 0 rgba(0,0,0,0.1)'
-  },
-  container: {
-    display: 'flex',
-    flexDirection: 'row',
-    height: '45px',
-    lineHeight: '60px',
-    justifyContent: 'space-between',
-    maxWidth: '768px',
-    margin: '0 auto',
-    '@media (max-width: 760px)': {
-      paddingLeft: '10px',
-      paddingRight: '10px'
-    }
-  }
-}
-
-export default loginComponent;

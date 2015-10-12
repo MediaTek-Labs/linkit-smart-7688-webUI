@@ -1,65 +1,66 @@
-var AppDispatcher  = require('../dispatcher/appDispatcher');
-var EventEmitter   = require('events').EventEmitter;
-var assign         = require('object-assign');
-var AppConstants  = require('../constants/appConstants');
-var AppActions     = require('../actions/appActions');
-var CHANGE_EVENT   = 'change';
+import AppDispatcher from '../dispatcher/appDispatcher';
+import assign from 'object-assign';
+import AppConstants from '../constants/appConstants';
+import AppActions from '../actions/appActions';
 import rpc from '../util/rpcAPI';
 
-let APP_PAGE       = {};
+const APP_PAGE = {};
+const EventEmitter = require('events').EventEmitter;
+const CHANGE_EVENT = 'change';
+
 window.session = localStorage.getItem('session') || null;
 
 if (window.session) {
   rpc.grantCode(window.session)
-  .then(function() {
-    return AppActions.initialFetchData(window.session)
+  .then(() => {
+    return AppActions.initialFetchData(window.session);
   })
-  .catch(function(err) {
+  .catch(() => {
     window.localStorage.removeItem('session');
     window.localStorage.removeItem('info');
     return AppDispatcher.dispatch({
       APP_PAGE: 'LOGIN',
       successMsg: null,
-      errorMsg: 'Timeout'
+      errorMsg: 'Timeout',
     });
   });
 } else {
   rpc.login('root', '')
-  .then(function(data) {
-    var session = data.body.result[1].ubus_rpc_session;
+  .then((data) => {
+    const session = data.body.result[1].ubus_rpc_session;
     window.session = session;
     return AppDispatcher.dispatch({
       APP_PAGE: 'FIRSTLOGIN',
       successMsg: null,
-      errorMsg: null
+      errorMsg: null,
     });
   })
-  .catch(function(err) {
-    if (err === 'Connection failed') {
+  .catch((err) => {
+    switch (err) {
+    case 'Connection failed':
       return AppDispatcher.dispatch({
         APP_PAGE: 'LOGIN',
         successMsg: null,
-        errorMsg: 'Waiting'
+        errorMsg: 'Waiting',
       });
-    } else if (err === 'Permission denied') {
+      break;
+    case 'Permission denied':
       return AppDispatcher.dispatch({
         APP_PAGE: 'LOGIN',
         successMsg: null,
-        errorMsg: null
+        errorMsg: null,
       });
+      break;
+    default:
+      return;
+      break;
     }
-
-    return ;
-  })
+  });
 }
 
-// APP_PAGE.APP_PAGE = 'LOGIN';
-// APP_PAGE.errorMsg = AppActions.getQuery('errorMsg') || null;
-// APP_PAGE.successMsg = AppActions.getQuery('successMsg') || null;
+const appStore = assign({}, EventEmitter.prototype, {
 
-var appStore = assign({}, EventEmitter.prototype, {
-
-  init: function() {
+  init: () => {
     return APP_PAGE;
   },
 
@@ -79,32 +80,31 @@ var appStore = assign({}, EventEmitter.prototype, {
    */
   removeChangeListener: function(callback) {
     this.removeListener(CHANGE_EVENT, callback);
-  }
+  },
 
 });
 
-AppDispatcher.register(function(action) {
-
+AppDispatcher.register((action) => {
   APP_PAGE.errorMsg = action.errorMsg || null;
   APP_PAGE.successMsg = action.successMsg || null;
   APP_PAGE.boardInfo = action.boardInfo || null;
 
   switch (action.APP_PAGE) {
-    case AppConstants.FIRSTLOGIN:
-      APP_PAGE.APP_PAGE = AppConstants.FIRSTLOGIN;
-      appStore.emitChange();
-      break;
-    case AppConstants.LOGIN:
-      APP_PAGE.APP_PAGE = AppConstants.LOGIN;
-      appStore.emitChange();
-      break;
-    case AppConstants.CONTENT:
-      APP_PAGE.APP_PAGE = AppConstants.CONTENT;
-      appStore.emitChange();
-      break;
-    default:
+  case AppConstants.FIRSTLOGIN:
+    APP_PAGE.APP_PAGE = AppConstants.FIRSTLOGIN;
+    appStore.emitChange();
+    break;
+  case AppConstants.LOGIN:
+    APP_PAGE.APP_PAGE = AppConstants.LOGIN;
+    appStore.emitChange();
+    break;
+  case AppConstants.CONTENT:
+    APP_PAGE.APP_PAGE = AppConstants.CONTENT;
+    appStore.emitChange();
+    break;
+  default:
+    break;
   }
-
 });
 
 module.exports = appStore;
