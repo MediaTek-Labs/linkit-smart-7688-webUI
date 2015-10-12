@@ -2,8 +2,7 @@
 
 This is the web configuration panel and REST api provider you find running on your Linkit smart at http://mylinkit.local/
 
-## 
-
+##
 
 ## Development
 

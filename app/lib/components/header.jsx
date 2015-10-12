@@ -1,4 +1,4 @@
-import { default as React, PropTypes } from 'react';
+import { default as React } from 'react';
 import Radium from 'radium';
 import mui from 'material-ui';
 import Logo from '../../img/mediatek.png';
