@@ -53,12 +53,19 @@ export default class networkComponent extends React.Component {
       payload: 0,
       text: __('Choose the Wi-Fi network.'),
     }];
-
-    this.state.apContent = {
-      ssid: this.props.boardInfo.wifi.ap.ssid || '',
-      key: this.props.boardInfo.wifi.ap.key || '',
-      encryption: this.props.boardInfo.wifi.ap.encryption.enabled || false,
-    };
+    if (this.props.boardInfo.wifi.ap.encryption === 'none') {
+      this.state.apContent = {
+        ssid: this.props.boardInfo.wifi.ap.ssid || '',
+        key: '',
+        encryption: false,
+      };
+    } else {
+      this.state.apContent = {
+        ssid: this.props.boardInfo.wifi.ap.ssid || '',
+        key: this.props.boardInfo.wifi.ap.key || '',
+        encryption: true,
+      };
+    }
 
     this.state.showPassword = false;
     this.state.notPassPassword = false;
@@ -129,6 +136,7 @@ export default class networkComponent extends React.Component {
     };
     let elem;
     let stationPassword;
+
     if (this.state.showPassword) {
       textType = 'text';
     }
