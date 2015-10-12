@@ -20,7 +20,7 @@ npm: 2.9.0
 - First, clone the project.
 ```bash
 $ git clone https://github.com/MediaTek-Labs/linkit-smart-webUI.git
-``
+```
 
 - Second, install Dependency.
 
