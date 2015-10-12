@@ -2,7 +2,28 @@
 
 This is the web configuration panel and REST api provider you find running on your Linkit smart at http://mylinkit.local/
 
-##
+## Usage
+
+- First, clone the project.
+
+```bash
+$ git clone https://github.com/MediaTek-Labs/linkit-smart-webUI.git
+```
+
+- Second, open linkit-smart-webUI
+
+``` bash
+cd ./linkit-smart-webUI
+```
+
+- Copy `/app/build/` folder to linkit smart's path: `/www/`
+
+- Copy three files (`/app/index.html` && `/app/zh-cn.html` && `/app/zh-tw.html`) to linkit smart's path: `/www/`
+
+- Open your browser and type `http://mylinkit.local/` , you will see this webUI!
+
+Done!
+
 
 ## Development
 
@@ -27,7 +48,7 @@ $ git clone https://github.com/MediaTek-Labs/linkit-smart-webUI.git
 $ npm i
 ```
 
-- third, open your command line.
+- Third, open your command line.
 
 ``` bash
 $ npm run watch
