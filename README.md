@@ -1,31 +1,58 @@
 # Linkit-smart web UI
 
-## Usage
+This is the web configuration panel and REST api provider you find running on your Linkit smart at http://mylinkit.local/
 
+## 
+
+
+## Development
+
+- Env
+
+Confirm your node env is :
+
+```
 node: 0.10.28
 npm: 2.9.0
 
-### 0. Install Dependency
+```
 
-Install lib:
+- First, clone the project.
+```bash
+$ git clone https://github.com/MediaTek-Labs/linkit-smart-webUI.git
+``
+
+- Second, install Dependency.
 
 ```
 $ npm i
 ```
 
-## 1. Develope
+- third, open your command line.
 
-```
+``` bash
 $ npm run watch
 ```
 
-Open your chrome with --disable-web-security mode:
+- Open your chrome with --disable-web-security mode.
 
-```
-open -n -a /Applications/Google\ Chrome.app --args --user-data-dir="/tmp/chrome_dev_session" --disable-web-security
+``` bash
+$ open -n -a /Applications/Google\ Chrome.app --args --user-data-dir="/tmp/chrome_dev_session" --disable-web-security
 ```
 
-type `127.0.0.1:8081/app` into your url
+and finally go to  `http://127.0.0.1:8081/app`.
+
+
+## Contribute
+
+1. Fork it
+2. Create your feature branch (git checkout -b my-new-feature)
+3. Commit your changes (git commit -am 'Add some feature')
+5. Push to the branch (git push origin my-new-feature)
+6. Create new Pull Request
+
+Hint: Please follow `airbnb` coding style guideline: https://github.com/airbnb/javascript
+
 
 ## Todo
 
