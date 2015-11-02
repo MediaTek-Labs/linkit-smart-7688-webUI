@@ -23,6 +23,9 @@ const appActions = {
     return rpc.commitWifi(session)
     .then(() => {
       return rpc.reboot(session);
+    })
+    .catch(() => {
+      return rpc.reboot(session);
     });
   },
 
