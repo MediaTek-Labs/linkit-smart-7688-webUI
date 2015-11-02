@@ -99,7 +99,7 @@ export default class sysinfoComponent extends React.Component {
     this.state.SoftwareBlockIsEdit = false;
     this.state.files = [{ name: '' }];
     this.state.modal = true;
-    this.state.upgradeFirmware = false;
+    this.state.upgradeFirmware = true;
     this.state.showPassword = false;
     this.state.notPassPassword = false;
     this.state.boardModel = '';
@@ -637,6 +637,7 @@ export default class sysinfoComponent extends React.Component {
   _onDrop(files) {
     this.setState({
       files: files,
+      upgradeFirmware: false,
     });
   }
 
