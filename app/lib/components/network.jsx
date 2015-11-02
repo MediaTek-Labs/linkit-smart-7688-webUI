@@ -189,6 +189,7 @@ export default class networkComponent extends React.Component {
                   stationContent: {
                     ssid: this.state.stationContent.ssid,
                     key: e.target.value,
+                    encryption: true,
                   },
                 });
               }
@@ -469,8 +470,13 @@ export default class networkComponent extends React.Component {
       this.refs.boardMsgDialog.show();
       this.setState({ boardSuccessMsg: successMsg });
     } else {
-      window.localStorage.removeItem('session');
-      window.localStorage.removeItem('info');
+      if (AppActions.isLocalStorageNameSupported) {
+        delete window.localStorage.session;
+        delete window.localStorage.info;
+      } else {
+        delete window.memoryStorage.session;
+        delete window.memoryStorage.info;
+      }
       return AppDispatcher.dispatch({
         APP_PAGE: 'LOGIN',
         successMsg: successMsg || null,
@@ -525,8 +531,13 @@ export default class networkComponent extends React.Component {
 
   _cancelBoardMsgDialog() {
     this.refs.boardMsgDialog.dismiss();
-    window.localStorage.removeItem('session');
-    window.localStorage.removeItem('info');
+    if (AppActions.isLocalStorageNameSupported) {
+      delete window.localStorage.session;
+      delete window.localStorage.info;
+    } else {
+      delete window.memoryStorage.session;
+      delete window.memoryStorage.info;
+    }
     const this$ = this;
     return AppDispatcher.dispatch({
       APP_PAGE: 'LOGIN',

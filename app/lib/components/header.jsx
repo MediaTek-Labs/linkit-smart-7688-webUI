@@ -2,6 +2,7 @@ import { default as React } from 'react';
 import Radium from 'radium';
 import mui from 'material-ui';
 import Logo from '../../img/mediatek.png';
+import AppActions from '../actions/appActions';
 
 const {
   DropDownMenu,
@@ -136,8 +137,13 @@ export default class loginComponent extends React.Component {
   }
 
   _logOut() {
-    window.localStorage.removeItem('info');
-    window.localStorage.removeItem('session');
+    if (AppActions.isLocalStorageNameSupported) {
+      delete window.localStorage.info;
+      delete window.localStorage.session;
+    } else {
+      delete window.memoryStorage.session;
+      delete window.memoryStorage.info;
+    }
     window.session = '';
     return AppDispatcher.dispatch({
       APP_PAGE: 'LOGIN',

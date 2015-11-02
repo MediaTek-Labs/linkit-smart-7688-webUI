@@ -112,14 +112,12 @@ export default class sysinfoComponent extends React.Component {
       this.state.password = info.password;
       this.state.bootLoaderVersion = this.props.boardInfo.system[Object.keys(this.props.boardInfo.system)[0]].loader_version;
       this.state.firmwareVersion = this.props.boardInfo.system[Object.keys(this.props.boardInfo.system)[0]].firmware_version;
-
+      this.state.macaddr = this.props.boardInfo.network.lan.macaddr;
       if (this.props.boardInfo.wifi.sta.disabled === '1') {
         this.state.mode = 'ap';
-        this.state.macaddr = this.props.boardInfo.network.lan.macaddr;
         this.state.currentIp = this.props.boardInfo.lan['ipv4-address'][0].address;
       } else {
         this.state.mode = 'station';
-        this.state.macaddr = this.props.boardInfo.network.wan.macaddr;
         this.state.currentIp = this.props.boardInfo.wan['ipv4-address'][0].address;
       }
     }
@@ -619,8 +617,13 @@ export default class sysinfoComponent extends React.Component {
     .catch((err) => {
       if (err === 'Access denied') {
         alert(err);
-        window.localStorage.removeItem('session');
-        window.localStorage.removeItem('info');
+        if (AppActions.isLocalStorageNameSupported) {
+          delete window.localStorage.session;
+          delete window.localStorage.info;
+        } else {
+          delete window.memoryStorage.session;
+          delete window.memoryStorage.info;
+        }
         return AppDispatcher.dispatch({
           APP_PAGE: 'LOGIN',
           successMsg: null,
@@ -717,8 +720,15 @@ export default class sysinfoComponent extends React.Component {
       this.refs.boardMsgDialog.show();
       this.setState({ boardSuccessMsg: successMsg });
     } else {
-      window.localStorage.removeItem('session');
-      window.localStorage.removeItem('info');
+
+      if (AppActions.isLocalStorageNameSupported) {
+        delete window.localStorage.session;
+        delete window.localStorage.info;
+      } else {
+        delete window.memoryStorage.session;
+        delete window.memoryStorage.info;
+      }
+
       return AppDispatcher.dispatch({
         APP_PAGE: 'LOGIN',
         successMsg: successMsg || null,
@@ -751,8 +761,13 @@ export default class sysinfoComponent extends React.Component {
 
   _cancelBoardMsgDialog() {
     this.refs.boardMsgDialog.dismiss();
-    window.localStorage.removeItem('session');
-    window.localStorage.removeItem('info');
+    if (AppActions.isLocalStorageNameSupported) {
+      delete window.localStorage.session;
+      delete window.localStorage.info;
+    } else {
+      delete window.memoryStorage.session;
+      delete window.memoryStorage.info;
+    }
     const this$ = this;
     return AppDispatcher.dispatch({
       APP_PAGE: 'LOGIN',

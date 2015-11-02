@@ -8,7 +8,11 @@ const APP_PAGE = {};
 const EventEmitter = require('events').EventEmitter;
 const CHANGE_EVENT = 'change';
 
-window.session = localStorage.getItem('session') || null;
+if (AppActions.isLocalStorageNameSupported) {
+  window.session = localStorage.getItem('session') || null;
+} else {
+  window.session = window.memoryStorage.session || null;
+}
 
 if (window.session) {
   rpc.grantCode(window.session)
@@ -16,8 +20,13 @@ if (window.session) {
     return AppActions.initialFetchData(window.session);
   })
   .catch(() => {
-    window.localStorage.removeItem('session');
-    window.localStorage.removeItem('info');
+    if (AppActions.isLocalStorageNameSupported) {
+      delete window.localStorage.session;
+      delete window.localStorage.info;
+    } else {
+      delete window.memoryStorage.session;
+      delete window.memoryStorage.info;
+    }
     return AppDispatcher.dispatch({
       APP_PAGE: 'LOGIN',
       successMsg: null,

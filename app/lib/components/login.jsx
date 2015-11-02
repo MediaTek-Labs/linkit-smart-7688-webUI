@@ -2,7 +2,7 @@ import { default as React, PropTypes } from 'react';
 import Radium from 'radium';
 import Logo from '../../img/mediatek.png';
 import mui from 'material-ui';
-import appAction from '../actions/appActions';
+import AppActions from '../actions/appActions';
 
 const {
   RaisedButton,
@@ -226,7 +226,7 @@ export default class loginComponent extends React.Component {
 
   _handleLogin() {
     const password = this.state.password;
-    return appAction.login('root', password);
+    return AppActions.login('root', password);
   }
 }
 

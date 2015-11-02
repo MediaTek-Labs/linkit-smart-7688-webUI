@@ -1,8 +1,24 @@
 import promise from 'bluebird';
 import rpc from '../util/rpcAPI';
 import AppDispatcher from '../dispatcher/appDispatcher';
+let isLocalStorageNameSupported = false;
+
+(() => {
+  const testKey = 'test';
+  const storage = window.sessionStorage;
+  try {
+    storage.setItem(testKey, '1');
+    storage.removeItem(testKey);
+    isLocalStorageNameSupported = true;
+  } catch (error) {
+    window.memoryStorage = {};
+    isLocalStorageNameSupported = false;
+  }
+})();
 
 const appActions = {
+  isLocalStorageNameSupported: isLocalStorageNameSupported,
+
   commitAndReboot: (session) => {
     return rpc.commitWifi(session)
     .then(() => {
@@ -82,11 +98,20 @@ const appActions = {
     })
     .then((session) => {
       window.session = session;
-      window.localStorage.setItem('info', JSON.stringify({
-        user: user,
-        password: password,
-      }));
-      window.localStorage.setItem('session', session);
+      if (this$.isLocalStorageNameSupported) {
+        window.localStorage.info = JSON.stringify({
+          user: user,
+          password: password,
+        });
+        window.localStorage.session = session;
+      } else {
+        window.memoryStorage.info = JSON.stringify({
+          user: user,
+          password: password,
+        });
+        window.memoryStorage.session = session;
+      }
+
       return rpc.grantCode(session);
     })
     .then(() => {
@@ -94,8 +119,14 @@ const appActions = {
     })
     .catch((err) => {
       window.session = '';
-      window.localStorage.removeItem('session');
-      window.localStorage.removeItem('info');
+
+      if (this$.isLocalStorageNameSupported) {
+        delete window.localStorage.session;
+        delete window.localStorage.info;
+      } else {
+        delete window.memoryStorage.session;
+        delete window.memoryStorage.info;
+      }
 
       if (err === 'Connection failed') {
         return AppDispatcher.dispatch({
@@ -105,8 +136,7 @@ const appActions = {
         });
       }
 
-      console.log(err);
-      alert(__('Account / password is incorrect.'));
+      alert(err);
     });
   },
 
