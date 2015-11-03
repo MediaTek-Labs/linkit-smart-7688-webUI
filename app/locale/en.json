@@ -72,5 +72,11 @@
   "See the Wi-Fi LED, it will light on steadily and start to blink or turn off afterwards. When the LED starts to blink or turn off, reload this webpage to sign in again.": "See the Wi-Fi LED, it will light on steadily and start to blink or turn off afterwards. When the LED starts to blink or turn off, reload this webpage to sign in again.",
   "Please make sure your host computer connects to the same local network as what the device connects to. Or you won’t be able to connect to this page again.": "Please make sure your host computer connects to the same local network as what the device connects to. Or you won’t be able to connect to this page again.",
   "Note: Please make sure your host computer is in the ": "Note: Please make sure your host computer is in the ",
-  "network. You can’t access this page if it’s in a different network.": "network. You can’t access this page if it’s in a different network."
+  "network. You can’t access this page if it’s in a different network.": "network. You can’t access this page if it’s in a different network.",
+  "The Wi-Fi LED blinks fast for about 3 minutes.": "The Wi-Fi LED blinks fast for about 3 minutes.",
+  "After firmware is flashed, the board reboots and the Wi-Fi LED turns on solid for 30 seconds and then turns off.": "After firmware is flashed, the board reboots and the Wi-Fi LED turns on solid for 30 seconds and then turns off.",
+  "The board is now in AP mode. Find the ": "The board is now in AP mode. Find the ",
+  " AP and connect to it.": " AP and connect to it.",
+  "The Firmware Is Uploaded And Flashing. Please Note:": "The Firmware Is Uploaded And Flashing. Please Note:",
+  "The Wi-Fi LED will blink 3  time per second when the board is connected to a client device.": "The Wi-Fi LED will blink 3  time per second when the board is connected to a client device."
 }

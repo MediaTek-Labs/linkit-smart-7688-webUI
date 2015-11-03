@@ -71,5 +71,11 @@
   "Please use at least 8 alphanumeric characters.": "請輸入至少 8 個字母",
   "See the Wi-Fi LED, it will light on steadily and start to blink or turn off afterwards. When the LED starts to blink or turn off, reload this webpage to sign in again.": "請留意 Wi-Fi LED 燈號。系統重啟過程中 Wi-Fi LED 燈號會持續點亮，直到燈號熄滅或開始閃爍時，表示系統已重新啟動完成。此時可重新載入此頁面並再次登入。",
   "Note: Please make sure your host computer is in the ": "注意: 請確保您的主機是在",
-  "network. You can’t access this page if it’s in a different network.": "網路中，否則您將不能訪問此頁面在不同網路下。"
+  "network. You can’t access this page if it’s in a different network.": "網路中，否則您將不能訪問此頁面在不同網路下。",
+  "The Wi-Fi LED blinks fast for about 3 minutes.": "Wi-Fi LED 快閃約3分鐘, 代表燒錄進行中。",
+  "After firmware is flashed, the board reboots and the Wi-Fi LED turns on solid for 30 seconds and then turns off.": "燒錄完成後，板子將會自動重新開機，此時Wi-Fi LED 將點亮30秒後熄燈。",
+  "The board is now in AP mode. Find the ": " 板子已進入AP 模式，請尋找並連接到",
+  " AP and connect to it.": "",
+  "The Firmware Is Uploaded And Flashing. Please Note:": "韌體上傳完成,  正在燒錄中。 您將會看到:",
+  "The Wi-Fi LED will blink 3  time per second when the board is connected to a client device.": "Wi-Fi 連接完成後, Wi-Fi LED會呈現每秒閃3 次狀態。"
 }
