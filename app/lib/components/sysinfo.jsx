@@ -113,6 +113,7 @@ export default class sysinfoComponent extends React.Component {
       this.state.bootLoaderVersion = this.props.boardInfo.system[Object.keys(this.props.boardInfo.system)[0]].loader_version;
       this.state.firmwareVersion = this.props.boardInfo.system[Object.keys(this.props.boardInfo.system)[0]].firmware_version;
       this.state.macaddr = this.props.boardInfo.network.lan.macaddr;
+      this.state.wifiMACName = this.props.boardInfo.network.lan.macaddr.split(':')[4] + '_' + this.props.boardInfo.network.lan.macaddr.split(':')[5];
       if (this.props.boardInfo.wifi.sta.disabled === '1') {
         this.state.mode = 'ap';
         this.state.currentIp = this.props.boardInfo.lan['ipv4-address'][0].address;
@@ -469,14 +470,15 @@ export default class sysinfoComponent extends React.Component {
               <p style={{ color: '#999A94', marginTop: '-20px' }}>{ __('Please consult the troubleshooting guide and then try again.') }</p>
             </Dialog>
             <Dialog
-              title={ __('The firmware has been pushed to the device.') }
+              title={ __('The Firmware Is Uploaded And Flashing. Please Note:') }
               actions={ upgradeFirmwareSuccessedActions }
               actionFocus="submit"
               ref="upgradeFirmwareSuccessedDialog"
               modal={ this.state.modal }>
-              <p style={{ color: '#999A94', marginTop: '-10px' }}>{__('Please wait while the device upgrades to the new firmware. You may sign in to the console after the firmware upgrade is completed.')}</p>
-              <p style={{ color: '#999A94', marginTop: '0px' }}>{__('Note: Do not disconnect the device from power source during firmware upgrade, or else the device will fail to boot up.')}</p>
-              <p style={{ color: '#999A94', marginTop: '0px' }}>{__('Check troubleshooting guide for more information.')}</p>
+              <p style={{ color: '#999A94', marginTop: '-10px' }}>{__('The Wi-Fi LED blinks fast for about 3 minutes.')}</p>
+              <p style={{ color: '#999A94', marginTop: '-10px' }}>{__('After firmware is flashed, the board reboots and the Wi-Fi LED turns on solid for 30 seconds and then turns off.')}</p>
+              <p style={{ color: '#999A94', marginTop: '0px' }}>{__('The board is now in AP mode. Find the ')}LinkIt_Smart_7688_{this.state.wifiMACName}{__(' AP and connect to it.')}</p>
+              <p style={{ color: '#999A94', marginTop: '0px' }}>{__('The Wi-Fi LED will blink 3  time per second when the board is connected to a client device.')}</p>
             </Dialog>
             <Dialog
               title={ __('Upload Firmware') }
@@ -757,7 +759,8 @@ export default class sysinfoComponent extends React.Component {
 
   _cancelUpgradeFirmwareSuccessedDialog() {
     this.refs.upgradeFirmwareSuccessedDialog.dismiss();
-    this.refs.boardMsgDialog.show();
+    // this.refs.boardMsgDialog.show();
+    this._returnToIndex();
   }
 
   _cancelBoardMsgDialog() {

@@ -440,7 +440,7 @@ export default class networkComponent extends React.Component {
       const stationModeInfo = this$.state.stationContent;
       for (let i = 0; i < data.body.result[1].results.length; i++ ) {
         data.body.result[1].results[i].payload = i + 1;
-        data.body.result[1].results[i].text = data.body.result[1].results[i].ssid + ' - ' + data.body.result[1].results[i].quality + ' %';
+        data.body.result[1].results[i].text = data.body.result[1].results[i].ssid + ' ( ' + data.body.result[1].results[i].quality + ' % )';
 
         // To know which wifi use this wifi ssid.
         if (this$.props.boardInfo.wifi.sta.ssid === data.body.result[1].results[i].ssid) {
