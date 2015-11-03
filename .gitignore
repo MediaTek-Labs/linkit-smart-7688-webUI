@@ -56,3 +56,4 @@ jscs-report.json
 jshint-report.json
 
 # client/build
+build.tar
