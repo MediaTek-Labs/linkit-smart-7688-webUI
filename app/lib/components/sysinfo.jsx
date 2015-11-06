@@ -113,7 +113,7 @@ export default class sysinfoComponent extends React.Component {
       this.state.bootLoaderVersion = this.props.boardInfo.system[Object.keys(this.props.boardInfo.system)[0]].loader_version;
       this.state.firmwareVersion = this.props.boardInfo.system[Object.keys(this.props.boardInfo.system)[0]].firmware_version;
       this.state.macaddr = this.props.boardInfo.network.lan.macaddr;
-      this.state.wifiMACName = this.props.boardInfo.network.lan.macaddr.split(':')[4] + '_' + this.props.boardInfo.network.lan.macaddr.split(':')[5];
+      this.state.wifiMACName = this.props.boardInfo.network.lan.macaddr.split(':')[3] + this.props.boardInfo.network.lan.macaddr.split(':')[4] + this.props.boardInfo.network.lan.macaddr.split(':')[5];
       if (this.props.boardInfo.wifi.sta.disabled === '1') {
         this.state.mode = 'ap';
         this.state.currentIp = this.props.boardInfo.lan['ipv4-address'][0].address;
@@ -279,8 +279,6 @@ export default class sysinfoComponent extends React.Component {
         <h3 style={ styles.h3 }>{ __('Platform information') }</h3>
         <h3 style={ styles.panelTitle }>{ __('Device name') }</h3>
         <p style={ styles.panelContent }>{ this.state.deviceName }</p>
-        <h3 style={ styles.panelTitle }>{ __('MAC address') }</h3>
-        <p style={ styles.panelContent }>{ this.state.macaddr }</p>
         <h3 style={ styles.panelTitle }>{ __('Current IP address') }</h3>
         <p style={ styles.panelContent }>{ this.state.currentIp }</p>
 
@@ -325,8 +323,6 @@ export default class sysinfoComponent extends React.Component {
               }
             }
             floatingLabelText={ __('Device name') } />
-          <h3 style={ styles.panelTitle }>{ __('MAC address') }</h3>
-          <p style={ styles.panelContent }>{ this.state.macaddr }</p>
           <h3 style={ styles.panelTitle }>{ __('Current IP address') }</h3>
           <p style={ styles.panelContent }>{ this.state.currentIp }</p>
 
@@ -475,10 +471,12 @@ export default class sysinfoComponent extends React.Component {
               actionFocus="submit"
               ref="upgradeFirmwareSuccessedDialog"
               modal={ this.state.modal }>
-              <p style={{ color: '#999A94', marginTop: '-10px' }}>{__('The Wi-Fi LED blinks fast for about 3 minutes.')}</p>
-              <p style={{ color: '#999A94', marginTop: '-10px' }}>{__('After firmware is flashed, the board reboots and the Wi-Fi LED turns on solid for 30 seconds and then turns off.')}</p>
-              <p style={{ color: '#999A94', marginTop: '0px' }}>{__('The board is now in AP mode. Find the ')}LinkIt_Smart_7688_{this.state.wifiMACName}{__(' AP and connect to it.')}</p>
-              <p style={{ color: '#999A94', marginTop: '0px' }}>{__('The Wi-Fi LED will blink 3  time per second when the board is connected to a client device.')}</p>
+              <ul style={{ lineHeight: '20px' }}>
+                <li style={{ color: '#999A94' }}>{__('The Wi-Fi LED blinks fast for about 3 minutes.')}</li>
+                <li style={{ color: '#999A94' }}>{__('After firmware is flashed, the board reboots and the Wi-Fi LED turns on solid for 30 seconds and then turns off.')}</li>
+                <li style={{ color: '#999A94' }}>{__('The board is now in AP mode and connect to it.')}</li>
+                <li style={{ color: '#999A94' }}>{__('The Wi-Fi LED will blink 3  time per second when the board is connected to a client device.')}</li>
+              </ul>
             </Dialog>
             <Dialog
               title={ __('Upload Firmware') }
@@ -723,7 +721,6 @@ export default class sysinfoComponent extends React.Component {
       this.refs.boardMsgDialog.show();
       this.setState({ boardSuccessMsg: successMsg });
     } else {
-
       if (AppActions.isLocalStorageNameSupported) {
         delete window.localStorage.session;
         delete window.localStorage.info;

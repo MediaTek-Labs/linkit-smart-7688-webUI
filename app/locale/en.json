@@ -75,8 +75,7 @@
   "network. You can’t access this page if it’s in a different network.": "network. You can’t access this page if it’s in a different network.",
   "The Wi-Fi LED blinks fast for about 3 minutes.": "The Wi-Fi LED blinks fast for about 3 minutes.",
   "After firmware is flashed, the board reboots and the Wi-Fi LED turns on solid for 30 seconds and then turns off.": "After firmware is flashed, the board reboots and the Wi-Fi LED turns on solid for 30 seconds and then turns off.",
-  "The board is now in AP mode. Find the ": "The board is now in AP mode. Find the ",
-  " AP and connect to it.": " AP and connect to it.",
+  "The board is now in AP mode and connect to it.": "The board is now in AP mode and connect to it.",
   "The Firmware Is Uploaded And Flashing. Please Note:": "The Firmware Is Uploaded And Flashing. Please Note:",
   "The Wi-Fi LED will blink 3  time per second when the board is connected to a client device.": "The Wi-Fi LED will blink 3  time per second when the board is connected to a client device."
 }
