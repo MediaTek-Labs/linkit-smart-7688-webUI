@@ -1,4 +1,4 @@
-import { default as React } from 'react';
+import { default as React, PropTypes } from 'react';
 import Radium from 'radium';
 import Logo from '../../img/mediatek.png';
 import mui from 'material-ui';
@@ -42,6 +42,11 @@ const styles = {
 
 @Radium
 export default class resetPasswordComponent extends React.Component {
+  static propTypes = {
+    errorMsg: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
+    successMsg: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -181,8 +186,10 @@ export default class resetPasswordComponent extends React.Component {
         errorMsg: null,
       });
     })
-    .catch(() => {
-      return;
+    .catch((err) => {
+      if (err === 'Connection failed') {
+        return alert(__('The device is still in the restarting process. Please retry again when the restarting process is complete.') + __('Please make sure your host computer is in the same network as the device. You can’t access this page if it’s in a different network.'));
+      }
     });
   }
 }

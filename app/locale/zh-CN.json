@@ -76,5 +76,7 @@
   "After firmware is flashed, the board reboots and the Wi-Fi LED turns on solid for 30 seconds and then turns off.": "烧录完成后，板子将会自动重新开机，此时Wi-Fi LED 将点亮30秒后熄灯。",
   "The board is now in AP mode and connect to it.": "板子已经进入AP 模式，请寻找并连接。",
   "The Firmware Is Uploaded And Flashing. Please Note:": "固件上传完成，正在烧录中。您将会看见:",
-  "The Wi-Fi LED will blink 3  time per second when the board is connected to a client device.": "Wi-Fi连接完成后，Wi-Fi LED会呈现每秒闪3 次状态。"
+  "The Wi-Fi LED will blink 3  time per second when the board is connected to a client device.": "Wi-Fi连接完成后，Wi-Fi LED会呈现每秒闪3 次状态。",
+  "The device is still in the restarting process. Please retry again when the restarting process is complete.": "系统正在重新启动中，请于系统启动完成后再重新设置密码。",
+  "Please make sure your host computer is in the same network as the device. You can’t access this page if it’s in a different network.": "請確保您的主機與設備在相同網路中，否則您將不能訪問此頁面。"
 }

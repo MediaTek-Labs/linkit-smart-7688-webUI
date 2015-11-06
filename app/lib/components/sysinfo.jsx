@@ -133,6 +133,7 @@ export default class sysinfoComponent extends React.Component {
     this._submitPlatformBlock = ::this._submitPlatformBlock;
     this._cancelDialog = ::this._cancelDialog;
     this._returnToIndex = ::this._returnToIndex;
+    this._returnToSetPassword = ::this._returnToSetPassword;
     this._cancelErrorMsgDialog = ::this._cancelErrorMsgDialog;
     this._cancelConfigureFailedDialog = ::this._cancelConfigureFailedDialog;
     this._cancelUpgradeFirmwareFailedDialog = ::this._cancelUpgradeFirmwareFailedDialog;
@@ -612,7 +613,7 @@ export default class sysinfoComponent extends React.Component {
       return this$.refs.standardDialog.dismiss();
     })
     .then(() => {
-      return this$._returnToIndex(__('Configuration saved. You can sign in to the console after your device has restarted.'));
+      return this$._returnToSetPassword();
     })
     .catch((err) => {
       if (err === 'Access denied') {
@@ -737,6 +738,22 @@ export default class sysinfoComponent extends React.Component {
     }
   }
 
+  _returnToSetPassword() {
+    if (AppActions.isLocalStorageNameSupported) {
+      delete window.localStorage.session;
+      delete window.localStorage.info;
+    } else {
+      delete window.memoryStorage.session;
+      delete window.memoryStorage.info;
+    }
+
+    return AppDispatcher.dispatch({
+      APP_PAGE: 'FIRSTLOGIN',
+      successMsg: null,
+      errorMsg: null,
+    });
+  }
+
   _handleStandardDialogTouchTap() {
     this.refs.standardDialog.show();
   }
@@ -757,7 +774,7 @@ export default class sysinfoComponent extends React.Component {
   _cancelUpgradeFirmwareSuccessedDialog() {
     this.refs.upgradeFirmwareSuccessedDialog.dismiss();
     // this.refs.boardMsgDialog.show();
-    this._returnToIndex();
+    this._returnToSetPassword();
   }
 
   _cancelBoardMsgDialog() {
