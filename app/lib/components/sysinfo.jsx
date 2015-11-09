@@ -475,8 +475,8 @@ export default class sysinfoComponent extends React.Component {
               <ul style={{ lineHeight: '20px' }}>
                 <li style={{ color: '#999A94' }}>{__('The Wi-Fi LED blinks fast for about 3 minutes.')}</li>
                 <li style={{ color: '#999A94' }}>{__('After firmware is flashed, the board reboots and the Wi-Fi LED turns on solid for 30 seconds and then turns off.')}</li>
-                <li style={{ color: '#999A94' }}>{__('The board is now in AP mode and connect to it.')}</li>
-                <li style={{ color: '#999A94' }}>{__('The Wi-Fi LED will blink 3  time per second when the board is connected to a client device.')}</li>
+                <li style={{ color: '#999A94' }}>{__('The board is now in AP mode. Please connect to it.')}</li>
+                <li style={{ color: '#999A94' }}>{__('The Wi-Fi LED will blink 3 times per second when the board is connected to a client device.')}</li>
               </ul>
             </Dialog>
             <Dialog

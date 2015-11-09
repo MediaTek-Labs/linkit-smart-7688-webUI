@@ -74,9 +74,9 @@
   "network. You can’t access this page if it’s in a different network.": "網路中，否則您將不能訪問此頁面在不同網路下。",
   "The Wi-Fi LED blinks fast for about 3 minutes.": "Wi-Fi LED 快閃約3分鐘, 代表燒錄進行中。",
   "After firmware is flashed, the board reboots and the Wi-Fi LED turns on solid for 30 seconds and then turns off.": "燒錄完成後，板子將會自動重新開機，此時Wi-Fi LED 將點亮30秒後熄燈。",
-  "The board is now in AP mode and connect to it.": " 板子已進入AP 模式，請尋找並連接。",
+  "The board is now in AP mode. Please connect to it.": " 板子已進入AP 模式，請尋找並連接。",
   "The Firmware Is Uploaded And Flashing. Please Note:": "韌體上傳完成,  正在燒錄中。 您將會看到:",
-  "The Wi-Fi LED will blink 3  time per second when the board is connected to a client device.": "Wi-Fi 連接完成後, Wi-Fi LED會呈現每秒閃3 次狀態。",
+  "The Wi-Fi LED will blink 3 times per second when the board is connected to a client device.": "Wi-Fi 連接完成後, Wi-Fi LED會呈現每秒閃3 次狀態。",
   "The device is still in the restarting process. Please retry again when the restarting process is complete.": "系統正在重新啟動中，請於系統啟動完成後再重新設置密碼。",
   "Please make sure your host computer is in the same network as the device. You can’t access this page if it’s in a different network.": "請確保您的主機與設備在相同網路中，否則您將不能訪問此頁面。"
 }
