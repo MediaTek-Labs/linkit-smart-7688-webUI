@@ -2,8 +2,6 @@ import { default as React, PropTypes } from 'react';
 import Radium from 'radium';
 import Dropzone from 'react-dropzone';
 import mui from 'material-ui';
-import icon7688 from '../../img/7688.png';
-import icon7688Duo from '../../img/7688_duo.png';
 import AppActions from '../actions/appActions';
 import AppDispatcher from '../dispatcher/appDispatcher';
 
@@ -163,7 +161,6 @@ export default class sysinfoComponent extends React.Component {
       marginBottom: '44px',
     };
     let errorText;
-    let boardImg;
     const standardActions = [
       <FlatButton
         label={ __('Cancel') }
@@ -179,7 +176,7 @@ export default class sysinfoComponent extends React.Component {
 
     const boardMsgActions = [
       <FlatButton
-        label={ __('OK') }
+        label={ __('Close') }
         labelStyle={{ color: Colors.amber700 }}
         onTouchTap={ this._cancelBoardMsgDialog }
         hoverColor="none" />,
@@ -267,12 +264,6 @@ export default class sysinfoComponent extends React.Component {
         width: '100%',
         marginBottom: '44px',
       };
-    }
-
-    if (this.state.boardModel === 'MediaTek LinkIt Smart7688') {
-      boardImg = icon7688;
-    } else {
-      boardImg = icon7688Duo;
     }
 
     let PlatformBlock = (
@@ -549,7 +540,6 @@ export default class sysinfoComponent extends React.Component {
               lineHeight: '18.54px',
               marginTop: '-15px',
             }}>{ __('See the Wi-Fi LED, it will light on steadily and start to blink or turn off afterwards. When the LED starts to blink or turn off, reload this webpage to sign in again.') }</p>
-            <img src={ boardImg } style={{ width: '350px' }} />
             </div>
           </Dialog>
 

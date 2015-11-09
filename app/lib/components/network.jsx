@@ -3,8 +3,6 @@ import Radium from 'radium';
 import mui from 'material-ui';
 import AppActions from '../actions/appActions';
 import AppDispatcher from '../dispatcher/appDispatcher';
-import icon7688 from '../../img/7688.png';
-import icon7688Duo from '../../img/7688_duo.png';
 
 const {
   TextField,
@@ -129,7 +127,6 @@ export default class networkComponent extends React.Component {
   render() {
     let textType = 'password';
     let errorText;
-    let boardImg = icon7688Duo;
     let showPasswordStyle = {
       width: '100%',
       marginBottom: '44px',
@@ -330,9 +327,6 @@ export default class networkComponent extends React.Component {
     default:
       break;
     }
-    if (this.state.boardModel === 'MediaTek LinkIt Smart7688') {
-      boardImg = icon7688;
-    }
 
     return (
       <div>
@@ -360,7 +354,6 @@ export default class networkComponent extends React.Component {
               color: '#999A94',
               lineHeight: '18.54px',
             }}>{ __('Note: Please make sure your host computer is in the ')} { this.state[ this.state.mode + 'Content'].ssid } {__('network. You can’t access this page if it’s in a different network.')}</p>
-            <img src={ boardImg } style={{ width: '350px' }} />
             </div>
           </Dialog>
           <Dialog

@@ -67,6 +67,7 @@
    "Upgrade firmware file": "韧体更新",
   "Choose the file": "选择一个档案",
   "Please set a password.": "请设定一组密码。",
+  "Close": "關閉",
   "Device Restarting. Please Wait…": "系统重启中，请稍候....",
   "Please use at least 8 alphanumeric characters.": "请输入至少8个字母",
   "See the Wi-Fi LED, it will light on steadily and start to blink or turn off afterwards. When the LED starts to blink or turn off, reload this webpage to sign in again.": "请留意无线网络连接的LED灯号，系统重启过程中的Wi-Fi无线LED燈號會持續點亮，直到燈號熄滅或開始閃爍時，表示系統已重新啟動完成。此時可重新載入此頁面並再次登入。",
