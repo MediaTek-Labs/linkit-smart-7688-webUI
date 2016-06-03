@@ -174,11 +174,11 @@ export default class loginComponent extends React.Component {
                 }
               }
               floatingLabelText=
-                {
+                { String(
                   <div>
                     {__('Password')} <b style={{ color: 'red' }}>*</b>
                   </div>
-                } />
+                )} />
             <div style={{ width: '100%', marginBottom: '24px' }}>
               <a
                 onTouchTap={
