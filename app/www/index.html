@@ -1,0 +1,16 @@
+<html>
+    <script type="text/javascript">
+      var userLang = (navigator.language || navigator.userLanguage);
+      var pimaryLang = userLang.split('-')[0];
+      var subLang = userLang.split('-')[1];
+      switch(pimaryLang) {
+        case "zh":
+            window.location = pimaryLang + '/' + subLang  + '/';
+            break;
+        default:
+            window.location = 'en/';
+      }
+    </script>
+</html>
+
+
