@@ -34,8 +34,8 @@ module.exports = Object.keys(languages).map((language) => {
     name: language,
     entry: path.join(__dirname, '/lib/app.jsx'),
     output: {
-      publicPath: 'http://127.0.0.1:8081/build/',
-      path: path.join(__dirname, '/build/'),
+      publicPath: 'http://127.0.0.1:8081/www/build/',
+      path: path.join(__dirname, '/www/build/'),
       filename: language + '.app.js',
     },
     module: {
@@ -70,7 +70,7 @@ module.exports = Object.keys(languages).map((language) => {
 });
 
 module.exports.output = {
-  publicPath: 'http://127.0.0.1:8081/build/',
+  publicPath: 'http://127.0.0.1:8081/www/build/',
 };
 
 module.exports.devServer = {};
