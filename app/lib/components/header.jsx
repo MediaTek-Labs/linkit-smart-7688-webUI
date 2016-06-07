@@ -53,9 +53,9 @@ export default class loginComponent extends React.Component {
     super(props);
     this.state = {};
     this._logOut = this._logOut.bind(this);
-    if (/zh\-tw/.test(window.location.pathname)) {
+    if (/zh\/tw\//.test(window.location.pathname)) {
       this.state.language = '2';
-    } else if (/zh\-cn/.test(window.location.pathname)) {
+    } else if (/zh\/cn\//.test(window.location.pathname)) {
       this.state.language = '3';
     } else {
       this.state.language = '1';
@@ -106,13 +106,13 @@ export default class loginComponent extends React.Component {
                   (e, sel)=> {
                     switch (sel) {
                     case 1:
-                      window.location.href = defaultRouter + '/zh-tw.html';
+                      window.location.href = defaultRouter + 'zh/tw/';
                       break;
                     case 2:
-                      window.location.href = defaultRouter + '/zh-cn.html';
+                      window.location.href = defaultRouter + 'zh/ch/';
                       break;
                     default:
-                      window.location.href = defaultRouter + '/';
+                      window.location.href = defaultRouter + 'en/';
                       break;
                     }
                   }
