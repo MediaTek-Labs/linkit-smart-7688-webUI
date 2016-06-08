@@ -593,7 +593,7 @@ export default class networkComponent extends React.Component {
                 style={{
                   color: Colors.amber700,
                   marginBottom: 16,
-                  width: '170px',
+                  width: '200px',
                 }}/>
             </RadioButtonGroup>
             { elem }
