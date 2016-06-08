@@ -167,7 +167,7 @@ export default class loginComponent extends React.Component {
               type={ textType }
               floatingLabelStyle={{ color: 'rgba(0, 0, 0, 0.498039)' }}
               underlineFocusStyle={{ borderColor: Colors.amber700 }}
-              style={[styles.basicWidth, { marginTop: '-10px' }]}
+              style={{ marginTop: '-10px', ...styles.basicWidth}}
               onChange={
                 (e)=> {
                   this.setState({ password: e.target.value });
