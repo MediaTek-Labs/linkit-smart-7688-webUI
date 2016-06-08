@@ -85,30 +85,93 @@ const rpcAPI = {
     return this.request(config);
   },
   // ====== login end ========
-  changeWifiMode: function(disabled, session) {
-    const config = {
-      jsonrpc: '2.0',
-      id: id++,
-      method: 'call',
-      params: [ session, 'uci', 'set',
-        {
-          config: 'wireless',
-          section: 'sta',
-          values: {
-            disabled: disabled,
-          },
-        },
-      ],
-    };
-
-    return this.request(config);
-  },
   scanWifi: function(session) {
     const config = {
       jsonrpc: '2.0',
       id: id++,
       method: 'call',
       params: [session, 'iwinfo', 'scan', { device: 'ra0' }],
+    };
+
+    return this.request(config);
+  },
+  setWifiIgnoreConfig: function(ignore, session) {
+    const config = {
+      jsonrpc: '2.0',
+      id: id++,
+      method: 'call',
+      params: [
+        session,
+        'uci',
+        'set',
+        {
+          config: 'dhcp',
+          section: 'lan',
+          values: {
+            ignore: ignore,
+          },
+        },
+      ],
+    };
+    return this.request(config);
+  },
+  setWifiProtoConfig: function(proto, session) {
+    const config = {
+      jsonrpc: '2.0',
+      id: id++,
+      method: 'call',
+      params: [
+        session,
+        'uci',
+        'set',
+        {
+          config: 'network',
+          section: 'lan',
+          values: {
+            proto: proto,
+          },
+        },
+      ],
+    };
+    return this.request(config);
+  },
+  setWifiNetworkConfig: function(network, session) {
+    const config = {
+      jsonrpc: '2.0',
+      id: id++,
+      method: 'call',
+      params: [
+        session,
+        'uci',
+        'set',
+        {
+          config: 'network',
+          section: 'lan',
+          values: {
+            network: network,
+          },
+        },
+      ],
+    };
+    return this.request(config);
+  },
+  setWifiMode: function(mode, session) {
+    const config = {
+      jsonrpc: '2.0',
+      id: id++,
+      method: 'call',
+      params: [
+        session,
+        'uci',
+        'set',
+        {
+          config: 'wireless',
+          section: 'radio0',
+          values: {
+            linkit_mode: mode,
+          },
+        },
+      ],
     };
 
     return this.request(config);
@@ -139,6 +202,21 @@ const rpcAPI = {
       ],
     };
 
+    return this.request(config);
+  },
+  uciCommit: function(uciConfig, session) {
+    const config = {
+      jsonrpc: '2.0',
+      id: id++,
+      method: 'call',
+      params: [
+        session,
+        'uci',
+        'commit', {
+          config: uciConfig,
+        },
+      ],
+    };
     return this.request(config);
   },
   commitWifi: function(session) {

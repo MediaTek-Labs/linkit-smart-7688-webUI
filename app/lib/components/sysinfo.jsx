@@ -114,12 +114,20 @@ export default class sysinfoComponent extends React.Component {
       this.state.firmwareVersion = this.props.boardInfo.system[Object.keys(this.props.boardInfo.system)[0]].firmware_version;
       this.state.macaddr = this.props.boardInfo.network.lan.macaddr;
       this.state.wifiMACName = this.props.boardInfo.network.lan.macaddr.split(':')[3] + this.props.boardInfo.network.lan.macaddr.split(':')[4] + this.props.boardInfo.network.lan.macaddr.split(':')[5];
-      if (this.props.boardInfo.wifi.sta.disabled === '1') {
-        this.state.mode = 'ap';
+      this.state.mode = this.props.boardInfo.wifi.radio0.linkit_mode;
+
+      switch (this.state.mode) {
+      case 'ap':
         this.state.currentIp = this.props.boardInfo.lan['ipv4-address'][0].address;
-      } else {
-        this.state.mode = 'station';
+        break;
+      case 'sta':
         this.state.currentIp = this.props.boardInfo.wan['ipv4-address'][0].address;
+        break;
+      case 'apsta':
+        this.state.currentIp = this.props.boardInfo.wan['ipv4-address'][0].address;
+        break;
+      default:
+        break;
       }
     }
 

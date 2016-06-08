@@ -28,21 +28,47 @@ const appActions = {
       return rpc.reboot(session);
     });
   },
-
   loadModel: (session) => {
     return rpc.loadModel(session);
   },
-
-  setWifi: (section, ssid, key, session) => {
-    let disabled = 1;
-    let mode = 'ap';
-    if (section === 'station') {
-      mode = 'sta';
-      disabled = 0;
+  setWifi: (mode, content, session) => {
+    if (mode === 'apsta') {
+      return rpc.setWifi('sta', content.ssid, content.key, session)
+      .then(() => {
+        return rpc.setWifi('ap', content.repeaterSsid, content.repeaterKey, session);
+      });
     }
-    return rpc.changeWifiMode(disabled, session)
+    return rpc.setWifi(mode, content.ssid, content.key, session);
+  },
+  setWifiMode: (mode, session) => {
+    let network = 'lan';
+    let ignore = 1;
+    let proto = 'dhcp';
+
+    if (mode !== 'apsta') {
+      network = 'wan';
+      ignore = 0;
+      proto = 'static';
+    }
+
+    return rpc.setWifiMode(mode, session)
     .then(() => {
-      return rpc.setWifi(mode, ssid, key, session);
+      return rpc.setWifiNetworkConfig(network, session);
+    })
+    .then(() => {
+      return rpc.uciCommit('wireless', session);
+    })
+    .then(() => {
+      return rpc.setWifiIgnoreConfig(ignore, session);
+    })
+    .then(() => {
+      return rpc.uciCommit('dhcp', session);
+    })
+    .then(() => {
+      return rpc.setWifiProtoConfig(proto, session);
+    })
+    .then(() => {
+      return rpc.uciCommit('network', session);
     });
   },
   scanWifi: (session) => {
