@@ -46,7 +46,7 @@ const appActions = {
     let proto = 'dhcp';
 
     if (mode !== 'apsta') {
-      network = 'wan';
+      // network = 'wan';
       ignore = 0;
       proto = 'static';
     }
