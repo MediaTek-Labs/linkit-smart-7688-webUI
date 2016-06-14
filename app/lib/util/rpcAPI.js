@@ -146,7 +146,7 @@ const rpcAPI = {
         'set',
         {
           config: 'wireless',
-          section: 'lan',
+          section: 'sta',
           values: {
             network: network,
           },
