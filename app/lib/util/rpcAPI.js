@@ -145,7 +145,7 @@ const rpcAPI = {
         'uci',
         'set',
         {
-          config: 'network',
+          config: 'wireless',
           section: 'lan',
           values: {
             network: network,
